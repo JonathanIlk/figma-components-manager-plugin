@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "rootDirs": [
+        "./src",
+        "../shared"
+    ],
+    "target": "es6",
+    "lib": ["es2017"],
+    "strict": true,
+    "typeRoots": [
+      "../node_modules/@figma"
+    ]
+  }
+}

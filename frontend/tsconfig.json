@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "rootDirs": [
+        "./src",
+        "../shared"
+    ],
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "strict": true,
+    "typeRoots": [
+    ]
+  }
+}

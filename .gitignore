@@ -1,0 +1,12 @@
+# Node
+*.log
+*.log.*
+node_modules
+.idea
+.vscode
+
+out/
+build/
+frontend/*.js
+backend/*.js
+shared/*.js
