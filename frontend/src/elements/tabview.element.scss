@@ -1,4 +1,9 @@
 app-tabview {
+
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
   .tab-buttons-container {
     display: flex;
     justify-content: space-around;
@@ -26,6 +31,7 @@ app-tabview {
 
   .tab-content {
     display: none;
+    overflow-y: scroll;
 
     &.active {
       display: block;
