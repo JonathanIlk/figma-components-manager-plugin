@@ -1,8 +1,9 @@
 import {ComponentDto, VariantDto} from "../../../shared/types";
 import {util} from "../../frontend";
 import "./component-info.element.scss";
+import {AbstractCmElement} from "./abstract-cm-element.element";
 
-export class ComponentInfoElement extends HTMLElement {
+export class ComponentInfoElement extends AbstractCmElement {
 
     static register() {
         window.customElements.define('app-component-info', ComponentInfoElement);
@@ -53,27 +54,15 @@ export class ComponentInfoElement extends HTMLElement {
                 ${this.getVariantsListHtml(data.variants)}
             </div>
         `;
-        this.setupInteractiveElements(data);
+        this.setupInteractiveElements();
         if(data.variants.length === 0) {
             const expandCollapseIcon: HTMLElement = this.querySelector(".expand-collapse-icon")!;
             expandCollapseIcon.style.display = "none";
         }
     }
 
-    private setupInteractiveElements(data: ComponentDto) {
-        // // when the header is clicked send a message to the backend to navigate to the node
-        // this.querySelector(".component-name")?.addEventListener("click", () => {
-        //     parent.postMessage({pluginMessage: {type: "navigate-to-node", payload: data.nodeId}}, '*');
-        // });
-
-        // when an element with attribute navigatable-node-id is clicked send a message to the backend to navigate to the node
-        this.querySelectorAll("[navigatable-node-id]").forEach((element) => {
-            element.addEventListener("click", () => {
-                const nodeId = element.getAttribute("navigatable-node-id");
-                parent.postMessage({pluginMessage: {type: "navigate-to-node", payload: nodeId}}, '*');
-            });
-        });
-
+    protected setupInteractiveElements() {
+        super.setupInteractiveElements();
         // when the expand-collapse icon is clicked toggle the expandable-content
         const expandCollapseIcon = this.querySelector(".expand-collapse-icon")!;
         expandCollapseIcon.addEventListener("click", () => {

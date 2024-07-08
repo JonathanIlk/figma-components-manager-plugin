@@ -1,8 +1,9 @@
 import {ScanResultDto} from "../../../shared/types";
 import {InstanceInfoElement} from "./instance-info.element";
 import "./instances-list.element.scss";
+import {AbstractCmElement} from "./abstract-cm-element.element";
 
-export class InstancesListElement extends HTMLElement {
+export class InstancesListElement extends AbstractCmElement {
 
     static register() {
         window.customElements.define('app-instances-list', InstancesListElement);
@@ -15,5 +16,7 @@ export class InstancesListElement extends HTMLElement {
             const instanceInfo: InstanceInfoElement = this.insertAdjacentElement('beforeend', document.createElement('app-instance-info')) as InstanceInfoElement;
             instanceInfo.updateForData(instance);
         }
+
+        this.setupInteractiveElements();
     }
 }

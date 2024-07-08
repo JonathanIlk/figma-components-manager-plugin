@@ -8,6 +8,7 @@ export class InstanceInfoElement extends HTMLElement {
 
 
     updateForData(data: InstanceDto) {
+        this.setAttribute("navigatable-node-id", data.nodeId);
         this.innerHTML = data.nodeName;
     }
 }
