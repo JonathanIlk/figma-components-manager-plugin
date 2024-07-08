@@ -8,7 +8,11 @@ export class SearchResultConverter {
     }
 
     public async convert(): Promise<ScanResultDto> {
+        const components = await this.extractComponents();
+        const allInstanceNodeIds = components.flatMap(component => component.instanceNodeIds);
+
         return {
+            allInstanceNodeIds: allInstanceNodeIds,
             components: await this.extractComponents()
         }
     }

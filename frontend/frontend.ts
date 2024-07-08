@@ -1,8 +1,12 @@
 import {ComponentDto, MessageToUi, ScanResultDto} from "../shared/types";
 import {ComponentInfoElement} from "./src/elements/component-info.element";
 import {Util} from "../shared/util";
+import {ComponentsListHeaderElement} from "./src/elements/components-list-header.element";
+import "./src/styles.scss";
 
 ComponentInfoElement.register();
+ComponentsListHeaderElement.register();
+
 export const util = new Util("CM-Frontend");
 
 function createComponentInfo(data: ComponentDto) {
@@ -19,6 +23,9 @@ function onReceiveComponentsMessage(payload: ScanResultDto) {
         const componentInfo = createComponentInfo(component);
         container.appendChild(componentInfo);
     }
+
+    const header: ComponentsListHeaderElement = document.getElementById('components-list-header') as ComponentsListHeaderElement;
+    header.updateForScanResult(payload);
 }
 
 onmessage = (event) => {

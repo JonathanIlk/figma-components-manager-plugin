@@ -13,6 +13,7 @@ export type MessageToUi = {
 }
 
 export type ScanResultDto = {
+    allInstanceNodeIds: string[];
     components: ComponentDto[];
 }
 

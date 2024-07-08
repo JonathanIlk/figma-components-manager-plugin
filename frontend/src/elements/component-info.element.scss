@@ -1,5 +1,4 @@
 app-component-info {
-    width: 100%;
     background: var(--figma-color-bg-secondary);
     border-radius: 12px;
     padding: 12px;
@@ -17,25 +16,7 @@ app-component-info .component-name {
 app-component-info .sub-header {
     margin-bottom: 8px;
 }
-app-component-info .subtle-text {
-    font-size: 0.8rem;
-    color: var(--figma-color-text-secondary);
-}
-app-component-info .tag {
-    background: var(--figma-color-bg-tertiary);
-    color: var(--figma-color-text-primary);
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-right: 4px;
-}
-app-component-info .variants-count {
-    font-weight: bold;
-    color: var(--figma-color-icon-component);
-}
-app-component-info .instances-count {
-    font-weight: bold;
-    color: var(--figma-color-text-success);
-}
+
 app-component-info .expand-collapse-icon {
     width: 18px;
     cursor: pointer;
