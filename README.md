@@ -7,11 +7,11 @@
 - Show amount of instances of a Component or Variant in the document
 - Automatic refresh when the document changes
 - List all Instances of a Component or Variant in the document
+- Search through all Components, Variants and Instances
  
 
 ### Not (yet) implemented
 
-- [TODO] Beliebige Textsuche
 - [TODO] Group Components by Page
 - [TODO] Controls to quickly collapse/expand all Components or Variants
 - [TODO] Searchbar that quickly filters Components and Variants
