@@ -16,4 +16,22 @@
   background: var(--figma-color-bg-secondary);
   border-radius: 12px;
   padding: 8px 12px;
+
+  .card-header {
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .sub-title {
+        margin-bottom: 8px;
+    }
+
+  }
+
 }

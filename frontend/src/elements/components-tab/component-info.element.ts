@@ -36,8 +36,8 @@ export class ComponentInfoElement extends AbstractCmElement {
 
         util.log("Components-Manager#ComponentInfo: Creating Component Info", data, this);
         this.innerHTML = `
-            <div class="header">
-                <div class="title-container">
+            <div class="card-header">
+                <div class="title">
                     <div class="component-name" navigatable-node-id="${data.nodeId}">${data.nodeName}</div>
                     <div class="expand-collapse-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
@@ -45,7 +45,7 @@ export class ComponentInfoElement extends AbstractCmElement {
                         </svg>
                     </div>
                 </div>
-                <div class="sub-header">
+                <div class="sub-title">
                     <span class="tag-element">
                         <span class="variants-count">${data.variants.length}</span> variants
                     </span>

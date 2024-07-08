@@ -27,10 +27,14 @@ export class InstancesGroupElement extends AbstractCmElement {
         this.data = data;
 
         const groupHeaderElement = document.createElement('div');
-        groupHeaderElement.setAttribute("navigatable-node-id", data.groupNodeId);
-        groupHeaderElement.classList.add('group-header');
-        groupHeaderElement.textContent = data.groupName;
+        groupHeaderElement.classList.add('card-header');
         this.insertAdjacentElement('beforeend', groupHeaderElement);
+
+        const title = document.createElement('div');
+        title.classList.add('title');
+        title.innerText = data.groupName;
+        title.setAttribute('navigatable-node-id', data.groupNodeId);
+        groupHeaderElement.insertAdjacentElement('beforeend', title);
 
 
         for (const instance of data.instances) {
