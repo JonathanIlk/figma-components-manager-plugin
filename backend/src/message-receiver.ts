@@ -1,4 +1,5 @@
 import {MessageToBackend} from "../../shared/types";
+import {DocumentSearcher} from "./document-searcher";
 
 export class MessageReceiver {
 
@@ -15,15 +16,7 @@ export class MessageReceiver {
         const node = await figma.getNodeByIdAsync(nodeId) as SceneNode;
         if (node) {
             // If the node is not in the current page, we should switch to the page where the node is located
-            let pageNode = node.parent;
-            for (let i = 0; i < 20; i++) {
-                if(!pageNode) break;
-                if (pageNode.type === "PAGE") {
-                    // yay we found the page somewhere in the hierarchy
-                    break;
-                }
-                pageNode = pageNode.parent;
-            }
+            const pageNode = DocumentSearcher.findPageForNode(node);
             if (!pageNode) {
                 console.error("Could not find the page for the node");
                 return;
