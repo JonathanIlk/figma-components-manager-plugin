@@ -45,7 +45,7 @@ export class ComponentInfoElement extends HTMLElement {
                         <span class="variants-count">${data.variants.length}</span> variants
                     </span>
                     <span class="tag-element">
-                        <span class="instances-count">${data.instanceNodeIds.length}</span> instances
+                        <span class="instances-count">${data.instances.length}</span> instances
                     </span>
                 </div>
             </div>
@@ -107,7 +107,7 @@ export class ComponentInfoElement extends HTMLElement {
             return `
                 <div class="variant-entry">
                     <span class="variant-name" navigatable-node-id="${variant.nodeId}">${variant.displayName}</span>
-                    <span class="subtle-text">(<span class="instances-count">${variant.instanceNodeIds.length}</span> instances)</span>
+                    <span class="subtle-text">(<span class="instances-count">${variant.instances.length}</span> instances)</span>
                 </div>
             `;
         }).join("");

@@ -13,7 +13,7 @@ export class ComponentsListHeaderElement extends HTMLElement {
     updateForScanResult(data: ScanResultDto) {
         this.innerHTML = `
             <span class="tag-element subtle-text">
-                <span class="instances-count">${data.allInstanceNodeIds.length}</span> instances in total
+                <span class="instances-count">${data.allInstances.length}</span> instances in total
             </span>
         `;
     }

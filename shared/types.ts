@@ -13,7 +13,7 @@ export type MessageToUi = {
 }
 
 export type ScanResultDto = {
-    allInstanceNodeIds: string[];
+    allInstances: InstanceDto[];
     components: ComponentDto[];
 }
 
@@ -22,13 +22,18 @@ export type ComponentDto = {
     nodeName: string;
     type: ComponentType;
     variants: VariantDto[],
-    instanceNodeIds: string[];
+    instances: InstanceDto[];
 }
 
 export type VariantDto = {
     nodeId: string;
     displayName: string;
-    instanceNodeIds: string[];
+    instances: InstanceDto[];
+}
+
+export type InstanceDto = {
+    nodeId: string;
+    nodeName: string;
 }
 
 export enum ComponentType {

@@ -1,5 +1,5 @@
 import {ComponentsSearchResult} from "./document-searcher";
-import {ComponentType, ComponentDto, ScanResultDto, VariantDto} from "../../shared/types";
+import {ComponentType, ComponentDto, ScanResultDto, VariantDto, InstanceDto} from "../../shared/types";
 import {util} from "../backend";
 
 export class SearchResultConverter {
@@ -9,10 +9,10 @@ export class SearchResultConverter {
 
     public async convert(): Promise<ScanResultDto> {
         const components = await this.extractComponents();
-        const allInstanceNodeIds = components.flatMap(component => component.instanceNodeIds);
+        const allInstanceNodeIds: InstanceDto[] = components.flatMap(component => component.instances);
 
         return {
-            allInstanceNodeIds: allInstanceNodeIds,
+            allInstances: allInstanceNodeIds,
             components: await this.extractComponents()
         }
     }
@@ -35,11 +35,11 @@ export class SearchResultConverter {
 
     protected async constructDtoForComponentSet(componentSet: ComponentSetNode): Promise<ComponentDto> {
         const variants: VariantDto[] = [];
-        const instanceNodeIds: string[] = [];
+        const instanceNodeIds: InstanceDto[] = [];
         for (const child of componentSet.children) {
             if (this.isVariant(child as ComponentNode)) {
                 variants.push(await this.constructDtoForVariant(child as ComponentNode));
-                instanceNodeIds.push(...await this.findAllInstanceNodeIds(child as ComponentNode));
+                instanceNodeIds.push(...await this.findAllInstances(child as ComponentNode));
             }
         }
 
@@ -48,14 +48,19 @@ export class SearchResultConverter {
             nodeName: componentSet.name,
             type: ComponentType.COMPONENT_SET,
             variants: variants,
-            instanceNodeIds: instanceNodeIds,
+            instances: instanceNodeIds,
         }
     }
 
-    private async findAllInstanceNodeIds(componentNode: ComponentNode): Promise<string[]> {
+    private async findAllInstances(componentNode: ComponentNode): Promise<InstanceDto[]> {
         // It is probably slow to call getInstancesAsync this could probably be improved
         const instances = await componentNode.getInstancesAsync();
-        return instances.map(instance => instance.id);
+        return instances.map(instance => {
+            return {
+                nodeId: instance.id,
+                nodeName: instance.name
+            }
+        });
     }
 
 
@@ -65,7 +70,7 @@ export class SearchResultConverter {
             nodeName: component.name,
             type: ComponentType.COMPONENT,
             variants: [],
-            instanceNodeIds: await this.findAllInstanceNodeIds(component)
+            instances: await this.findAllInstances(component)
         }
     }
 
@@ -74,7 +79,7 @@ export class SearchResultConverter {
         return {
             nodeId: node.id,
             displayName: Object.values(node.variantProperties!)[0],
-            instanceNodeIds: await this.findAllInstanceNodeIds(node)
+            instances: await this.findAllInstances(node)
         }
     }
 
