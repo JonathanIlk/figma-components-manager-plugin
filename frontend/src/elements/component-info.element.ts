@@ -12,14 +12,6 @@ export class ComponentInfoElement extends HTMLElement {
         return ["component-data"];
     }
 
-    get componentData(): ComponentDto {
-        return JSON.parse(this.getAttribute("component-data") || "{}");
-    }
-
-    set componentData(value: ComponentDto) {
-        this.setAttribute("component-data", JSON.stringify(value));
-    }
-
     constructor() {
         super();
     }
@@ -30,7 +22,7 @@ export class ComponentInfoElement extends HTMLElement {
 
     protected attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         util.log("Components-Manager#ComponentInfo: Attribute Changed", name, oldValue, newValue);
-        if(name === "component-data") {
+        if (name === "component-data") {
             const data = JSON.parse(newValue);
             this.initForComponent(data);
         }
@@ -48,11 +40,11 @@ export class ComponentInfoElement extends HTMLElement {
                         </svg>
                     </div>
                 </div>
-                <div class="sub-header subtle-text">
-                    <span class="tag">
+                <div class="sub-header">
+                    <span class="tag-element">
                         <span class="variants-count">${data.variants.length}</span> variants
                     </span>
-                    <span class="tag">
+                    <span class="tag-element">
                         <span class="instances-count">${data.instanceNodeIds.length}</span> instances
                     </span>
                 </div>

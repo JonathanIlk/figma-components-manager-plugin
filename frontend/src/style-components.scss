@@ -1,0 +1,12 @@
+// Simple "Components" that are defined by adding a class to an element
+
+// Tag
+.tag-element {
+  background: var(--figma-color-bg-tertiary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: 4px;
+
+  font-size: 0.8rem;
+  color: var(--figma-color-text-secondary);
+}

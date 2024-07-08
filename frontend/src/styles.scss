@@ -1,3 +1,5 @@
+@use "style-components";
+
 body {
   /*
   https://www.figma.com/plugin-docs/css-variables/
@@ -31,14 +33,6 @@ body {
   flex-direction: column;
   justify-content: center;
   gap: 8px;
-}
-
-.tag {
-  background: var(--figma-color-bg-tertiary);
-  color: var(--figma-color-text-primary);
-  padding: 2px 8px;
-  border-radius: 4px;
-  margin-right: 4px;
 }
 
 .variants-count {
