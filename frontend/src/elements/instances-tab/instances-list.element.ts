@@ -24,14 +24,19 @@ export class InstancesListElement extends AbstractCmElement {
                 continue;
             }
 
-            const groupElement = document.createElement('div');
-            groupElement.classList.add('group-header');
-            groupElement.setAttribute("navigatable-node-id", group.groupNodeId);
-            groupElement.textContent = group.groupName;
-            this.insertAdjacentElement('beforeend', groupElement);
+            const groupContainerElement = document.createElement('div');
+            groupContainerElement.classList.add('group-container');
+            this.insertAdjacentElement('beforeend', groupContainerElement);
+
+            const groupHeaderElement = document.createElement('div');
+            groupHeaderElement.setAttribute("navigatable-node-id", group.groupNodeId);
+            groupHeaderElement.classList.add('group-header');
+            groupHeaderElement.textContent = group.groupName;
+            groupContainerElement.insertAdjacentElement('beforeend', groupHeaderElement);
+
 
             for (const instance of group.instances) {
-                const instanceInfo: InstanceInfoElement = this.insertAdjacentElement('beforeend', document.createElement('app-instance-info')) as InstanceInfoElement;
+                const instanceInfo: InstanceInfoElement = groupContainerElement.insertAdjacentElement('beforeend', document.createElement('app-instance-info')) as InstanceInfoElement;
                 instanceInfo.updateForData(instance);
             }
         }

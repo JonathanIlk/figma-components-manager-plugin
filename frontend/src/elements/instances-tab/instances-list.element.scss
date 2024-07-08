@@ -6,6 +6,12 @@ app-instances-list {
     gap: 4px;
     align-items: flex-start;
 
+    .group-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
     .group-header {
         display: flex;
         align-items: center;
