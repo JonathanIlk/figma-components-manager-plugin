@@ -9,8 +9,9 @@
 
 ### Not (yet) implemented
 
+- [TODO] Automatic Refresh / Refresh Button
+- [TODO] Beliebige Textsuche
+- [TODO] Group Components by Page
 - [TODO] Show all instances of a Component or Variant in a separate view when clicked (navigatable)
 - [TODO] Controls to quickly collapse/expand all Components or Variants
 - [TODO] Searchbar that quickly filters Components and Variants
-- [TODO] Drag and Drop Components & Variants into document to create new instances
-- [TODO] Group Components by Page
