@@ -20,6 +20,7 @@ export class ComponentInfoElement extends AbstractCmElement {
 
     protected connectedCallback() {
         super.connectedCallback();
+        this.classList.add("card");
     }
 
     protected attributeChangedCallback(name: string, oldValue: string, newValue: string) {

@@ -19,6 +19,7 @@ export class InstancesGroupElement extends AbstractCmElement {
 
     connectedCallback() {
         super.connectedCallback();
+        this.classList.add("card");
     }
 
     updateForData(data: InstanceGroupData) {
