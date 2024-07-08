@@ -13,5 +13,4 @@
 ### Not (yet) implemented
 
 - [TODO] Group Components by Page
-- [TODO] Controls to quickly collapse/expand all Components or Variants
 - [TODO] Show all instances for which the component was deleted
