@@ -12,6 +12,7 @@
 - [TODO] Automatic Refresh / Refresh Button
 - [TODO] Beliebige Textsuche
 - [TODO] Group Components by Page
-- [TODO] Show all instances of a Component or Variant in a separate view when clicked (navigatable)
+- [TODO] Show all instances of a Component or Variant in a separate view when clicked (navigatable, grouped by page)
 - [TODO] Controls to quickly collapse/expand all Components or Variants
 - [TODO] Searchbar that quickly filters Components and Variants
+- [TODO] Show all instances for which the component was deleted
