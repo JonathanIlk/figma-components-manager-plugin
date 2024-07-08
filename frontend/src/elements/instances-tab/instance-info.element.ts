@@ -3,6 +3,7 @@ import "./instance-info.element.scss"
 import {AbstractCmElement} from "../common/abstract-cm-element.element";
 
 export class InstanceInfoElement extends AbstractCmElement {
+    private data!: InstanceDto;
 
     static register() {
         window.customElements.define('app-instance-info', InstanceInfoElement);
@@ -10,12 +11,18 @@ export class InstanceInfoElement extends AbstractCmElement {
 
 
     updateForData(data: InstanceDto) {
+        this.data = data;
         this.setAttribute("navigatable-node-id", data.nodeId);
         this.innerHTML = data.nodeName;
-        this.setupSearch(data);
+        this.setupAsSearchableElement();
     }
 
-    private setupSearch(data: InstanceDto) {
-        this.setupAsSearchableElement("#instances-search-input", data.nodeName);
+    public getSearchInputSelector(): string {
+        return "#instances-search-input";
     }
+
+    public getSearcheableText(): string {
+        return this.data.nodeName;
+    }
+
 }

@@ -6,21 +6,6 @@ app-instances-list {
     gap: 4px;
     align-items: flex-start;
 
-    .group-container {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        padding-bottom: 8px;
-    }
-
-    .group-header {
-        display: flex;
-        align-items: center;
-        background-color: var(--color-primary);
-        color: white;
-        font-weight: bold;
-    }
-
     .no-instances-text {
         font-size: 0.8rem;
     }

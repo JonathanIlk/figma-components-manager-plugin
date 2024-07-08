@@ -4,6 +4,7 @@ import "./component-info.element.scss";
 import {AbstractCmElement} from "../common/abstract-cm-element.element";
 
 export class ComponentInfoElement extends AbstractCmElement {
+    private data!: ComponentDto;
 
     static register() {
         window.customElements.define('app-component-info', ComponentInfoElement);
@@ -18,7 +19,7 @@ export class ComponentInfoElement extends AbstractCmElement {
     }
 
     protected connectedCallback() {
-
+        super.connectedCallback();
     }
 
     protected attributeChangedCallback(name: string, oldValue: string, newValue: string) {
@@ -30,6 +31,8 @@ export class ComponentInfoElement extends AbstractCmElement {
     }
 
     protected initForComponent(data: ComponentDto) {
+        this.data = data;
+
         util.log("Components-Manager#ComponentInfo: Creating Component Info", data, this);
         this.innerHTML = `
             <div class="header">
@@ -59,7 +62,6 @@ export class ComponentInfoElement extends AbstractCmElement {
             const expandCollapseIcon: HTMLElement = this.querySelector(".expand-collapse-icon")!;
             expandCollapseIcon.style.display = "none";
         }
-        this.setupSearch(data);
     }
 
     protected setupInteractiveElements() {
@@ -103,8 +105,11 @@ export class ComponentInfoElement extends AbstractCmElement {
         }).join("");
     }
 
-    private setupSearch(data: ComponentDto) {
-        this.setupAsSearchableElement("#components-search-input",
-            `${data.nodeName}${data.variants.map(variant => variant.displayName).join("")}`);
+    public getSearchInputSelector(): string {
+        return "#components-search-input";
+    }
+
+    public getSearcheableText(): string {
+        return `${this.data.nodeName}${this.data.variants.map(variant => variant.displayName).join("")}`;
     }
 }

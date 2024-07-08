@@ -5,6 +5,9 @@ import {SearchInputElement} from "./search-input.element";
  */
 export abstract class AbstractCmElement extends HTMLElement {
 
+    protected connectedCallback() {
+        this.setupAsSearchableElement();
+    }
 
     /**
      * Call this in the child classes to enable interactivity for certain elements (if used).
@@ -24,16 +27,30 @@ export abstract class AbstractCmElement extends HTMLElement {
      * Call this with the id of a search input and the relevant search text of the element to make it searchable.
      * It will hide the element if the searchText from the input does not match the relevant search text of the element.
      */
-    protected setupAsSearchableElement(searchInputSelector: string, elementRelevantSearchText: string) {
-        const searchInput = document.querySelector(searchInputSelector) as SearchInputElement;
+    protected setupAsSearchableElement() {
+        if (this.getSearchInputSelector().length === 0) return;
+
+        const searchInput = document.querySelector(this.getSearchInputSelector()) as SearchInputElement;
+        if (!searchInput) {
+            return;
+        }
+
         searchInput.addEventListener("search", (event: Event) => {
             const searchText = (event as CustomEvent).detail.toLowerCase();
-            if (elementRelevantSearchText.toLowerCase().includes(searchText) || searchText.length === 0) {
+            if (this.getSearcheableText().toLowerCase().includes(searchText) || searchText.length === 0) {
                 this.classList.remove("search-hidden");
             } else {
                 this.classList.add("search-hidden");
             }
 
         });
+    }
+
+    public getSearchInputSelector(): string {
+        return "";
+    }
+
+    public getSearcheableText(): string {
+        return this.innerHTML;
     }
 }

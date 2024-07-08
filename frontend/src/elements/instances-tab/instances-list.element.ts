@@ -1,13 +1,7 @@
-import {InstanceDto, ScanResultDto} from "../../../../shared/types";
-import {InstanceInfoElement} from "./instance-info.element";
+import {ScanResultDto} from "../../../../shared/types";
 import "./instances-list.element.scss";
 import {AbstractCmElement} from "../common/abstract-cm-element.element";
-
-interface InstanceInfosGroup {
-    groupName: string;
-    groupNodeId: string;
-    instances: InstanceDto[];
-}
+import {InstanceGroupData, InstancesGroupElement} from "./instances-group.element";
 
 export class InstancesListElement extends AbstractCmElement {
 
@@ -18,34 +12,22 @@ export class InstancesListElement extends AbstractCmElement {
 
     updateForScanResult(data: ScanResultDto) {
         this.innerHTML = "";
-        const instances: InstanceInfosGroup[] = this.getGroupedInstances(data);
+        const instances: InstanceGroupData[] = this.getGroupedInstances(data);
         for (const group of instances) {
             if (group.instances.length === 0) {
                 continue;
             }
 
-            const groupContainerElement = document.createElement('div');
-            groupContainerElement.classList.add('group-container');
+            const groupContainerElement = document.createElement('app-instances-group') as InstancesGroupElement;
+            groupContainerElement.updateForData(group);
             this.insertAdjacentElement('beforeend', groupContainerElement);
-
-            const groupHeaderElement = document.createElement('div');
-            groupHeaderElement.setAttribute("navigatable-node-id", group.groupNodeId);
-            groupHeaderElement.classList.add('group-header');
-            groupHeaderElement.textContent = group.groupName;
-            groupContainerElement.insertAdjacentElement('beforeend', groupHeaderElement);
-
-
-            for (const instance of group.instances) {
-                const instanceInfo: InstanceInfoElement = groupContainerElement.insertAdjacentElement('beforeend', document.createElement('app-instance-info')) as InstanceInfoElement;
-                instanceInfo.updateForData(instance);
-            }
         }
 
         this.setupInteractiveElements();
     }
 
     private getGroupedInstances(data: ScanResultDto) {
-        const groups: InstanceInfosGroup[] = [];
+        const groups: InstanceGroupData[] = [];
         for (const component of data.components) {
             if(component.type === "COMPONENT_SET") {
                 for(const variant of component.variants) {
