@@ -1,6 +1,4 @@
-import {ScanResultDto} from "../shared/types";
 import {Util} from "../shared/util";
-import {InformationScanner} from "./src/information-scanner";
 import {MessageReceiver} from "./src/message-receiver";
 import {ViewUpdater} from "./src/view-updater";
 
@@ -18,8 +16,15 @@ class Backend {
         
         figma.showUI(__html__, {themeColors: true, width: 400, height: 500});
         this.viewUpdater.updateComponents();
+
+        this.subscribeToDocumentChanges();
     }
 
 
+    private static subscribeToDocumentChanges() {
+        figma.on("documentchange", (event: DocumentChangeEvent) => {
+           this.viewUpdater.updateComponents();
+        });
+    }
 }
 Backend.startBackend();
