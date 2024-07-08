@@ -78,7 +78,7 @@ export class SearchResultConverter {
         util.log("Variant found:", node)
         return {
             nodeId: node.id,
-            displayName: Object.values(node.variantProperties!)[0],
+            displayName: Object.values(node.variantProperties!).join(", "),
             instances: await this.findAllInstances(node)
         }
     }
