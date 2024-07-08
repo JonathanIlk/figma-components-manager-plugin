@@ -15,7 +15,6 @@ export class InstanceInfoElement extends AbstractCmElement {
     updateForData(data: InstanceDto, parentGroup: InstancesGroupElement) {
         this.parentGroup = parentGroup;
         this.data = data;
-        this.setAttribute("navigatable-node-id", data.nodeId);
         this.innerHTML = data.nodeName;
         this.setupAsSearchableElement();
     }
