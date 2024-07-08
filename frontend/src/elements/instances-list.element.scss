@@ -3,5 +3,18 @@ app-instances-list {
     height: 100%;
     display: flex;
     flex-direction: column;
+    gap: 4px;
 
+    .group-header {
+        display: flex;
+        align-items: center;
+        margin-top: 4px;
+        background-color: var(--color-primary);
+        color: white;
+        font-weight: bold;
+    }
+
+    .no-instances-text {
+        font-size: 0.8rem;
+    }
 }

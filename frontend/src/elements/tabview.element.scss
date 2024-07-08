@@ -14,17 +14,18 @@ app-tabview {
       cursor: pointer;
       border: none;
       background-color: var(--figma-color-bg-secondary);
-      color: var(--figma-color-text);
-      transition: background-color 0.2s;
+      color: var(--figma-color-text-tertiary);
+      transition: all 0.2s;
       font-weight: bold;
 
       &:hover {
-        background-color: var(--figma-color-bg-secondary-hover);
+        //background-color: var(--figma-color-bg-secondary-hover);
+        color: var(--figma-color-text);
       }
 
       &.active {
         background-color: var(--figma-color-bg-secondary-active);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        color: var(--figma-color-text);
       }
     }
   }
