@@ -1,7 +1,7 @@
-import {ComponentDto, VariantDto} from "../../../shared/types";
-import {util} from "../../frontend";
+import {ComponentDto, VariantDto} from "../../../../shared/types";
+import {util} from "../../../frontend";
 import "./component-info.element.scss";
-import {AbstractCmElement} from "./abstract-cm-element.element";
+import {AbstractCmElement} from "../common/abstract-cm-element.element";
 
 export class ComponentInfoElement extends AbstractCmElement {
 

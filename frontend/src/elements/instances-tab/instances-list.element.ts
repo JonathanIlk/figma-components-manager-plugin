@@ -1,7 +1,7 @@
-import {InstanceDto, ScanResultDto} from "../../../shared/types";
+import {InstanceDto, ScanResultDto} from "../../../../shared/types";
 import {InstanceInfoElement} from "./instance-info.element";
 import "./instances-list.element.scss";
-import {AbstractCmElement} from "./abstract-cm-element.element";
+import {AbstractCmElement} from "../common/abstract-cm-element.element";
 
 interface InstanceInfosGroup {
     groupName: string;

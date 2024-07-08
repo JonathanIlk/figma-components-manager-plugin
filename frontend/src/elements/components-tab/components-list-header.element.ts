@@ -1,4 +1,4 @@
-import {ScanResultDto} from "../../../shared/types";
+import {ScanResultDto} from "../../../../shared/types";
 import "./components-list-header.element.scss";
 
 export class ComponentsListHeaderElement extends HTMLElement {

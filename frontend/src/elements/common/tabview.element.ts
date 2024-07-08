@@ -1,4 +1,4 @@
-import "./components-list-header.element.scss";
+import "../components-tab/components-list-header.element.scss";
 import "./tabview.element.scss";
 
 /**

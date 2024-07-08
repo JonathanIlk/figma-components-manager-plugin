@@ -1,4 +1,4 @@
-import {InstanceDto} from "../../../shared/types";
+import {InstanceDto} from "../../../../shared/types";
 import "./instance-info.element.scss"
 
 export class InstanceInfoElement extends HTMLElement {
