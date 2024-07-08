@@ -1,8 +1,8 @@
 
 ### Features
 
-- List of all Components in the document
-- List of the corresponding Variants in the document
+- List all Components in the document
+- List the corresponding Variants in the document
 - Quickly navigate to a Component or Variant by clicking in the list
 - Show amount of instances of a Component or Variant in the document
 - Automatic refresh when the document changes
