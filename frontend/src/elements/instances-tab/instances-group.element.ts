@@ -44,6 +44,7 @@ export class InstancesGroupElement extends AbstractCmElement {
             const instanceInfo: InstanceInfoElement = cardContent.insertAdjacentElement('beforeend', document.createElement('app-instance-info')) as InstanceInfoElement;
             instanceInfo.updateForData(instance, this);
             instanceInfo.setAttribute('navigatable-node-id', instance.nodeId);
+            instanceInfo.classList.add("card-clickable-element");
             this.instanceInfos.push(instanceInfo);
         }
         this.setupAsSearchableElement();

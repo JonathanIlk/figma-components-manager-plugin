@@ -6,16 +6,4 @@ app-instances-group {
     grid-gap: 4px;
   }
 
-  app-instance-info {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 8px;
-    border-radius: 16px;
-    color: var(--figma-color-text);
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.2);
-      text-decoration: none !important;
-    }
-  }
-
 }

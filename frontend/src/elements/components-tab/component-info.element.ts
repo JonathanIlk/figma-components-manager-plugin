@@ -98,8 +98,8 @@ export class ComponentInfoElement extends AbstractCmElement {
     private getVariantsListHtml(variants: VariantDto[]): string {
         return variants.map(variant => {
             return `
-                <div class="variant-entry">
-                    <span class="variant-name" navigatable-node-id="${variant.nodeId}">${variant.displayName}</span>
+                <div class="variant-entry card-clickable-element" navigatable-node-id="${variant.nodeId}">
+                    <span class="variant-name">${variant.displayName}</span>
                     <span class="subtle-text">(<span class="instances-count">${variant.instances.length}</span> instances)</span>
                 </div>
             `;
