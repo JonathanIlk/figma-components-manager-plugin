@@ -25,4 +25,8 @@ export class SearchInputElement extends HTMLElement {
         });
         this.dispatchEvent(searchEvent);
     }
+
+    getSearchText() {
+        return (this.querySelector('input') as HTMLInputElement).value;
+    }
 }

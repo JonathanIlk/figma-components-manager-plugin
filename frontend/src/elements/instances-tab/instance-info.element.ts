@@ -1,8 +1,10 @@
 import {InstanceDto} from "../../../../shared/types";
 import "./instance-info.element.scss"
 import {AbstractCmElement} from "../common/abstract-cm-element.element";
+import {InstancesGroupElement} from "./instances-group.element";
 
 export class InstanceInfoElement extends AbstractCmElement {
+    private parentGroup!: InstancesGroupElement;
     private data!: InstanceDto;
 
     static register() {
@@ -10,7 +12,8 @@ export class InstanceInfoElement extends AbstractCmElement {
     }
 
 
-    updateForData(data: InstanceDto) {
+    updateForData(data: InstanceDto, parentGroup: InstancesGroupElement) {
+        this.parentGroup = parentGroup;
         this.data = data;
         this.setAttribute("navigatable-node-id", data.nodeId);
         this.innerHTML = data.nodeName;
@@ -23,6 +26,11 @@ export class InstanceInfoElement extends AbstractCmElement {
 
     public getSearcheableText(): string {
         return this.data.nodeName;
+    }
+
+    // If the group is hit by search, we want to always show all instances inside the group.
+    public optionalSearchCondition(): boolean {
+        return this.parentGroup.isHitBySearch();
     }
 
 }

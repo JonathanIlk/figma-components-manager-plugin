@@ -23,34 +23,52 @@ export abstract class AbstractCmElement extends HTMLElement {
         });
     }
 
-    /**
-     * Call this with the id of a search input and the relevant search text of the element to make it searchable.
-     * It will hide the element if the searchText from the input does not match the relevant search text of the element.
-     */
     protected setupAsSearchableElement() {
         if (this.getSearchInputSelector().length === 0) return;
 
         const searchInput = document.querySelector(this.getSearchInputSelector()) as SearchInputElement;
-        if (!searchInput) {
-            return;
-        }
 
         searchInput.addEventListener("search", (event: Event) => {
-            const searchText = (event as CustomEvent).detail.toLowerCase();
-            if (this.getSearcheableText().toLowerCase().includes(searchText) || searchText.length === 0) {
+
+            if (this.isHitBySearch() || this.optionalSearchCondition()) {
                 this.classList.remove("search-hidden");
             } else {
                 this.classList.add("search-hidden");
             }
-
         });
     }
 
+    /**
+     *
+     * @final @sealed
+     */
+    public isHitBySearch() {
+        const searchInput = document.querySelector(this.getSearchInputSelector()) as SearchInputElement;
+        const searchText = searchInput.getSearchText().toLowerCase();
+        return this.getSearcheableText().toLowerCase().includes(searchText) || searchText.length === 0;
+    }
+
+
+
+    /**
+     * Override this method in the child classes to return the selector of the search input element.
+     */
     public getSearchInputSelector(): string {
         return "";
     }
 
+    /**
+     * Override this method in the child classes to return the text that should be accounted for when searching.
+     */
     public getSearcheableText(): string {
         return this.innerHTML;
+    }
+
+    /**
+     * Override this to provide an optional search condition.
+     * If this returns true the element will be shown even if it is not hit by the search.
+     */
+    protected optionalSearchCondition() {
+        return false;
     }
 }

@@ -34,7 +34,7 @@ export class InstancesGroupElement extends AbstractCmElement {
 
         for (const instance of data.instances) {
             const instanceInfo: InstanceInfoElement = this.insertAdjacentElement('beforeend', document.createElement('app-instance-info')) as InstanceInfoElement;
-            instanceInfo.updateForData(instance);
+            instanceInfo.updateForData(instance, this);
             this.instanceInfos.push(instanceInfo);
         }
         this.setupAsSearchableElement();
@@ -45,6 +45,11 @@ export class InstancesGroupElement extends AbstractCmElement {
     }
 
     public getSearcheableText(): string {
-        return this.data.groupName + " " + this.instanceInfos.map(i => i.getSearcheableText()).join(" ");
+        return this.data.groupName;
+    }
+
+    // If any InstanceInfoElement is hit by search, we want to show the group.
+    protected optionalSearchCondition(): boolean {
+        return this.instanceInfos.some(instanceInfo => instanceInfo.isHitBySearch());
     }
 }
