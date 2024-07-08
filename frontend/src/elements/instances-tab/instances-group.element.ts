@@ -36,9 +36,12 @@ export class InstancesGroupElement extends AbstractCmElement {
         title.setAttribute('navigatable-node-id', data.groupNodeId);
         groupHeaderElement.insertAdjacentElement('beforeend', title);
 
+        const cardContent = document.createElement('div');
+        cardContent.classList.add('card-content');
+        this.insertAdjacentElement('beforeend', cardContent);
 
         for (const instance of data.instances) {
-            const instanceInfo: InstanceInfoElement = this.insertAdjacentElement('beforeend', document.createElement('app-instance-info')) as InstanceInfoElement;
+            const instanceInfo: InstanceInfoElement = cardContent.insertAdjacentElement('beforeend', document.createElement('app-instance-info')) as InstanceInfoElement;
             instanceInfo.updateForData(instance, this);
             this.instanceInfos.push(instanceInfo);
         }

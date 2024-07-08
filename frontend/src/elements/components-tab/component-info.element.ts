@@ -54,7 +54,7 @@ export class ComponentInfoElement extends AbstractCmElement {
                     </span>
                 </div>
             </div>
-            <div class="expandable-content">
+            <div class="card-content expandable-content">
                 ${this.getVariantsListHtml(data.variants)}
             </div>
         `;

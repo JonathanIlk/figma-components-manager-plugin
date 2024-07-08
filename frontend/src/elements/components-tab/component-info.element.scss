@@ -4,13 +4,10 @@ app-component-info .expand-collapse-icon {
 }
 
 app-component-info .expandable-content {
-    margin-top: 16px;
-    padding: 8px;
-    overflow: hidden;
     transition: all 0.3s ease-in-out;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    overflow: hidden;
 }
+
 app-component-info .expandable-content:not(.visible) {
     padding: 0 !important;
     margin: 0 !important;
