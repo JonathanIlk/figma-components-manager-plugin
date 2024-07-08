@@ -3,9 +3,11 @@ import {ComponentInfoElement} from "./src/elements/component-info.element";
 import {Util} from "../shared/util";
 import {ComponentsListHeaderElement} from "./src/elements/components-list-header.element";
 import "./src/styles.scss";
+import {TabviewElement} from "./src/elements/tabview.element";
 
 ComponentInfoElement.register();
 ComponentsListHeaderElement.register();
+TabviewElement.register();
 
 export const util = new Util("CM-Frontend");
 

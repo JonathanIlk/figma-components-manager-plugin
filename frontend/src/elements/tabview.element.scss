@@ -1,0 +1,33 @@
+app-tabview {
+  .tab-buttons-container {
+    display: flex;
+    justify-content: space-around;
+
+    .tab-button {
+      flex-grow: 1;
+      padding: 8px 16px;
+      cursor: pointer;
+      border: none;
+      background-color: var(--figma-color-bg-secondary);
+      color: var(--figma-color-text);
+      transition: background-color 0.2s;
+      font-weight: bold;
+
+      &:hover {
+        background-color: var(--figma-color-bg-secondary-hover);
+      }
+
+      &.active {
+        background-color: var(--figma-color-bg-secondary-active);
+      }
+    }
+  }
+
+  .tab-content {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
+}

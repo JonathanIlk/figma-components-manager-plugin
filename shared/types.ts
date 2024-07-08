@@ -3,7 +3,7 @@ export type Environment = {
 }
 
 export type MessageToBackend = {
-    type: "navigate-to-node",
+    type: "navigate-to-node" | "show-instances",
     payload: unknown,
 }
 

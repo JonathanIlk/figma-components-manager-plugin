@@ -36,4 +36,8 @@ export class MessageReceiver {
             figma.viewport.scrollAndZoomIntoView([node]);
         }
     }
+
+    protected async onShowInstances(message: MessageToBackend) {
+
+    }
 }
