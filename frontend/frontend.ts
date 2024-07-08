@@ -6,12 +6,14 @@ import "./src/styles.scss";
 import {TabviewElement} from "./src/elements/tabview.element";
 import {InstancesListElement} from "./src/elements/instances-list.element";
 import {InstanceInfoElement} from "./src/elements/instance-info.element";
+import {SearchInputElement} from "./src/elements/search-input.element";
 
 ComponentInfoElement.register();
 ComponentsListHeaderElement.register();
 TabviewElement.register();
 InstancesListElement.register();
 InstanceInfoElement.register();
+SearchInputElement.register();
 
 export const util = new Util("CM-Frontend");
 
