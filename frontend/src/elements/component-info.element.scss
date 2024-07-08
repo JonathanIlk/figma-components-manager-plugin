@@ -47,9 +47,3 @@ app-component-info .expand-collapse-icon.expanded {
 app-component-info .variant-entry:not(:last-child) {
     margin-bottom: 4px;
 }
-app-component-info [navigatable-node-id] {
-    cursor: pointer;
-}
-app-component-info [navigatable-node-id]:hover {
-    text-decoration: underline;
-}

@@ -17,7 +17,7 @@ body {
   -webkit-border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--figma-color-bg-secondary);
+  background: rgba(209, 168, 255, 0.2);
 }
 
 .content-container {
@@ -49,4 +49,11 @@ body {
 .subtle-text {
   font-size: 0.8rem;
   color: var(--figma-color-text-secondary);
+}
+
+[navigatable-node-id] {
+  cursor: pointer;
+}
+[navigatable-node-id]:hover {
+  text-decoration: underline;
 }

@@ -4,10 +4,14 @@ import {Util} from "../shared/util";
 import {ComponentsListHeaderElement} from "./src/elements/components-list-header.element";
 import "./src/styles.scss";
 import {TabviewElement} from "./src/elements/tabview.element";
+import {InstancesListElement} from "./src/elements/instances-list.element";
+import {InstanceInfoElement} from "./src/elements/instance-info.element";
 
 ComponentInfoElement.register();
 ComponentsListHeaderElement.register();
 TabviewElement.register();
+InstancesListElement.register();
+InstanceInfoElement.register();
 
 export const util = new Util("CM-Frontend");
 
@@ -28,6 +32,10 @@ function onReceiveComponentsMessage(payload: ScanResultDto) {
 
     const header: ComponentsListHeaderElement = document.getElementById('components-list-header') as ComponentsListHeaderElement;
     header.updateForScanResult(payload);
+
+    const instancesList: InstancesListElement = document.getElementsByTagName('app-instances-list')[0] as InstancesListElement;
+    instancesList.updateForScanResult(payload);
+
 }
 
 onmessage = (event) => {

@@ -19,6 +19,7 @@ app-tabview {
 
       &.active {
         background-color: var(--figma-color-bg-secondary-active);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
       }
     }
   }
