@@ -64,6 +64,11 @@ body {
 [navigatable-node-id] {
   cursor: pointer;
 }
+
 [navigatable-node-id]:hover {
   text-decoration: underline;
+}
+
+.search-hidden {
+  display: none;
 }

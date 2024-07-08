@@ -2,12 +2,12 @@ app-search-input {
   display: block;
   width: 100%;
   padding-top: 4px;
-  padding-bottom: 4px;
+  padding-bottom: 8px;
 
   input {
     width: 100%;
     padding: 4px;
-    border-radius: 9999px;
+    border-radius: 8px;
     border: none;
 
     background: var(--figma-color-bg-secondary);

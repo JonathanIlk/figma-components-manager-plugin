@@ -59,6 +59,7 @@ export class ComponentInfoElement extends AbstractCmElement {
             const expandCollapseIcon: HTMLElement = this.querySelector(".expand-collapse-icon")!;
             expandCollapseIcon.style.display = "none";
         }
+        this.setupSearch(data);
     }
 
     protected setupInteractiveElements() {
@@ -100,5 +101,10 @@ export class ComponentInfoElement extends AbstractCmElement {
                 </div>
             `;
         }).join("");
+    }
+
+    private setupSearch(data: ComponentDto) {
+        this.setupAsSearchableElement("#components-search-input",
+            `${data.nodeName}${data.variants.map(variant => variant.displayName).join("")}`);
     }
 }
