@@ -20,19 +20,16 @@ export class InstancesListElement extends AbstractCmElement {
         this.innerHTML = "";
         const instances: InstanceInfosGroup[] = this.getGroupedInstances(data);
         for (const group of instances) {
+            if (group.instances.length === 0) {
+                continue;
+            }
+
             const groupElement = document.createElement('div');
             groupElement.classList.add('group-header');
             groupElement.setAttribute("navigatable-node-id", group.groupNodeId);
             groupElement.textContent = group.groupName;
             this.insertAdjacentElement('beforeend', groupElement);
 
-            if (group.instances.length === 0) {
-                const noInstancesElement = document.createElement('div');
-                noInstancesElement.classList.add('no-instances-text');
-                noInstancesElement.textContent = "No instances found";
-                this.insertAdjacentElement('beforeend', noInstancesElement);
-                continue;
-            }
             for (const instance of group.instances) {
                 const instanceInfo: InstanceInfoElement = this.insertAdjacentElement('beforeend', document.createElement('app-instance-info')) as InstanceInfoElement;
                 instanceInfo.updateForData(instance);
