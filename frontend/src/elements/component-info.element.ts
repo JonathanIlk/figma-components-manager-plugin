@@ -1,5 +1,6 @@
-import {ComponentDto, VariantDto} from "../../shared/types";
-import {util} from "../frontend";
+import {ComponentDto, VariantDto} from "../../../shared/types";
+import {util} from "../../frontend";
+import "./component-info.element.scss";
 
 export class ComponentInfoElement extends HTMLElement {
 
@@ -38,7 +39,6 @@ export class ComponentInfoElement extends HTMLElement {
     protected initForComponent(data: ComponentDto) {
         util.log("Components-Manager#ComponentInfo: Creating Component Info", data, this);
         this.innerHTML = `
-            ${this.getStyle()}
             <div class="header">
                 <div class="title-container">
                     <div class="component-name" navigatable-node-id="${data.nodeId}">${data.nodeName}</div>
@@ -63,7 +63,8 @@ export class ComponentInfoElement extends HTMLElement {
         `;
         this.setupInteractiveElements(data);
         if(data.variants.length === 0) {
-            this.querySelector(".expand-collapse-icon")?.style.display = "none";
+            const expandCollapseIcon: HTMLElement = this.querySelector(".expand-collapse-icon")!;
+            expandCollapseIcon.style.display = "none";
         }
     }
 
@@ -95,7 +96,7 @@ export class ComponentInfoElement extends HTMLElement {
 
     public expandContent() {
         // Can't animate to auto height so we set the height to the scrollHeight for the css transition
-        const expandableContent = this.querySelector(".expandable-content")!;
+        const expandableContent: HTMLElement = this.querySelector(".expandable-content")!;
         const expandCollapseIcon = this.querySelector(".expand-collapse-icon")!;
         expandableContent.style.height = expandableContent.scrollHeight + "px";
         expandableContent.classList.add("visible");
@@ -107,87 +108,6 @@ export class ComponentInfoElement extends HTMLElement {
         const expandCollapseIcon = this.querySelector(".expand-collapse-icon")!;
         expandableContent.classList.remove("visible");
         expandCollapseIcon.classList.remove("expanded");
-    }
-
-    private getStyle() {
-        return `
-            <style>
-                app-component-info {
-                    width: 100%;
-                    background: var(--figma-color-bg-secondary);
-                    border-radius: 12px;
-                    padding: 12px;
-                }
-                app-component-info .title-container {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 8px;
-                }
-                app-component-info .component-name {
-                    font-size: 1.2rem;
-                    font-weight: bold;
-                }
-                app-component-info .sub-header {
-                    margin-bottom: 8px;
-                }
-                app-component-info .subtle-text {
-                    font-size: 0.8rem;
-                    color: var(--figma-color-text-secondary);
-                }
-                app-component-info .tag {
-                    background: var(--figma-color-bg-tertiary);
-                    color: var(--figma-color-text-primary);
-                    padding: 2px 8px;
-                    border-radius: 4px;
-                    margin-right: 4px;
-                }
-                app-component-info .variants-count {
-                    font-weight: bold;
-                    color: var(--figma-color-icon-component);
-                }
-                app-component-info .instances-count {
-                    font-weight: bold;
-                    color: var(--figma-color-text-success);
-                }
-                app-component-info .expand-collapse-icon {
-                    width: 18px;
-                    cursor: pointer;
-                }
-                
-                app-component-info .expandable-content {
-                    margin-top: 16px;
-                    padding: 8px;
-                    overflow: hidden;
-                    transition: all 0.3s ease-in-out;
-                    background: rgba(255, 255, 255, 0.1);
-                    border-radius: 8px;
-                }
-                app-component-info .expandable-content:not(.visible) {
-                    padding: 0 !important;
-                    margin: 0 !important;
-                    height: 0 !important;
-                }
-                app-component-info .expand-collapse-icon {
-                    transition: all 0.3s ease-in-out;
-                }
-                app-component-info .expand-collapse-icon:hover svg {
-                    stroke: var(--figma-color-icon-brand);
-                }
-                app-component-info .expand-collapse-icon.expanded {
-                    transform: rotate(180deg);
-                }
-                app-component-info .variant-entry:not(:last-child) {
-                    margin-bottom: 4px;
-                }
-                app-component-info [navigatable-node-id] {
-                    cursor: pointer;
-                }
-                app-component-info [navigatable-node-id]:hover {
-                    text-decoration: underline;
-                }
-            </style>
-        `;
     }
 
     private getVariantsListHtml(variants: VariantDto[]): string {

@@ -43,6 +43,20 @@ module.exports = [
                 {
                     test: /\.tsx?$/,
                     loader: "ts-loader"
+                },
+                { // Include styles in html file directly when they are imported in typescript (https://stackoverflow.com/a/53657486/1123709)
+                    test: /\.scss$/,
+                    use: [
+                        {
+                            loader: 'style-loader',
+                            options: {
+                                insert: 'head', // insert style tag inside of <head>
+                                injectType: 'singletonStyleTag' // this is for wrap all your style in just one style tag
+                            },
+                        },
+                        "css-loader",
+                        "sass-loader"
+                    ],
                 }
             ]
         },

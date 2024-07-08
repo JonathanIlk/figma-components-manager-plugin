@@ -1,5 +1,5 @@
 import {ComponentDto, MessageToUi, ScanResultDto} from "../shared/types";
-import {ComponentInfoElement} from "./src/component-info.element";
+import {ComponentInfoElement} from "./src/elements/component-info.element";
 import {Util} from "../shared/util";
 
 ComponentInfoElement.register();
