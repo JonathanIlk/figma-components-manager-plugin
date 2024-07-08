@@ -1,8 +1,3 @@
-app-component-info .expand-collapse-icon {
-    width: 18px;
-    cursor: pointer;
-}
-
 app-component-info .expandable-content {
     transition: all 0.3s ease-in-out;
     overflow: hidden;
@@ -13,15 +8,7 @@ app-component-info .expandable-content:not(.visible) {
     margin: 0 !important;
     height: 0 !important;
 }
-app-component-info .expand-collapse-icon {
-    transition: all 0.3s ease-in-out;
-}
-app-component-info .expand-collapse-icon:hover svg {
-    stroke: var(--figma-color-icon-brand);
-}
-app-component-info .expand-collapse-icon.expanded {
-    transform: rotate(180deg);
-}
+
 app-component-info .variant-entry:not(:last-child) {
     margin-bottom: 4px;
 }

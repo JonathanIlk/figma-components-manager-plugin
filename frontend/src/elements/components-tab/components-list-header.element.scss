@@ -3,4 +3,12 @@ app-components-list-header {
   width: 100%;
   display: flex;
   justify-content: flex-start;
+  position: relative;
+
+  .expand-collapse-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 24px;
+  }
 }
