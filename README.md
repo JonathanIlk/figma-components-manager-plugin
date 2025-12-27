@@ -20,7 +20,7 @@
 
 - List all Components in the document
 - List the corresponding Variants in the document
-- Quickly navigate to a Component or Variant by clicking in the list
+- Quickly navigate to Components, Variants, Instances by clicking in the list
 - Show amount of instances of a Component or Variant in the document
 - Automatic refresh when the document changes (optional, can be toggled off for performance)
 - List all Instances of a Component or Variant in the document
@@ -28,13 +28,17 @@
 - Resize Plugin window to your liking
  
 
-### Requested, not implemented (Pull Requests welcome)
+### Requested, not implemented
+
+Pull Requests for these features are welcome!
+Issues for other features are also welcome, but I cannot guarantee that I will implement them.
 
 - Group Components by Page
 - Show all instances for which the component was deleted
 - (X) button to clear search input
 - Jump from Components tab to the corresponding instances for a selected component/variant
 - Fix some minor light mode styling issues (everything is readable, but could be prettier)
+- More consistent ordering of the variants of a component (currently default order as returned by figma api)
 
 ## Technical Documentation
 
