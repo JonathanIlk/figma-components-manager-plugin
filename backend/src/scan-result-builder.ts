@@ -1,23 +1,28 @@
-import {ComponentsSearchResult} from "./document-searcher";
+import {RefreshStartInstructions} from "./document-searcher";
 import {ComponentType, ComponentDto, ScanResultDto, VariantDto, InstanceDto} from "../../shared/types";
 import {util} from "../backend";
 import {FigmaUtil} from "./figma-util";
 
 /**
- * Converts a ComponentsSearchResult into a ScanResultDto for transfer to the frontend, to be displayed in the UI.
+ * Converts RefreshStartInstructions into a ScanResultDto for transfer to the frontend, to be displayed in the UI.
  */
-export class SearchResultConverter {
+export class ScanResultBuilder {
 
-    constructor(protected searchResult: ComponentsSearchResult) {
+    constructor(protected searchResult: RefreshStartInstructions) {
     }
 
     protected allSeenInstances: Set<InstanceNode> = new Set();
 
+    /**
+     * Takes the Components passed to the constructor and searches for all relevant variants, instances for the passed components.
+     * This searches top-down from component sets to variants to instances.
+     */
     public async convert(): Promise<ScanResultDto> {
         util.log(`Converting scan result of ${Object.keys(this.searchResult.components).length} components and ${Object.keys(this.searchResult.componentSets).length} component sets to DTOs`);
         const allComponentDtos = await this.extractComponents();
 
-        const variantDtos: VariantDto[] = await Promise.all(Object.values(this.searchResult.components)
+        const variantDtos: VariantDto[] = await Promise.all(Object.values(this.searchResult.componentSets)
+            .flatMap(componentSet => componentSet.children as ComponentNode[])
             .filter(component => this.isVariant(component))
             .map(async component => {
                 return await this.constructDtoForVariant(component);

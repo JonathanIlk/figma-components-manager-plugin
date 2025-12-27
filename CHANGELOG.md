@@ -2,3 +2,5 @@ Version 4:
 
 - Skip incorrect components when rendering view
 - Add Resize handle to plugin window to allow user resizing
+- Optimize automatic refresh to use partial updates instead of fully rescanning the document. This improves performance significantly on large documents.
+- 

@@ -1,4 +1,4 @@
-import {FullComponentsRefreshMessage, MessageToUi, MessageToUiType, ScanResultDto} from "../shared/types";
+import {DocumentUpdatedMessage, MessageToUi, MessageToUiType, ScanResultDto} from "../shared/types";
 import {ComponentInfoElement} from "./src/elements/components-tab/component-info.element";
 import {Util} from "../shared/util";
 import {ComponentsListHeaderElement} from "./src/elements/components-tab/components-list-header.element";
@@ -25,9 +25,9 @@ export const util = new Util("CM-Frontend");
 onmessage = (event) => {
     const messageToUi: MessageToUi = event.data.pluginMessage;
     util.log("Components-Manager: UI Received Message", messageToUi);
-    if (messageToUi.type === MessageToUiType.FULL_COMPONENTS_REFRESH) {
-        const typedMessage = messageToUi as FullComponentsRefreshMessage;
-        ScanResultsManager.getInstance().fullScanRefresh(typedMessage.payload);
+    if (messageToUi.type === MessageToUiType.DOCUMENT_UPDATE) {
+        const typedMessage = messageToUi as DocumentUpdatedMessage;
+        ScanResultsManager.getInstance().handleDocumentUpdate(typedMessage.payload);
     }
 }
 

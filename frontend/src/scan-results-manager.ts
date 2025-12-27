@@ -1,8 +1,9 @@
-import {ScanResultDto} from "../../shared/types";
+import {DocumentUpdatePayload, ScanResultDto} from "../../shared/types";
 import {ComponentsListHeaderElement} from "./elements/components-tab/components-list-header.element";
 import {InstancesListElement} from "./elements/instances-tab/instances-list.element";
 import {ComponentInfoElement} from "./elements/components-tab/component-info.element";
 import {ScannedComponent, ScannedInstance, ScannedVariant} from "./scanned-nodes";
+import {util} from "../frontend";
 
 export interface StoredScanResults {
     components: { [nodeId: string]: ScannedComponent };
@@ -32,30 +33,31 @@ export class ScanResultsManager {
 
     private constructor() {}
 
-    public fullScanRefresh(scanResult: ScanResultDto) {
-        const newResults: StoredScanResults = {
-            components: {},
-            variants: {},
-            instances: {}
-        };
+    public handleDocumentUpdate(updatePayload: DocumentUpdatePayload) {
+        util.log("ScanResultsManager: Handling Document Update", updatePayload);
 
-        for (const componentDto of scanResult.components) {
+        for (const componentDto of updatePayload.scanResult.components) {
             const component = ScannedComponent.fromDto(componentDto);
-            newResults.components[component.nodeId] = component;
+            this.cachedScanResults.components[component.nodeId] = component;
         }
 
-        for (const variantDto of scanResult.variants) {
+        for (const variantDto of updatePayload.scanResult.variants) {
             const variant = ScannedVariant.fromDto(variantDto);
-            newResults.variants[variant.nodeId] = variant;
+            this.cachedScanResults.variants[variant.nodeId] = variant;
         }
 
-        for (const instanceDto of scanResult.instances) {
+        for (const instanceDto of updatePayload.scanResult.instances) {
             const instance = ScannedInstance.fromDto(instanceDto);
-            newResults.instances[instance.nodeId] = instance;
+            this.cachedScanResults.instances[instance.nodeId] = instance;
         }
 
-        this.cachedScanResults = newResults;
+        for (const removedNodeId of updatePayload.removedNodeIds) {
+            delete this.cachedScanResults.components[removedNodeId];
+            delete this.cachedScanResults.variants[removedNodeId];
+            delete this.cachedScanResults.instances[removedNodeId];
+        }
 
+        // For now we just do a full refresh of the UI on any update, this could be improved later
         this.refreshUi();
     }
 
