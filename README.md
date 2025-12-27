@@ -22,7 +22,7 @@
 - List the corresponding Variants in the document
 - Quickly navigate to a Component or Variant by clicking in the list
 - Show amount of instances of a Component or Variant in the document
-- Automatic refresh when the document changes
+- Automatic refresh when the document changes (optional, can be toggled off for performance)
 - List all Instances of a Component or Variant in the document
 - Search through all Components, Variants and Instances
 - Resize Plugin window to your liking
