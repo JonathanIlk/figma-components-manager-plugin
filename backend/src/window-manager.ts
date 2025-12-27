@@ -7,7 +7,7 @@ export class WindowManager {
     private static instance: WindowManager;
 
     private static DEFAULT_WIDTH = 400;
-    private static DEFAULT_HEIGHT = 500;
+    private static DEFAULT_HEIGHT = 550;
 
     private constructor() {
     }
