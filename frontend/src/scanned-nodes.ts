@@ -7,11 +7,11 @@ export interface BaseScannedNode {
 }
 
 export class ScannedComponent implements BaseScannedNode {
-    private constructor(public nodeId: string, public displayName: string, public type: ComponentType, public variantIds: string[], public instanceIds: string[]) {
+    private constructor(public nodeId: string, public displayName: string, public type: ComponentType, public variantIds: string[], public instanceIds: string[], public variantProperties: string[]) {
     }
 
     public static fromDto(dto: ComponentDto): ScannedComponent {
-        return new ScannedComponent(dto.nodeId, dto.nodeName, dto.type, dto.variantIds, dto.instanceIds);
+        return new ScannedComponent(dto.nodeId, dto.nodeName, dto.type, dto.variantIds, dto.instanceIds, dto.variantProperties);
     }
 
     get variants(): ScannedVariant[] {

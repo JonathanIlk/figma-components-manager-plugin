@@ -27,7 +27,8 @@ export class ComponentInfoElement extends AbstractCmElement {
     public initForComponent(component: ScannedComponent) {
         this.component = component;
 
-        util.log("Components-Manager#ComponentInfo: Creating Component Info", component, this);
+        const propertyCount = component.variantProperties.length;
+
         this.innerHTML = `
             <div class="card-header">
                 <div class="title">
@@ -47,7 +48,12 @@ export class ComponentInfoElement extends AbstractCmElement {
                     </span>
                 </div>
             </div>
-            <div class="card-content expandable-content">
+            <div class="card-content expandable-content variants-grid" style="grid-template-columns: ${propertyCount > 1 ? `repeat(${propertyCount - 1}, max-content) 1fr 120px;` : 'auto 120px;'};">
+                ${component.variantProperties.map(variant => `
+                    <div class="subtle-text variant-property-header grid-header">${variant}</div>
+                `).join("")}
+
+                <div class="subtle-text grid-header">Instances</div>
                 ${this.getVariantsListHtml(component.variants)}
             </div>
         `;
@@ -70,6 +76,18 @@ export class ComponentInfoElement extends AbstractCmElement {
                 this.expandContent();
             }
         });
+
+        // Synchronize hover state for elements with the same navigatable-node-id
+        this.querySelectorAll('[navigatable-node-id]').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                const nodeId = element.getAttribute('navigatable-node-id');
+                this.querySelectorAll(`[navigatable-node-id="${nodeId}"]`).forEach(el => el.classList.add('hover'));
+            });
+            element.addEventListener('mouseleave', () => {
+                const nodeId = element.getAttribute('navigatable-node-id');
+                this.querySelectorAll(`[navigatable-node-id="${nodeId}"]`).forEach(el => el.classList.remove('hover'));
+            });
+        });
     }
 
     public expandContent() {
@@ -91,11 +109,15 @@ export class ComponentInfoElement extends AbstractCmElement {
     private getVariantsListHtml(variants: ScannedVariant[]): string {
         return variants.map(variant => {
             const hasInstances = variant.instances.length > 0;
+            const propertyValues = variant.displayName.split(", ");
+
             return `
                 <div class="variant-row">
-                    <div class="card-clickable-element" navigatable-node-id="${variant.nodeId}" title="Focus on variant">
-                        ${variant.displayName}
+                    ${propertyValues.map(propertyValue => `
+                    <div class="card-clickable-element variant-property" navigatable-node-id="${variant.nodeId}" title="Focus on variant">
+                        ${propertyValue}
                     </div>
+                    `).join("")}
                     <div class="card-clickable-element variant-instances ${hasInstances ? '' : 'disabled'}" cycle-through-instances="${variant.nodeId}" title="Cycle through instances">
                         <span class="${hasInstances ? 'instances-count' : 'subtle-text'}">${variant.instances.length}</span> 
                         <span class="subtle-text">instances</span>

@@ -9,14 +9,34 @@ app-component-info .expandable-content:not(.visible) {
   height: 0 !important;
 }
 
+$columnGap: 3px;
+$rowGap: 4px;
 
 
-app-component-info .variant-row {
+app-component-info .variants-grid {
   display: grid;
-  grid-template-columns: 1fr 120px;
-  gap: 0 3px;
+  //grid-template-columns -> set in TS based on number of properties
+  column-gap: $columnGap;
+  row-gap: $rowGap;
   margin-bottom: 4px;
   font-size: 0.8rem;
+
+  .variant-row {
+    // Pass through grid styling to row children
+    display: contents;
+  }
+
+  .variant-properties-container {
+    display: contents;
+  }
+
+  .variant-property-header {
+    padding-left: $columnGap;
+  }
+
+  .grid-header {
+    font-size: 0.75rem;
+  }
 }
 
 app-component-info .variant-instances {
@@ -32,8 +52,15 @@ app-component-info .variant-row .card-clickable-element {
     border-top-left-radius: 0;
   }
 
-  &:first-child {
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
+  &.variant-property {
+    border-radius: 0;
+    gap: 0;
+    margin-left: -$columnGap;
+
+    &:first-child {
+      border-top-left-radius: 16px;
+      border-bottom-left-radius: 16px;
+      margin-left: 0;
+    }
   }
 }

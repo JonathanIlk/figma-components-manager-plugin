@@ -43,7 +43,7 @@
       border-radius: 16px;
       color: var(--figma-color-text);
 
-      &:hover {
+      &:hover, &.hover {
         background: rgba(255, 255, 255, 0.2);
         text-decoration: none !important;
       }

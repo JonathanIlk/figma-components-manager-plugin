@@ -70,12 +70,20 @@ export class ScanResultBuilder {
             }
         }
 
+        let variantPropertyKeys: string[] = [];
+        try {
+            variantPropertyKeys = Object.keys(componentSet.variantGroupProperties);
+        } catch(e) {
+            // Happens for invalid component sets, then we just leave it empty
+        }
+
         return {
             nodeId: componentSet.id,
             nodeName: componentSet.name,
             type: ComponentType.COMPONENT_SET,
             variantIds: variants.map(variant => variant.nodeId),
             instanceIds: instanceNodeIds.map(instance => instance.nodeId),
+            variantProperties: variantPropertyKeys,
         }
     }
 
@@ -103,6 +111,7 @@ export class ScanResultBuilder {
             type: ComponentType.COMPONENT,
             variantIds: [], // single components do not have variants
             instanceIds: (await this.findAllInstances(component)).map(instance => instance.nodeId),
+            variantProperties: [], // single components do not have variant properties
         }
     }
 

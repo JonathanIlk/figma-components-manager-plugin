@@ -56,6 +56,7 @@ export type ComponentDto = {
     type: ComponentType;
     variantIds: string[],
     instanceIds: string[];
+    variantProperties: string[]; // only for COMPONENT_SET
 }
 
 export type VariantDto = {
