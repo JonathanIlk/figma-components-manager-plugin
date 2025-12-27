@@ -12,6 +12,9 @@ export type MessageToUi = {
     payload: unknown,
 }
 
+/**
+ * Used to transfer the scan result of components and their instances from the backend to the frontend.
+ */
 export type ScanResultDto = {
     allInstances: InstanceDto[];
     components: ComponentDto[];

@@ -1,13 +1,18 @@
 import {ComponentsSearchResult} from "./document-searcher";
 import {ComponentType, ComponentDto, ScanResultDto, VariantDto, InstanceDto} from "../../shared/types";
 import {util} from "../backend";
+import {FigmaUtil} from "./figma-util";
 
+/**
+ * Converts a ComponentsSearchResult into a ScanResultDto for transfer to the frontend, to be displayed in the UI.
+ */
 export class SearchResultConverter {
 
     constructor(protected searchResult: ComponentsSearchResult) {
     }
 
     public async convert(): Promise<ScanResultDto> {
+        util.log(`Converting scan result of ${Object.keys(this.searchResult.components).length} components and ${Object.keys(this.searchResult.componentSets).length} component sets to DTOs`);
         const components = await this.extractComponents();
         const allInstanceNodeIds: InstanceDto[] = components.flatMap(component => component.instances);
 
@@ -17,7 +22,7 @@ export class SearchResultConverter {
         }
     }
 
-    protected async extractComponents() {
+    private async extractComponents() {
         const componentDtos: ComponentDto[] = [];
         // first add all ComponentSets as Components
         for (const componentSet of Object.values(this.searchResult.componentSets)) {
@@ -33,7 +38,7 @@ export class SearchResultConverter {
         return componentDtos;
     }
 
-    protected async constructDtoForComponentSet(componentSet: ComponentSetNode): Promise<ComponentDto> {
+    private async constructDtoForComponentSet(componentSet: ComponentSetNode): Promise<ComponentDto> {
         const variants: VariantDto[] = [];
         const instanceNodeIds: InstanceDto[] = [];
         for (const child of componentSet.children) {
@@ -84,6 +89,10 @@ export class SearchResultConverter {
     }
 
     private isVariant(component: ComponentNode) {
+        if(!FigmaUtil.isNodeValid(component)) {
+            return false;
+        }
+
         return component.variantProperties && component.variantProperties.key !== null;
     }
 }
