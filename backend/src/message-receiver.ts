@@ -1,12 +1,15 @@
-import {MessageToBackend} from "../../shared/types";
+import {BackendMessageType, MessageToBackend} from "../../shared/types";
 import {DocumentSearcher} from "./document-searcher";
 
+/**
+ * Handles messages received from the UI (e.g. button clicks) and performs corresponding actions in the Figma document.
+ */
 export class MessageReceiver {
 
     public init() {
         figma.ui.onmessage = async (msg: MessageToBackend) => {
-            if (msg.type === 'navigate-to-node') {
-                this.onNavigateToNode(msg);
+            if (msg.type === BackendMessageType.NAVIGATE_TO_NODE) {
+                await this.onNavigateToNode(msg);
             }
         };
     }
@@ -28,9 +31,5 @@ export class MessageReceiver {
             figma.currentPage.selection = [node];
             figma.viewport.scrollAndZoomIntoView([node]);
         }
-    }
-
-    protected async onShowInstances(message: MessageToBackend) {
-
     }
 }

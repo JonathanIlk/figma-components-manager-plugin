@@ -1,9 +1,9 @@
-export type Environment = {
-    loggerPrefix: string;
+export enum BackendMessageType {
+    NAVIGATE_TO_NODE = "navigate-to-node",
 }
 
 export type MessageToBackend = {
-    type: "navigate-to-node" | "show-instances",
+    type: BackendMessageType,
     payload: unknown,
 }
 

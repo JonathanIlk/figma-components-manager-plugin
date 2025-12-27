@@ -1,7 +1,8 @@
 import {SearchInputElement} from "./search-input.element";
 
 /**
- *
+ * Abstract base class for all custom elements in the Components Manager plugin.
+ * Provides common functionality such as search handling and interactive element setup.
  */
 export abstract class AbstractCmElement extends HTMLElement {
 
