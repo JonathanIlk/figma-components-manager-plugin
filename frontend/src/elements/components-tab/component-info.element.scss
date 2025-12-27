@@ -1,14 +1,15 @@
 app-component-info .expandable-content {
-    transition: all 0.3s ease-in-out;
-    overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
 }
 
 app-component-info .expandable-content:not(.visible) {
-    padding: 0 !important;
-    margin: 0 !important;
-    height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 0 !important;
 }
 
 app-component-info .variant-entry:not(:last-child) {
-    margin-bottom: 4px;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
 }
