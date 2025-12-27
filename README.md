@@ -34,6 +34,7 @@
 - Show all instances for which the component was deleted
 - (X) button to clear search input
 - Jump from Components tab to the corresponding instances for a selected component/variant
+- Fix some minor light mode styling issues (everything is readable, but could be prettier)
 
 ## Technical Documentation
 
