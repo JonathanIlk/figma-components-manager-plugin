@@ -1,6 +1,8 @@
-import {BackendMessageType, MessageToBackend, ResizeMessage} from "../../shared/types";
+import {BackendMessageType, MessageToBackend, ResizeMessage, SetAutoRefreshMessage} from "../../shared/types";
 import {DocumentSearcher} from "./document-searcher";
 import {WindowManager} from "./window-manager";
+import {SettingsManager} from "./settings-manager";
+import {RefreshHandler} from "./refresh-handler";
 
 /**
  * Handles messages received from the UI (e.g. button clicks) and performs corresponding actions in the Figma document.
@@ -17,6 +19,15 @@ export class BackendMessageReceiver {
                 case BackendMessageType.RESIZE: {
                     const message = msg as ResizeMessage;
                     WindowManager.getInstance().resize(message.payload.width, message.payload.height);
+                    break;
+                }
+                case BackendMessageType.SET_AUTO_REFRESH: {
+                    const message = msg as SetAutoRefreshMessage;
+                    await SettingsManager.getInstance().setAutoRefresh(message.payload.autoRefresh);
+                    break;
+                }
+                case BackendMessageType.MANUAL_REFRESH: {
+                    await new RefreshHandler().fullComponentsRefresh();
                     break;
                 }
             }

@@ -1,4 +1,4 @@
-import {RefreshStartInstructions, DocumentSearcher} from "./document-searcher";
+import {DocumentSearcher, RefreshStartInstructions} from "./document-searcher";
 import {ScanResultBuilder} from "./scan-result-builder";
 import {DocumentUpdatePayload, MessageToUiType} from "../../shared/types";
 import {util} from "../backend";

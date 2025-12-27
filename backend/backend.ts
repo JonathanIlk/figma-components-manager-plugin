@@ -2,6 +2,7 @@ import {Util} from "../shared/util";
 import {BackendMessageReceiver} from "./src/backend-message-receiver";
 import {RefreshHandler} from "./src/refresh-handler";
 import {WindowManager} from "./src/window-manager";
+import {SettingsManager} from "./src/settings-manager";
 
 export const util = new Util("CM-Backend");
 
@@ -17,6 +18,7 @@ class Backend {
 
         // Initialize Singleton Managers
         WindowManager.getInstance().initialize();
+        await SettingsManager.getInstance().initialize();
 
         this.viewUpdater.fullComponentsRefresh();
 
@@ -25,6 +27,9 @@ class Backend {
 
     private static subscribeToDocumentChanges() {
         figma.on("documentchange", (event: DocumentChangeEvent) => {
+            if (!SettingsManager.getInstance().shouldAutoRefresh()) {
+                return;
+            }
             this.viewUpdater.partialComponentsRefresh(event);
         });
     }

@@ -3,6 +3,8 @@
 export enum BackendMessageType {
     NAVIGATE_TO_NODE = "navigate-to-node",
     RESIZE = "resize",
+    SET_AUTO_REFRESH = "set-auto-refresh",
+    MANUAL_REFRESH = "manual-refresh",
 }
 
 export interface MessageToBackend<T_Type = BackendMessageType, T_Payload = unknown> {
@@ -12,9 +14,12 @@ export interface MessageToBackend<T_Type = BackendMessageType, T_Payload = unkno
 
 export interface ResizeMessage extends MessageToBackend<BackendMessageType.RESIZE, {width: number, height: number}> {}
 
+export interface SetAutoRefreshMessage extends MessageToBackend<BackendMessageType.SET_AUTO_REFRESH, {autoRefresh: boolean}> {}
+
 /// Messages Backend -> UI
 export enum MessageToUiType {
     DOCUMENT_UPDATE = "document-update",
+    SETTINGS_UPDATE = "settings-update",
 }
 
 export interface MessageToUi<T_Type = MessageToUiType, T_Payload = unknown> {
@@ -24,9 +29,15 @@ export interface MessageToUi<T_Type = MessageToUiType, T_Payload = unknown> {
 
 export interface DocumentUpdatedMessage extends MessageToUi<MessageToUiType.DOCUMENT_UPDATE, DocumentUpdatePayload> {}
 
+export interface SettingsUpdatedMessage extends MessageToUi<MessageToUiType.SETTINGS_UPDATE, SettingsUpdatePayload> {}
+
 export type DocumentUpdatePayload = {
     scanResult: ScanResultDto;
     removedNodeIds: string[];
+}
+
+export type SettingsUpdatePayload = {
+    autoRefresh: boolean;
 }
 
 /**
