@@ -120,7 +120,7 @@ export class ComponentInfoElement extends AbstractCmElement {
                     `).join("")}
                     <div class="card-clickable-element variant-instances ${hasInstances ? '' : 'disabled'}" cycle-through-instances="${variant.nodeId}" title="Cycle through instances">
                         <span class="${hasInstances ? 'instances-count' : 'subtle-text'}">${variant.instances.length}</span> 
-                        <span class="subtle-text">instances</span>
+                        <span class="subtle-text">${variant.instances.length === 1 ? "instance" : "instances"}</span>
                     </div>
                 </div>
             `;
