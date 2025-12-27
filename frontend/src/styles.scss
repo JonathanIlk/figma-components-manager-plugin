@@ -63,7 +63,7 @@ body {
   color: var(--figma-color-text-secondary);
 }
 
-[navigatable-node-id] {
+[navigatable-node-id], [cycle-through-instances] {
   cursor: pointer;
 }
 

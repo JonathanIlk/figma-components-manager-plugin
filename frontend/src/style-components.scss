@@ -47,6 +47,11 @@
         background: rgba(255, 255, 255, 0.2);
         text-decoration: none !important;
       }
+
+      &.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
     }
   }
 

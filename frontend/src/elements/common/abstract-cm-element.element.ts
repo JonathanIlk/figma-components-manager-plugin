@@ -23,6 +23,14 @@ export abstract class AbstractCmElement extends HTMLElement {
                 parent.postMessage({pluginMessage: {type: BackendMessageType.NAVIGATE_TO_NODE, payload: nodeId}}, '*');
             });
         });
+
+        // when an element with attribute [cycle-through-instances] is clicked send a message to the backend to cycle through instances
+        this.querySelectorAll("[cycle-through-instances]").forEach((element) => {
+            element.addEventListener("click", () => {
+                const nodeId = element.getAttribute("cycle-through-instances");
+                parent.postMessage({pluginMessage: {type: BackendMessageType.CYCLE_THROUGH_INSTANCES, payload: nodeId}}, '*');
+            });
+        });
     }
 
     protected setupAsSearchableElement() {

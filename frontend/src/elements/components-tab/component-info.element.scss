@@ -9,7 +9,31 @@ app-component-info .expandable-content:not(.visible) {
   height: 0 !important;
 }
 
-app-component-info .variant-entry:not(:last-child) {
-  font-size: 0.9rem;
+
+
+app-component-info .variant-row {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 0 3px;
   margin-bottom: 4px;
+  font-size: 0.8rem;
+}
+
+app-component-info .variant-instances {
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+app-component-info .variant-row .card-clickable-element {
+  padding: 4px 8px !important;
+
+  &:last-child {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+  }
+
+  &:first-child {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
 }

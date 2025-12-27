@@ -2,6 +2,7 @@
 
 export enum BackendMessageType {
     NAVIGATE_TO_NODE = "navigate-to-node",
+    CYCLE_THROUGH_INSTANCES = "cycle-through-instances",
     RESIZE = "resize",
     SET_AUTO_REFRESH = "set-auto-refresh",
     MANUAL_REFRESH = "manual-refresh",

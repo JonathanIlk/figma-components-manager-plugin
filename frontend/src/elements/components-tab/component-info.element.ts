@@ -3,8 +3,13 @@ import "./component-info.element.scss";
 import {AbstractCmElement} from "../common/abstract-cm-element.element";
 import {ScannedComponent, ScannedVariant} from "../../scanned-nodes";
 
+/**
+ * Displays a card with information about a component:
+ * - Name, number of variants, number of instances
+ * - Expandable list of variants with their instance counts
+ */
 export class ComponentInfoElement extends AbstractCmElement {
-    private data!: ScannedComponent;
+    private component!: ScannedComponent;
 
     static register() {
         window.customElements.define('app-component-info', ComponentInfoElement);
@@ -19,14 +24,14 @@ export class ComponentInfoElement extends AbstractCmElement {
         this.classList.add("card");
     }
 
-    public initForComponent(data: ScannedComponent) {
-        this.data = data;
+    public initForComponent(component: ScannedComponent) {
+        this.component = component;
 
-        util.log("Components-Manager#ComponentInfo: Creating Component Info", data, this);
+        util.log("Components-Manager#ComponentInfo: Creating Component Info", component, this);
         this.innerHTML = `
             <div class="card-header">
                 <div class="title">
-                    <div class="component-name" navigatable-node-id="${data.nodeId}">${data.displayName}</div>
+                    <div class="component-name" navigatable-node-id="${component.nodeId}">${component.displayName}</div>
                     <div class="expand-collapse-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
@@ -35,19 +40,19 @@ export class ComponentInfoElement extends AbstractCmElement {
                 </div>
                 <div class="sub-title">
                     <span class="tag-element">
-                        <span class="variants-count">${data.variants.length}</span> variants
+                        <span class="variants-count">${component.variants.length}</span> variants
                     </span>
                     <span class="tag-element">
-                        <span class="instances-count">${data.instances.length}</span> instances
+                        <span class="instances-count">${component.instances.length}</span> instances
                     </span>
                 </div>
             </div>
             <div class="card-content expandable-content">
-                ${this.getVariantsListHtml(data.variants)}
+                ${this.getVariantsListHtml(component.variants)}
             </div>
         `;
         this.setupInteractiveElements();
-        if(data.variants.length === 0) {
+        if(component.variants.length === 0) {
             const expandCollapseIcon: HTMLElement = this.querySelector(".expand-collapse-icon")!;
             expandCollapseIcon.style.display = "none";
         }
@@ -85,10 +90,16 @@ export class ComponentInfoElement extends AbstractCmElement {
 
     private getVariantsListHtml(variants: ScannedVariant[]): string {
         return variants.map(variant => {
+            const hasInstances = variant.instances.length > 0;
             return `
-                <div class="variant-entry card-clickable-element" navigatable-node-id="${variant.nodeId}">
-                    <span class="variant-name">${variant.displayName}</span>
-                    <span class="subtle-text">(<span class="instances-count">${variant.instances.length}</span> instances)</span>
+                <div class="variant-row">
+                    <div class="card-clickable-element" navigatable-node-id="${variant.nodeId}" title="Focus on variant">
+                        ${variant.displayName}
+                    </div>
+                    <div class="card-clickable-element variant-instances ${hasInstances ? '' : 'disabled'}" cycle-through-instances="${variant.nodeId}" title="Cycle through instances">
+                        <span class="${hasInstances ? 'instances-count' : 'subtle-text'}">${variant.instances.length}</span> 
+                        <span class="subtle-text">instances</span>
+                    </div>
                 </div>
             `;
         }).join("");
@@ -99,6 +110,6 @@ export class ComponentInfoElement extends AbstractCmElement {
     }
 
     public getSearchableText(): string {
-        return `${this.data.displayName}${this.data.variants.map(variant => variant.displayName).join("")}`;
+        return `${this.component.displayName}${this.component.variants.map(variant => variant.displayName).join("")}`;
     }
 }

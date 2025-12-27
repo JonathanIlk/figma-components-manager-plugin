@@ -16,6 +16,10 @@ export class BackendMessageReceiver {
                     await this.onNavigateToNode(msg);
                     break;
                 }
+                case BackendMessageType.CYCLE_THROUGH_INSTANCES: {
+                    await this.onCycleThroughInstances(msg);
+                    break;
+                }
                 case BackendMessageType.RESIZE: {
                     const message = msg as ResizeMessage;
                     WindowManager.getInstance().resize(message.payload.width, message.payload.height);
@@ -41,18 +45,48 @@ export class BackendMessageReceiver {
         const nodeId = message.payload as string;
         const node = await figma.getNodeByIdAsync(nodeId) as SceneNode;
         if (node) {
-            // If the node is not in the current page, we should switch to the page where the node is located
-            const pageNode = DocumentSearcher.findPageForNode(node);
-            if (!pageNode) {
-                console.error("Could not find the page for the node");
-                return;
-            }
-            if(pageNode && pageNode.type === "PAGE" && figma.currentPage !== pageNode as PageNode) {
-                await figma.setCurrentPageAsync(pageNode as PageNode);
+            await this.focusNode(node);
+        }
+    }
+
+    protected async onCycleThroughInstances(message: MessageToBackend) {
+        const nodeId = message.payload as string;
+        const node = await figma.getNodeByIdAsync(nodeId) as ComponentNode | ComponentSetNode;
+        if (!node) return;
+
+        if (node.type === "COMPONENT") {
+            const instances = await node.getInstancesAsync();
+            if (instances.length === 0) return;
+
+            // Check if any of the instances is currently selected
+            const currentSelection = figma.currentPage.selection;
+            let nextIndex = 0;
+
+            if (currentSelection.length > 0) {
+                const selectedNode = currentSelection[0];
+                const currentIndex = instances.findIndex((instance: InstanceNode) => instance.id === selectedNode.id);
+                if (currentIndex !== -1) {
+                    nextIndex = (currentIndex + 1) % instances.length;
+                }
             }
 
-            figma.currentPage.selection = [node];
-            figma.viewport.scrollAndZoomIntoView([node]);
+            const nextInstance = instances[nextIndex];
+            await this.focusNode(nextInstance);
         }
+    }
+
+    private async focusNode(node: SceneNode) {
+        // If the node is not in the current page, we should switch to the page where the node is located
+        const pageNode = DocumentSearcher.findPageForNode(node);
+        if (!pageNode) {
+            console.error("Could not find the page for the node");
+            return;
+        }
+        if(pageNode && pageNode.type === "PAGE" && figma.currentPage !== pageNode as PageNode) {
+            await figma.setCurrentPageAsync(pageNode as PageNode);
+        }
+
+        figma.currentPage.selection = [node];
+        figma.viewport.scrollAndZoomIntoView([node]);
     }
 }
