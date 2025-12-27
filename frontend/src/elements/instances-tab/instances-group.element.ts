@@ -2,11 +2,12 @@ import {InstanceDto} from "../../../../shared/types";
 import {AbstractCmElement} from "../common/abstract-cm-element.element";
 import {InstanceInfoElement} from "./instance-info.element";
 import "./instances-group.element.scss";
+import {ScannedInstance} from "../../scanned-nodes";
 
 export interface InstanceGroupData {
     groupName: string;
     groupNodeId: string;
-    instances: InstanceDto[];
+    instances: ScannedInstance[];
 }
 
 export class InstancesGroupElement extends AbstractCmElement {
@@ -54,7 +55,7 @@ export class InstancesGroupElement extends AbstractCmElement {
         return "#instances-search-input";
     }
 
-    public getSearcheableText(): string {
+    public getSearchableText(): string {
         return this.data.groupName;
     }
 

@@ -11,23 +11,40 @@ export class SearchResultConverter {
     constructor(protected searchResult: ComponentsSearchResult) {
     }
 
+    protected allSeenInstances: Set<InstanceNode> = new Set();
+
     public async convert(): Promise<ScanResultDto> {
         util.log(`Converting scan result of ${Object.keys(this.searchResult.components).length} components and ${Object.keys(this.searchResult.componentSets).length} component sets to DTOs`);
-        const components = await this.extractComponents();
-        const allInstanceNodeIds: InstanceDto[] = components.flatMap(component => component.instances);
+        const allComponentDtos = await this.extractComponents();
+
+        const variantDtos: VariantDto[] = await Promise.all(Object.values(this.searchResult.components)
+            .filter(component => this.isVariant(component))
+            .map(async component => {
+                return await this.constructDtoForVariant(component);
+            }));
+
+        const instanceDtos: InstanceDto[] = Array.from(this.allSeenInstances).map(instance => {
+            return {
+                nodeId: instance.id,
+                nodeName: instance.name
+            }
+        });
 
         return {
-            allInstances: allInstanceNodeIds,
-            components: await this.extractComponents()
+            components: allComponentDtos,
+            variants: variantDtos,
+            instances: instanceDtos,
         }
     }
 
     private async extractComponents() {
         const componentDtos: ComponentDto[] = [];
+
         // first add all ComponentSets as Components
         for (const componentSet of Object.values(this.searchResult.componentSets)) {
             componentDtos.push(await this.constructDtoForComponentSet(componentSet));
         }
+
         // then add all Components that are not part of a ComponentSet (Components without Variants)
         for (const component of Object.values(this.searchResult.components)) {
             if (this.isVariant(component)) {
@@ -52,14 +69,19 @@ export class SearchResultConverter {
             nodeId: componentSet.id,
             nodeName: componentSet.name,
             type: ComponentType.COMPONENT_SET,
-            variants: variants,
-            instances: instanceNodeIds,
+            variantIds: variants.map(variant => variant.nodeId),
+            instanceIds: instanceNodeIds.map(instance => instance.nodeId),
         }
     }
 
     private async findAllInstances(componentNode: ComponentNode): Promise<InstanceDto[]> {
         // It is probably slow to call getInstancesAsync this could probably be improved
         const instances = await componentNode.getInstancesAsync();
+
+        for (const instance of instances) {
+            this.allSeenInstances.add(instance);
+        }
+
         return instances.map(instance => {
             return {
                 nodeId: instance.id,
@@ -74,8 +96,8 @@ export class SearchResultConverter {
             nodeId: component.id,
             nodeName: component.name,
             type: ComponentType.COMPONENT,
-            variants: [],
-            instances: await this.findAllInstances(component)
+            variantIds: [], // single components do not have variants
+            instanceIds: (await this.findAllInstances(component)).map(instance => instance.nodeId),
         }
     }
 
@@ -84,12 +106,12 @@ export class SearchResultConverter {
         return {
             nodeId: node.id,
             displayName: Object.values(node.variantProperties!).join(", "),
-            instances: await this.findAllInstances(node)
+            instanceIds: (await this.findAllInstances(node)).map(instance => instance.nodeId)
         }
     }
 
     private isVariant(component: ComponentNode) {
-        if(!FigmaUtil.isNodeValid(component)) {
+        if (!FigmaUtil.isNodeValid(component)) {
             return false;
         }
 

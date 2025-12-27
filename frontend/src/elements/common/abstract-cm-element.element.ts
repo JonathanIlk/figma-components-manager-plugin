@@ -47,7 +47,7 @@ export abstract class AbstractCmElement extends HTMLElement {
     public isHitBySearch() {
         const searchInput = document.querySelector(this.getSearchInputSelector()) as SearchInputElement;
         const searchText = searchInput.getSearchText().toLowerCase();
-        return this.getSearcheableText().toLowerCase().includes(searchText) || searchText.length === 0;
+        return this.getSearchableText().toLowerCase().includes(searchText) || searchText.length === 0;
     }
 
 
@@ -62,7 +62,7 @@ export abstract class AbstractCmElement extends HTMLElement {
     /**
      * Override this method in the child classes to return the text that should be accounted for when searching.
      */
-    public getSearcheableText(): string {
+    public getSearchableText(): string {
         return this.innerHTML;
     }
 

@@ -25,12 +25,15 @@
 - Automatic refresh when the document changes
 - List all Instances of a Component or Variant in the document
 - Search through all Components, Variants and Instances
+- Resize Plugin window to your liking
  
 
-### Requested (Pull Requests welcome)
+### Requested, not implemented (Pull Requests welcome)
 
-- [TODO] Group Components by Page
-- [TODO] Show all instances for which the component was deleted
+- Group Components by Page
+- Show all instances for which the component was deleted
+- (X) button to clear search input
+- Jump from Components tab to the corresponding instances for a selected component/variant
 
 ## Technical Documentation
 

@@ -1,6 +1,7 @@
 import {ScanResultDto} from "../../../../shared/types";
 import "./components-list-header.element.scss";
 import {ComponentInfoElement} from "./component-info.element";
+import {StoredScanResults} from "../../scan-results-manager";
 
 export class ComponentsListHeaderElement extends HTMLElement {
 
@@ -13,10 +14,10 @@ export class ComponentsListHeaderElement extends HTMLElement {
     connectedCallback() {
     }
 
-    updateForScanResult(data: ScanResultDto) {
+    updateForScanResult(data: StoredScanResults) {
         this.innerHTML = `
             <span class="tag-element subtle-text">
-                <span class="instances-count">${data.allInstances.length}</span> instances in total
+                <span class="instances-count">${Object.values(data.instances).length}</span> instances in total
             </span>
             <span class="expand-collapse-icon">
                 <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" fill="none" viewBox="0 0 24 24">

@@ -2,20 +2,21 @@ import {InstanceDto} from "../../../../shared/types";
 import "./instance-info.element.scss"
 import {AbstractCmElement} from "../common/abstract-cm-element.element";
 import {InstancesGroupElement} from "./instances-group.element";
+import {ScannedInstance} from "../../scanned-nodes";
 
 export class InstanceInfoElement extends AbstractCmElement {
     private parentGroup!: InstancesGroupElement;
-    private data!: InstanceDto;
+    private data!: ScannedInstance;
 
     static register() {
         window.customElements.define('app-instance-info', InstanceInfoElement);
     }
 
 
-    updateForData(data: InstanceDto, parentGroup: InstancesGroupElement) {
+    updateForData(data: ScannedInstance, parentGroup: InstancesGroupElement) {
         this.parentGroup = parentGroup;
         this.data = data;
-        this.innerHTML = data.nodeName;
+        this.innerHTML = data.displayName;
         this.setupAsSearchableElement();
     }
 
@@ -23,8 +24,8 @@ export class InstanceInfoElement extends AbstractCmElement {
         return "#instances-search-input";
     }
 
-    public getSearcheableText(): string {
-        return this.data.nodeName;
+    public getSearchableText(): string {
+        return this.data.displayName;
     }
 
     // If the group is hit by search, we want to always show all instances inside the group.

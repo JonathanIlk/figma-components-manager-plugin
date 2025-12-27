@@ -1,4 +1,4 @@
-import {ComponentDto, MessageToUi, ScanResultDto} from "../shared/types";
+import {FullComponentsRefreshMessage, MessageToUi, MessageToUiType, ScanResultDto} from "../shared/types";
 import {ComponentInfoElement} from "./src/elements/components-tab/component-info.element";
 import {Util} from "../shared/util";
 import {ComponentsListHeaderElement} from "./src/elements/components-tab/components-list-header.element";
@@ -9,6 +9,7 @@ import {InstanceInfoElement} from "./src/elements/instances-tab/instance-info.el
 import {SearchInputElement} from "./src/elements/common/search-input.element";
 import {InstancesGroupElement} from "./src/elements/instances-tab/instances-group.element";
 import {ResizeCornerElement} from "./src/elements/common/resize-corner.element";
+import {ScanResultsManager} from "./src/scan-results-manager";
 
 ComponentInfoElement.register();
 ComponentsListHeaderElement.register();
@@ -21,34 +22,12 @@ ResizeCornerElement.register();
 
 export const util = new Util("CM-Frontend");
 
-function createComponentInfo(data: ComponentDto) {
-    const componentInfo: ComponentInfoElement = document.createElement('app-component-info') as ComponentInfoElement;
-    componentInfo.setAttribute("component-data", JSON.stringify(data));
-    return componentInfo;
-}
-
-function onReceiveComponentsMessage(payload: ScanResultDto) {
-    const container = document.getElementById('components-list') as HTMLElement;
-    container.innerHTML = "";
-
-    for (const component of payload.components) {
-        const componentInfo = createComponentInfo(component);
-        container.appendChild(componentInfo);
-    }
-
-    const header: ComponentsListHeaderElement = document.getElementById('components-list-header') as ComponentsListHeaderElement;
-    header.updateForScanResult(payload);
-
-    const instancesList: InstancesListElement = document.getElementsByTagName('app-instances-list')[0] as InstancesListElement;
-    instancesList.updateForScanResult(payload);
-
-}
-
 onmessage = (event) => {
-    const message: MessageToUi = event.data.pluginMessage;
-    util.log("Components-Manager: UI Received Message", message);
-    if (message.type === "components") {
-        onReceiveComponentsMessage(message.payload as ScanResultDto);
+    const messageToUi: MessageToUi = event.data.pluginMessage;
+    util.log("Components-Manager: UI Received Message", messageToUi);
+    if (messageToUi.type === MessageToUiType.FULL_COMPONENTS_REFRESH) {
+        const typedMessage = messageToUi as FullComponentsRefreshMessage;
+        ScanResultsManager.getInstance().fullScanRefresh(typedMessage.payload);
     }
 }
 

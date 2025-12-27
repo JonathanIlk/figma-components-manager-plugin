@@ -1,17 +1,13 @@
-import {ComponentDto, VariantDto} from "../../../../shared/types";
 import {util} from "../../../frontend";
 import "./component-info.element.scss";
 import {AbstractCmElement} from "../common/abstract-cm-element.element";
+import {ScannedComponent, ScannedVariant} from "../../scanned-nodes";
 
 export class ComponentInfoElement extends AbstractCmElement {
-    private data!: ComponentDto;
+    private data!: ScannedComponent;
 
     static register() {
         window.customElements.define('app-component-info', ComponentInfoElement);
-    }
-
-    static get observedAttributes() {
-        return ["component-data"];
     }
 
     constructor() {
@@ -23,22 +19,14 @@ export class ComponentInfoElement extends AbstractCmElement {
         this.classList.add("card");
     }
 
-    protected attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        util.log("Components-Manager#ComponentInfo: Attribute Changed", name, oldValue, newValue);
-        if (name === "component-data") {
-            const data = JSON.parse(newValue);
-            this.initForComponent(data);
-        }
-    }
-
-    protected initForComponent(data: ComponentDto) {
+    public initForComponent(data: ScannedComponent) {
         this.data = data;
 
         util.log("Components-Manager#ComponentInfo: Creating Component Info", data, this);
         this.innerHTML = `
             <div class="card-header">
                 <div class="title">
-                    <div class="component-name" navigatable-node-id="${data.nodeId}">${data.nodeName}</div>
+                    <div class="component-name" navigatable-node-id="${data.nodeId}">${data.displayName}</div>
                     <div class="expand-collapse-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
@@ -95,7 +83,7 @@ export class ComponentInfoElement extends AbstractCmElement {
         expandCollapseIcon.classList.remove("expanded");
     }
 
-    private getVariantsListHtml(variants: VariantDto[]): string {
+    private getVariantsListHtml(variants: ScannedVariant[]): string {
         return variants.map(variant => {
             return `
                 <div class="variant-entry card-clickable-element" navigatable-node-id="${variant.nodeId}">
@@ -110,7 +98,7 @@ export class ComponentInfoElement extends AbstractCmElement {
         return "#components-search-input";
     }
 
-    public getSearcheableText(): string {
-        return `${this.data.nodeName}${this.data.variants.map(variant => variant.displayName).join("")}`;
+    public getSearchableText(): string {
+        return `${this.data.displayName}${this.data.variants.map(variant => variant.displayName).join("")}`;
     }
 }

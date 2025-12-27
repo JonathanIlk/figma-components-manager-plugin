@@ -18,15 +18,16 @@ class Backend {
         // Initialize Singleton Managers
         WindowManager.getInstance().initialize();
 
-        this.viewUpdater.updateComponents();
+        this.viewUpdater.fullComponentsRefresh();
 
         this.subscribeToDocumentChanges();
     }
 
     private static subscribeToDocumentChanges() {
         figma.on("documentchange", (event: DocumentChangeEvent) => {
-           this.viewUpdater.updateComponents();
+            this.viewUpdater.updateForDocumentChanges(event.documentChanges);
         });
     }
 }
+
 Backend.startBackend();

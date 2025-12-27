@@ -1,23 +1,18 @@
-import {ScanResultDto} from "../../shared/types";
-import {InformationScanner} from "./information-scanner";
+import {ComponentsSearchResult, DocumentSearcher} from "./document-searcher";
+import {SearchResultConverter} from "./search-result-converter";
+import {MessageToUiType} from "../../shared/types";
 
-export type UiMessage = {
-    type: "components";
-    payload: object;
-}
-
-
-/**
- * Sends messages to the frontend.
- */
 export class ViewUpdater {
 
-    protected sendToUi(message: UiMessage) {
-        figma.ui.postMessage(message);
+    /**
+     * Scan the entire document for components, variants, instances and send the result to the UI.
+     */
+    public async fullComponentsRefresh() {
+        const searchResult: ComponentsSearchResult = DocumentSearcher.findAllComponents();
+        const scanResultDto = await new SearchResultConverter(searchResult).convert();
+        figma.ui.postMessage({type: MessageToUiType.FULL_COMPONENTS_REFRESH, payload: scanResultDto});
     }
 
-    public async updateComponents() {
-        const scanResult: ScanResultDto = await InformationScanner.fullScan();
-        this.sendToUi({type: "components", payload: scanResult});
+    public async updateForDocumentChanges(changes: DocumentChange[]) {
     }
 }
