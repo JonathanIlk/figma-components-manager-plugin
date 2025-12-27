@@ -1,13 +1,25 @@
-import {BackendMessageType, MessageToBackend} from "../../shared/types";
+import {BackendMessageType, MessageToBackend, ResizeMessage} from "../../shared/types";
 import {DocumentSearcher} from "./document-searcher";
+import {WindowManager} from "./window-manager";
 
 /**
  * Handles messages received from the UI (e.g. button clicks) and performs corresponding actions in the Figma document.
  */
-export class MessageReceiver {
+export class BackendMessageReceiver {
 
     public init() {
         figma.ui.onmessage = async (msg: MessageToBackend) => {
+            switch(msg.type) {
+                case BackendMessageType.NAVIGATE_TO_NODE: {
+                    await this.onNavigateToNode(msg);
+                    break;
+                }
+                case BackendMessageType.RESIZE: {
+                    const message = msg as ResizeMessage;
+                    WindowManager.getInstance().resize(message.payload.width, message.payload.height);
+                    break;
+                }
+            }
             if (msg.type === BackendMessageType.NAVIGATE_TO_NODE) {
                 await this.onNavigateToNode(msg);
             }

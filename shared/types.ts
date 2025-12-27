@@ -1,11 +1,14 @@
 export enum BackendMessageType {
     NAVIGATE_TO_NODE = "navigate-to-node",
+    RESIZE = "resize",
 }
 
-export type MessageToBackend = {
-    type: BackendMessageType,
-    payload: unknown,
+export interface MessageToBackend<T_Type = BackendMessageType, T_Payload = unknown> {
+    type: T_Type,
+    payload: T_Payload,
 }
+
+export interface ResizeMessage extends MessageToBackend<BackendMessageType.RESIZE, {width: number, height: number}> {}
 
 export type MessageToUi = {
     type: "components",

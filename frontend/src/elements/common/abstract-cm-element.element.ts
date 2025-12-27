@@ -1,4 +1,5 @@
 import {SearchInputElement} from "./search-input.element";
+import {BackendMessageType} from "../../../../shared/types";
 
 /**
  * Abstract base class for all custom elements in the Components Manager plugin.
@@ -19,7 +20,7 @@ export abstract class AbstractCmElement extends HTMLElement {
         this.querySelectorAll("[navigatable-node-id]").forEach((element) => {
             element.addEventListener("click", () => {
                 const nodeId = element.getAttribute("navigatable-node-id");
-                parent.postMessage({pluginMessage: {type: "navigate-to-node", payload: nodeId}}, '*');
+                parent.postMessage({pluginMessage: {type: BackendMessageType.NAVIGATE_TO_NODE, payload: nodeId}}, '*');
             });
         });
     }
