@@ -41,7 +41,7 @@ export class ScannedComponent implements BaseScannedNode {
     }
 
     get searchTerm(): string {
-        return `${this.displayName} ${this.variantProperties.join(' ')} ${this.variants.map(v => v.propertyValues.join(",")).join(' ')}`;
+        return `${this.displayName} ${this.variantProperties.join(' ')} ${this.variants.map(v => v.searchTerm).join(' ')}`;
     }
 }
 
@@ -65,6 +65,10 @@ export class ScannedVariant implements BaseScannedNode {
             }
         }
         return instances;
+    }
+
+    get searchTerm(): string {
+        return `${this.propertyValues.join(' ')}`;
     }
 }
 

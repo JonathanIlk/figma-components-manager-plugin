@@ -1,6 +1,7 @@
 Version 6:
 
 - Add font-size setting for users to customize text size in the UI
+- Add input to filter component variants
 
 Version 5:
 

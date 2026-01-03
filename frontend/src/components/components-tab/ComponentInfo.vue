@@ -11,11 +11,12 @@
       </div>
       <div class="sub-title">
         <span class="tag-element">
-          <span class="variants-count">{{ component.variants.length }}</span> variants
+          <span class="variants-count">{{ isExpanded ? sortedVariants.length : component.variants.length }}</span> variants
         </span>
         <span class="tag-element">
           <span class="instances-count">{{ component.instances.length }}</span> instances
         </span>
+        <SearchInput v-model="searchTerm" icon="filter" placeholder="Filter variants" :class="{'display-none': !isExpanded}"></SearchInput>
       </div>
     </div>
 
@@ -92,12 +93,14 @@
 import { defineComponent, PropType, ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { ScannedComponent } from '../../scanned-nodes';
 import { BackendMessageType } from '../../../../shared/types';
+import SearchInput from "../common/SearchInput.vue";
 
 // Which element of a variant is being hovered
 type HoverState = "variant" | "instances" | false;
 
 export default defineComponent({
   name: 'ComponentInfo',
+  components: {SearchInput},
   props: {
     component: {
       type: Object as PropType<ScannedComponent>,
@@ -108,13 +111,21 @@ export default defineComponent({
     const isExpanded = ref(false);
     const expandableContent = ref<HTMLElement | null>(null);
     const hoverStates = ref<Record<string, HoverState>>({});
+    const searchTerm = ref('');
 
     // Sorting state
     const sortColumn = ref<number | 'instances'>(0); // 0-based index for properties, or 'instances'
     const sortDirection = ref<'asc' | 'desc'>('asc');
 
     const sortedVariants = computed(() => {
-      const variants = [...props.component.variants];
+      let variants = [...props.component.variants];
+
+      if (searchTerm.value) {
+        const term = searchTerm.value.toLowerCase();
+        variants = variants.filter(v =>
+          v.searchTerm.toLowerCase().includes(term)
+        );
+      }
 
       return variants.sort((a, b) => {
         let valA: string | number;
@@ -130,7 +141,7 @@ export default defineComponent({
         }
 
         // Compare
-        let comparison = 0;
+        let comparison: number;
         if (typeof valA === 'number' && typeof valB === 'number') {
           comparison = valA - valB;
         } else {
@@ -240,7 +251,8 @@ export default defineComponent({
       sortedVariants,
       sortColumn,
       sortDirection,
-      toggleSort
+      toggleSort,
+      searchTerm
     };
   }
 });

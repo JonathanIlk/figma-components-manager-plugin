@@ -52,14 +52,14 @@ body {
   color: var(--figma-color-text-secondary);
 }
 
-.search-hidden {
-  display: none;
-}
-
 .clickable-text {
   cursor: pointer;
 
   &:hover {
     text-decoration: underline;
   }
+}
+
+.display-none {
+    display: none !important;
 }

@@ -3,11 +3,11 @@
     <TabView class="main-tab-view">
       <template #Components>
           <ComponentsListHeader />
-          <SearchInput v-model="componentsSearch" />
+          <SearchInput v-model="componentsSearch" class="standalone-search"/>
           <ComponentsList :search-term="componentsSearch" />
       </template>
       <template #Instances>
-          <SearchInput v-model="instancesSearch" />
+          <SearchInput v-model="instancesSearch" class="standalone-search"/>
           <InstancesList :search-term="instancesSearch" />
       </template>
     </TabView>

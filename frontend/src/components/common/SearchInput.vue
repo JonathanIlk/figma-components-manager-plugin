@@ -24,7 +24,7 @@
       </div>
       <input
         type="text"
-        placeholder="Search"
+        :placeholder="placeholder"
         :value="modelValue"
         @input="onInput"
       />
@@ -54,6 +54,10 @@ export default defineComponent({
       type: String as () => 'search' | 'filter',
       default: 'search',
       validator: (value: string) => ['search', 'filter'].includes(value)
+    },
+    placeholder: {
+      type: String,
+      default: 'Search'
     }
   },
   emits: ['update:modelValue'],
@@ -76,11 +80,24 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.search-input {
+
+.search-input.standalone-search {
   display: block;
   width: 100%;
   padding-top: 4px;
   padding-bottom: 8px;
+
+  input {
+    background: var(--figma-color-bg-secondary);
+
+    &:focus {
+      background: var(--figma-color-bg-tertiary);
+    }
+  }
+}
+
+.search-input {
+  display: inline-block;
 
   .input-wrapper {
     position: relative;
@@ -109,12 +126,12 @@ export default defineComponent({
     border-radius: 8px;
     border: none;
 
-    background: var(--figma-color-bg-secondary);
+    background: var(--cm-color-bg-tertiary);
     color: var(--figma-color-text);
 
     &:focus {
       outline: none;
-      background: var(--figma-color-bg-tertiary);
+      background: var(--cm-color-bg-tertiary-hover);
     }
   }
 
@@ -136,7 +153,7 @@ export default defineComponent({
     font-size: 18px;
     font-weight: bold;
     line-height: 1;
-    border-radius: 4px;
+    border-radius: 8px;
     z-index: 1;
 
     &:hover {
