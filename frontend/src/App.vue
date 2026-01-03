@@ -2,17 +2,13 @@
   <div id="app">
     <TabView>
       <template #Components>
-        <div class="content-container tab-content">
           <ComponentsListHeader />
           <SearchInput v-model="componentsSearch" />
           <ComponentsList :search-term="componentsSearch" />
-        </div>
       </template>
       <template #Instances>
-        <div class="content-container tab-content">
           <SearchInput v-model="instancesSearch" />
           <InstancesList :search-term="instancesSearch" />
-        </div>
       </template>
     </TabView>
     <SettingsBar />

@@ -2,36 +2,41 @@
   <div class="tabview">
     <div class="tab-buttons-container">
       <button
-        v-for="(tab, index) in tabs"
-        :key="index"
+        v-for="tab in tabs"
+        :key="tab"
         class="tab-button"
-        :class="{ active: activeTab === index }"
-        @click="activeTab = index"
+        :class="{ active: activeTab === tab }"
+        @click="activeTab = tab"
       >
         {{ tab }}
       </button>
     </div>
-    <div class="tab-content-container">
-      <div
-        v-for="(tab, index) in tabs"
-        :key="index"
-        class="tab-content"
-        :class="{ active: activeTab === index }"
-      >
-        <slot :name="tab"></slot>
-      </div>
+    <div
+      v-for="tab in tabs"
+      :key="tab"
+      class="tab-content content-container"
+      :class="{ active: activeTab === tab }"
+    >
+      <slot :name="tab"></slot>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onBeforeUpdate } from 'vue';
 
 export default defineComponent({
   name: 'TabView',
-  setup() {
-    const tabs = ['Components', 'Instances'];
-    const activeTab = ref(0);
+  setup(props, { slots }) {
+    const tabs = ref(Object.keys(slots));
+    const activeTab = ref(tabs.value[0]);
+
+    onBeforeUpdate(() => {
+      tabs.value = Object.keys(slots);
+      if (!tabs.value.includes(activeTab.value) && tabs.value.length > 0) {
+        activeTab.value = tabs.value[0];
+      }
+    });
 
     return {
       tabs,
@@ -43,7 +48,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .tabview {
-  height: 100%;
   display: flex;
   flex-direction: column;
 
@@ -70,13 +74,6 @@ export default defineComponent({
         color: var(--figma-color-text);
       }
     }
-  }
-
-  .tab-content-container {
-    flex-grow: 1;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
   }
 
   .tab-content {

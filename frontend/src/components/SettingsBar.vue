@@ -62,9 +62,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .settings-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100%;
   background-color: var(--figma-color-bg);
   border-top: 1px solid var(--figma-color-border);
