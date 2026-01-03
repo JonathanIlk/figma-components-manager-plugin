@@ -39,6 +39,10 @@ export class ScannedComponent implements BaseScannedNode {
         }
         return instances;
     }
+
+    get searchTerm(): string {
+        return `${this.displayName} ${this.variantProperties.join(' ')} ${this.variants.map(v => v.propertyValues.join(",")).join(' ')}`;
+    }
 }
 
 /**

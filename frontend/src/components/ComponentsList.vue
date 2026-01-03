@@ -33,7 +33,7 @@ export default defineComponent({
         return components;
       }
       const lowerSearch = props.searchTerm.toLowerCase();
-      return components.filter(c => c.displayName.toLowerCase().includes(lowerSearch));
+      return components.filter(c => c.searchTerm.toLowerCase().includes(lowerSearch));
     });
 
     return {
