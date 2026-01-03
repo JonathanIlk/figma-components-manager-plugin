@@ -26,6 +26,11 @@
 - List all Instances of a Component or Variant in the document
 - Search through all Components, Variants and Instances
 - Resize Plugin window to your liking
+
+### Known Bugs
+
+**Deletion of Components/Variants is not detected automatically, requires manual refresh.**
+This is because Figma does not emit events for Component/Variant deletion, other than generic "relativeTransform" changed events. However at this point there is no way to distinguish between a transform change and a deletion, without doing a full (expensive) rescan.
  
 
 ### Requested, not implemented

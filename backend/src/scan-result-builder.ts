@@ -116,7 +116,6 @@ export class ScanResultBuilder {
     }
 
     private async constructDtoForVariant(node: ComponentNode): Promise<VariantDto> {
-        util.log("Variant found:", node)
         return {
             nodeId: node.id,
             displayName: Object.values(node.variantProperties!).join(", "),

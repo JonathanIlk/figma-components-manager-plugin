@@ -35,6 +35,7 @@ export interface SettingsUpdatedMessage extends MessageToUi<MessageToUiType.SETT
 export type DocumentUpdatePayload = {
     scanResult: ScanResultDto;
     removedNodeIds: string[];
+    fullRefresh?: boolean;
 }
 
 export type SettingsUpdatePayload = {

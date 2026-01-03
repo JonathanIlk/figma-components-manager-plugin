@@ -46,6 +46,16 @@ export class FrontendStateService {
     public handleDocumentUpdate(updatePayload: DocumentUpdatePayload) {
         util.log("ScanResultsManager: Handling Document Update", updatePayload);
 
+        if (updatePayload.fullRefresh) {
+            // For a full refresh, we clear all existing scan results first.
+            this.state.scanResults = {
+                components: {},
+                variants: {},
+                instances: {}
+            };
+        }
+
+
         for (const componentDto of updatePayload.scanResult.components) {
             const component = ScannedComponent.fromDto(componentDto);
             this.state.scanResults.components[component.nodeId] = component;
