@@ -1,3 +1,7 @@
+Version 6:
+
+- Add font-size setting for users to customize text size in the UI
+
 Version 5:
 
 - Enable seamless updates for the UI without re-rerendering the whole view

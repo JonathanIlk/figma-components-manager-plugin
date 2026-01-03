@@ -13,6 +13,7 @@ export interface AppState {
     scanResults: StoredScanResults;
     settings: {
         autoRefresh: boolean;
+        fontSize: number;
     };
 }
 
@@ -37,7 +38,8 @@ export class FrontendStateService {
             instances: {}
         },
         settings: {
-            autoRefresh: false
+            autoRefresh: false,
+            fontSize: 16
         }
     });
 
@@ -80,6 +82,8 @@ export class FrontendStateService {
 
     public handleSettingsUpdate(payload: SettingsUpdatePayload) {
         this.state.settings.autoRefresh = payload.autoRefresh;
+        this.state.settings.fontSize = payload.fontSize;
+        document.documentElement.style.fontSize = `${payload.fontSize}px`;
     }
 
     public getComponentById(nodeId: string): ScannedComponent | undefined {

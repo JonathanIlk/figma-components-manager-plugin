@@ -206,8 +206,23 @@ export default defineComponent({
     watch(isExpanded, (newValue) => {
       if (expandableContent.value) {
         if (newValue) {
+          // 1. Set explicit pixel height to start the CSS transition
           expandableContent.value.style.height = expandableContent.value.scrollHeight + "px";
+
+          // 2. After transition (300ms), set to 'auto' to adapt to dynamic content changes
+          setTimeout(() => {
+            if (expandableContent.value && isExpanded.value) {
+              expandableContent.value.style.height = "auto";
+            }
+          }, 250);
         } else {
+          // 1. If currently 'auto', lock it to pixels so we can transition from it
+          if (expandableContent.value.style.height === "auto") {
+            expandableContent.value.style.height = expandableContent.value.scrollHeight + "px";
+            // Force reflow so the browser registers the pixel height before setting to 0
+            void expandableContent.value.offsetHeight;
+          }
+          // 2. Animate to 0
           expandableContent.value.style.height = "0px";
         }
       }
@@ -235,7 +250,7 @@ export default defineComponent({
 
 .component-info {
   .expandable-content {
-    transition: all 0.3s ease-in-out;
+    transition: all 0.25s ease-in-out;
     overflow: hidden;
     height: 0;
     margin-top: 0;
@@ -290,11 +305,12 @@ export default defineComponent({
   .variant-instances {
     text-align: left;
     font-size: 0.75rem;
+    line-height: 0.75rem;
     margin-left: $columnGap;
   }
 
   .variant-row .card-clickable-element {
-    padding: 4px 8px !important;
+    padding: 0.25rem 8px;
 
     &:last-child {
       border-bottom-left-radius: 0;

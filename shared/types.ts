@@ -5,6 +5,7 @@ export enum BackendMessageType {
     CYCLE_THROUGH_INSTANCES = "cycle-through-instances",
     RESIZE = "resize",
     SET_AUTO_REFRESH = "set-auto-refresh",
+    SET_FONT_SIZE = "set-font-size",
     MANUAL_REFRESH = "manual-refresh",
 }
 
@@ -15,6 +16,7 @@ export interface MessageToBackend<T_Type = BackendMessageType, T_Payload = unkno
 
 export interface ResizeMessage extends MessageToBackend<BackendMessageType.RESIZE, {width: number, height: number}> {}
 export interface SetAutoRefreshMessage extends MessageToBackend<BackendMessageType.SET_AUTO_REFRESH, {autoRefresh: boolean}> {}
+export interface SetFontSizeMessage extends MessageToBackend<BackendMessageType.SET_FONT_SIZE, {fontSize: number}> {}
 export interface NavigateToNodeMessage extends MessageToBackend<BackendMessageType.NAVIGATE_TO_NODE, string> {}
 
 /// Messages Backend -> UI
@@ -40,6 +42,7 @@ export type DocumentUpdatePayload = {
 
 export type SettingsUpdatePayload = {
     autoRefresh: boolean;
+    fontSize: number;
 }
 
 /**

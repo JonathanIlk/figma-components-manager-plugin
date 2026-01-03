@@ -4,8 +4,10 @@ import {MessageToUiType, SettingsUpdatePayload} from "../../shared/types";
 export class SettingsManager {
     private static instance: SettingsManager;
     private static STORAGE_KEY_AUTO_REFRESH = "settings_auto_refresh";
+    private static STORAGE_KEY_FONT_SIZE = "settings_font_size";
 
     private autoRefresh: boolean = true; // Default to true
+    private fontSize: number = 16; // Default to 16px
 
     private constructor() {
     }
@@ -22,6 +24,10 @@ export class SettingsManager {
             const storedAutoRefresh = await figma.clientStorage.getAsync(SettingsManager.STORAGE_KEY_AUTO_REFRESH);
             if (storedAutoRefresh !== undefined) {
                 this.autoRefresh = storedAutoRefresh;
+            }
+            const storedFontSize = await figma.clientStorage.getAsync(SettingsManager.STORAGE_KEY_FONT_SIZE);
+            if (storedFontSize !== undefined) {
+                this.fontSize = storedFontSize;
             }
         } catch (err) {
             util.logError("Error loading settings from clientStorage", err);
@@ -43,11 +49,21 @@ export class SettingsManager {
         this.sendSettingsToUi();
     }
 
+    public async setFontSize(size: number) {
+        this.fontSize = size;
+        try {
+            await figma.clientStorage.setAsync(SettingsManager.STORAGE_KEY_FONT_SIZE, size);
+        } catch (err) {
+            util.logError("Error saving settings to clientStorage", err);
+        }
+        this.sendSettingsToUi();
+    }
+
     public sendSettingsToUi() {
         const payload: SettingsUpdatePayload = {
-            autoRefresh: this.autoRefresh
+            autoRefresh: this.autoRefresh,
+            fontSize: this.fontSize
         };
         figma.ui.postMessage({type: MessageToUiType.SETTINGS_UPDATE, payload: payload});
     }
 }
-

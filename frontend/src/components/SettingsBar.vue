@@ -16,6 +16,11 @@
         </a>
       </div>
       <div class="right-section">
+        <button class="icon-button" title="Toggle font size" @click="toggleFontSize">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M0.5 14H2.5L3.2 11.5H6.8L7.5 14H9.5L5.5 2H4.5L0.5 14ZM5 4.5L6.2 10H3.8L5 4.5ZM10.5 14H12L12.4 12.5H14.6L15 14H16.5L13.5 6H12.5L10.5 14ZM13.5 8L14.2 11.5H12.8L13.5 8Z" fill="currentColor"/>
+          </svg>
+        </button>
         <button class="icon-button" title="Manually refresh the document scan" @click="sendManualRefresh">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M13.64 2.35C12.19 0.9 10.2 0 8 0C3.58 0 0 3.58 0 8C0 12.42 3.58 16 8 16C11.73 16 14.84 13.45 15.73 10H13.65C12.83 12.33 10.61 14 8 14C4.69 14 2 11.31 2 8C2 4.69 4.69 2 8 2C9.66 2 11.14 2.69 12.22 3.78L9 7H16V0L13.64 2.35Z" fill="currentColor"/>
@@ -59,9 +64,23 @@ export default defineComponent({
       }, '*');
     };
 
+    const toggleFontSize = () => {
+      const currentSize = scanResultsManager.state.settings.fontSize;
+      const newSize = currentSize === 16 ? 14 : 16;
+      parent.postMessage({
+        pluginMessage: {
+          type: BackendMessageType.SET_FONT_SIZE,
+          payload: {
+            fontSize: newSize
+          }
+        }
+      }, '*');
+    };
+
     return {
       autoRefresh,
-      sendManualRefresh
+      sendManualRefresh,
+      toggleFontSize
     };
   }
 });
@@ -105,6 +124,7 @@ export default defineComponent({
   align-items: center;
   justify-content: flex-end;
   flex: 1;
+  gap: 4px;
 }
 
 .github-link {
@@ -202,4 +222,3 @@ input:checked + .slider:before {
   background-color: var(--figma-color-bg-hover);
 }
 </style>
-

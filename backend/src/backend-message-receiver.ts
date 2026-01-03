@@ -1,4 +1,4 @@
-import {BackendMessageType, MessageToBackend, ResizeMessage, SetAutoRefreshMessage} from "../../shared/types";
+import {BackendMessageType, MessageToBackend, ResizeMessage, SetAutoRefreshMessage, SetFontSizeMessage} from "../../shared/types";
 import {DocumentSearcher} from "./document-searcher";
 import {WindowManager} from "./window-manager";
 import {SettingsManager} from "./settings-manager";
@@ -29,6 +29,11 @@ export class BackendMessageReceiver {
                 case BackendMessageType.SET_AUTO_REFRESH: {
                     const message = msg as SetAutoRefreshMessage;
                     await SettingsManager.getInstance().setAutoRefresh(message.payload.autoRefresh);
+                    break;
+                }
+                case BackendMessageType.SET_FONT_SIZE: {
+                    const message = msg as SetFontSizeMessage;
+                    await SettingsManager.getInstance().setFontSize(message.payload.fontSize);
                     break;
                 }
                 case BackendMessageType.MANUAL_REFRESH: {
