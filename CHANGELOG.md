@@ -1,6 +1,7 @@
 Version 5:
 
-- Enable seamless updates for the UI
+- Enable seamless updates for the UI without re-rerendering the whole view
+- Add functionality to sort variants by their variant properties
 - Migrate to Vue.js for the UI
 
 Version 4:

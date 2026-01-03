@@ -41,8 +41,6 @@ Issues for other features are also welcome, but I cannot guarantee that I will i
 - Group Components by Page
 - Show all instances that exist without a valid component in the document
 - Jump from Components tab to the corresponding instances for a selected component/variant
-- Fix some minor light mode styling issues (everything is readable, but could be prettier)
-- More consistent ordering of the variants of a component (currently default order as returned by figma api)
 
 ## Technical Documentation
 

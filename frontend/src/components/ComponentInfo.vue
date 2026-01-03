@@ -26,14 +26,32 @@
       :style="gridStyle"
       ref="expandableContent"
     >
-      <!-- Header with Variant properties -->
-      <div v-for="variant in component.variantProperties" :key="variant" class="subtle-text variant-property-header grid-header">
+      <!-- Headers with Variant properties -->
+      <div
+        v-for="(variant, index) in component.variantProperties"
+        :key="variant"
+        class="subtle-text grid-header sortable-header"
+        @click="toggleSort(index)"
+      >
         {{ variant }}
+        <span v-if="sortColumn === index" class="sort-indicator">
+          {{ sortDirection === 'asc' ? '▲' : '▼' }}
+        </span>
       </div>
-      <div class="subtle-text grid-header">Instances</div>
+
+      <!--  -->
+      <div
+        class="subtle-text grid-header sortable-header"
+        @click="toggleSort('instances')"
+      >
+        Instances
+        <span v-if="sortColumn === 'instances'" class="sort-indicator">
+          {{ sortDirection === 'asc' ? '▲' : '▼' }}
+        </span>
+      </div>
 
       <!-- Loop through all variants -->
-      <template v-for="variant in component.variants" :key="variant.nodeId">
+      <template v-for="variant in sortedVariants" :key="variant.nodeId">
         <div class="variant-row">
           <div class="variant-properties-container">
 
@@ -74,7 +92,6 @@
 import { defineComponent, PropType, ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { ScannedComponent } from '../scanned-nodes';
 import { BackendMessageType } from '../../../shared/types';
-import {util} from "../../frontend";
 
 // Which element of a variant is being hovered
 type HoverState = "variant" | "instances" | false;
@@ -91,6 +108,50 @@ export default defineComponent({
     const isExpanded = ref(false);
     const expandableContent = ref<HTMLElement | null>(null);
     const hoverStates = ref<Record<string, HoverState>>({});
+
+    // Sorting state
+    const sortColumn = ref<number | 'instances'>(0); // 0-based index for properties, or 'instances'
+    const sortDirection = ref<'asc' | 'desc'>('asc');
+
+    const sortedVariants = computed(() => {
+      const variants = [...props.component.variants];
+
+      return variants.sort((a, b) => {
+        let valA: string | number;
+        let valB: string | number;
+
+        if (sortColumn.value === 'instances') {
+          valA = a.instances.length;
+          valB = b.instances.length;
+        } else {
+          // Sort by property value
+          valA = a.propertyValues[sortColumn.value] || '';
+          valB = b.propertyValues[sortColumn.value] || '';
+        }
+
+        // Compare
+        let comparison = 0;
+        if (typeof valA === 'number' && typeof valB === 'number') {
+          comparison = valA - valB;
+        } else {
+          // Use numeric collation for strings like "Variant 2" vs "Variant 10"
+          comparison = String(valA).localeCompare(String(valB), undefined, { numeric: true });
+        }
+
+        return sortDirection.value === 'asc' ? comparison : -comparison;
+      });
+    });
+
+    const toggleSort = (column: number | 'instances') => {
+      if (sortColumn.value === column) {
+        // Toggle direction
+        sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
+      } else {
+        // New column, default to ascending
+        sortColumn.value = column;
+        sortDirection.value = 'asc';
+      }
+    };
 
     const gridStyle = computed(() => {
       const propertyCount = props.component.variantProperties.length;
@@ -160,7 +221,11 @@ export default defineComponent({
       cycleThroughInstances,
       setHover,
       hoverStates,
-      expandableContent
+      expandableContent,
+      sortedVariants,
+      sortColumn,
+      sortDirection,
+      toggleSort
     };
   }
 });
@@ -199,12 +264,26 @@ export default defineComponent({
       display: contents;
     }
 
-    .variant-property-header {
+    .grid-header {
+      font-size: 0.75rem;
       padding-left: $columnGap * 2;
     }
 
-    .grid-header {
-      font-size: 0.75rem;
+    .sortable-header {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      &:hover {
+        color: var(--figma-color-text);
+      }
+    }
+
+    .sort-indicator {
+      padding-top: 2px;
+      font-size: 0.4rem;
     }
   }
 
