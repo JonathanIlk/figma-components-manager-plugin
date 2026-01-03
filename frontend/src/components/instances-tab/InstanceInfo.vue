@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { ScannedInstance } from '../scanned-nodes';
-import { BackendMessageType } from '../../../shared/types';
+import { ScannedInstance } from '../../scanned-nodes';
+import { BackendMessageType } from '../../../../shared/types';
 
 export default defineComponent({
   name: 'InstanceInfo',

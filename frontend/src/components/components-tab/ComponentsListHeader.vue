@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from 'vue';
-import { FrontendStateService } from '../frontend-state-service';
+import { FrontendStateService } from '../../frontend-state-service';
 
 export default defineComponent({
   name: 'ComponentsListHeader',

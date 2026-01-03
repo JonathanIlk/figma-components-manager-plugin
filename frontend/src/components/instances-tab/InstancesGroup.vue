@@ -20,9 +20,9 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from 'vue';
-import { ScannedInstance } from '../scanned-nodes';
+import { ScannedInstance } from '../../scanned-nodes';
 import InstanceInfo from './InstanceInfo.vue';
-import { BackendMessageType } from '../../../shared/types';
+import { BackendMessageType } from '../../../../shared/types';
 
 export default defineComponent({
   name: 'InstancesGroup',

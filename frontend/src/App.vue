@@ -18,11 +18,11 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import TabView from './components/TabView.vue';
-import ComponentsListHeader from './components/ComponentsListHeader.vue';
-import SearchInput from './components/SearchInput.vue';
-import ComponentsList from './components/ComponentsList.vue';
-import InstancesList from './components/InstancesList.vue';
+import TabView from './components/common/TabView.vue';
+import ComponentsListHeader from './components/components-tab/ComponentsListHeader.vue';
+import SearchInput from './components/common/SearchInput.vue';
+import ComponentsList from './components/components-tab/ComponentsList.vue';
+import InstancesList from './components/instances-tab/InstancesList.vue';
 import SettingsBar from './components/SettingsBar.vue';
 import ResizeCorner from './components/ResizeCorner.vue';
 

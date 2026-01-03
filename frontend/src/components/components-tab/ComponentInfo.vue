@@ -90,8 +90,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { ScannedComponent } from '../scanned-nodes';
-import { BackendMessageType } from '../../../shared/types';
+import { ScannedComponent } from '../../scanned-nodes';
+import { BackendMessageType } from '../../../../shared/types';
 
 // Which element of a variant is being hovered
 type HoverState = "variant" | "instances" | false;

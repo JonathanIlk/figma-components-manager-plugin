@@ -16,8 +16,8 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { FrontendStateService, StoredScanResults } from '../frontend-state-service';
-import { ScannedInstance } from '../scanned-nodes';
+import { FrontendStateService, StoredScanResults } from '../../frontend-state-service';
+import { ScannedInstance } from '../../scanned-nodes';
 import InstancesGroup from './InstancesGroup.vue';
 
 interface InstanceGroupData {

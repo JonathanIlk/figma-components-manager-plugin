@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { FrontendStateService } from '../frontend-state-service';
+import { FrontendStateService } from '../../frontend-state-service';
 import ComponentInfo from './ComponentInfo.vue';
 
 export default defineComponent({
