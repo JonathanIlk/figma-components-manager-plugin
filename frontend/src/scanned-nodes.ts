@@ -1,4 +1,4 @@
-import {ComponentDto, ComponentType} from "../../shared/types";
+import {ComponentDto, ComponentType, InstanceDto, VariantDto} from "../../shared/types";
 import {ScanResultsManager} from "./scan-results-manager";
 
 export interface BaseScannedNode {
@@ -6,6 +6,10 @@ export interface BaseScannedNode {
     displayName: string;
 }
 
+/**
+ * Frontend Representation of a figma document Component retrieved from the Backend.
+ * Constructed when receiving scan results from the Backend.
+ */
 export class ScannedComponent implements BaseScannedNode {
     private constructor(public nodeId: string, public displayName: string, public type: ComponentType, public variantIds: string[], public instanceIds: string[], public variantProperties: string[]) {
     }
@@ -37,12 +41,15 @@ export class ScannedComponent implements BaseScannedNode {
     }
 }
 
+/**
+ * Frontend Representation of a figma document Variant retrieved from the Backend.
+ */
 export class ScannedVariant implements BaseScannedNode {
-    private constructor(public nodeId: string,  public displayName: string, public instanceIds: string[]) {
+    private constructor(public nodeId: string,  public displayName: string, public propertyValues: string[], public instanceIds: string[]) {
     }
 
-    public static fromDto(dto: {nodeId: string, displayName: string, instanceIds: string[]}): ScannedVariant {
-        return new ScannedVariant(dto.nodeId, dto.displayName, dto.instanceIds);
+    public static fromDto(dto: VariantDto): ScannedVariant {
+        return new ScannedVariant(dto.nodeId, dto.displayName, dto.propertyValues, dto.instanceIds);
     }
 
     get instances(): ScannedInstance[] {
@@ -57,11 +64,14 @@ export class ScannedVariant implements BaseScannedNode {
     }
 }
 
+/**
+ * Frontend Representation of a figma document Instance retrieved from the Backend.
+ */
 export class ScannedInstance implements BaseScannedNode {
     private constructor(public nodeId: string, public displayName: string) {
     }
 
-    public static fromDto(dto: { nodeId: string, nodeName: string }): ScannedInstance {
+    public static fromDto(dto: InstanceDto): ScannedInstance {
         return new ScannedInstance(dto.nodeId, dto.nodeName);
     }
 }

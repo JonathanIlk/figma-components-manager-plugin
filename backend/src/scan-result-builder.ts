@@ -120,6 +120,7 @@ export class ScanResultBuilder {
         return {
             nodeId: node.id,
             displayName: Object.values(node.variantProperties!).join(", "),
+            propertyValues: Object.values(node.variantProperties!),
             instanceIds: (await this.findAllInstances(node)).map(instance => instance.nodeId)
         }
     }

@@ -71,9 +71,7 @@ export default defineComponent({
       parent.postMessage({
         pluginMessage: {
           type: BackendMessageType.NAVIGATE_TO_NODE,
-          payload: {
-            nodeId: props.groupNodeId
-          }
+          payload: props.groupNodeId,
         }
       }, '*');
     };

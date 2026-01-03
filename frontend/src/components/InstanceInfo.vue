@@ -26,9 +26,7 @@ export default defineComponent({
       parent.postMessage({
         pluginMessage: {
           type: BackendMessageType.NAVIGATE_TO_NODE,
-          payload: {
-            nodeId: props.instance.nodeId
-          }
+          payload: props.instance.nodeId,
         }
       }, '*');
     };

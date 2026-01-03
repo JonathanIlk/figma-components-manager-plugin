@@ -18,22 +18,28 @@
         </span>
       </div>
     </div>
+
+    <!-- Variants Grid -->
     <div
       class="card-content expandable-content variants-grid"
       :class="{ visible: isExpanded }"
       :style="gridStyle"
       ref="expandableContent"
     >
+      <!-- Header with Variant properties -->
       <div v-for="variant in component.variantProperties" :key="variant" class="subtle-text variant-property-header grid-header">
         {{ variant }}
       </div>
       <div class="subtle-text grid-header">Instances</div>
 
+      <!-- Loop through all variants -->
       <template v-for="variant in component.variants" :key="variant.nodeId">
         <div class="variant-row">
           <div class="variant-properties-container">
+
+            <!-- properties of the variant -->
             <div
-              v-for="(property, index) in variant.variantProperties"
+              v-for="(property, index) in variant.propertyValues"
               :key="index"
               class="card-clickable-element variant-property"
               :navigatable-node-id="variant.nodeId"
@@ -42,9 +48,11 @@
               @mouseleave="setHover(variant.nodeId, false)"
               :class="{ hover: hoverState[variant.nodeId] }"
             >
-              {{ property.value }}
+              {{ property }}
             </div>
           </div>
+
+          <!-- Instance count of variant -->
           <div
             class="card-clickable-element variant-instances"
             :navigatable-node-id="variant.nodeId"
@@ -65,6 +73,7 @@
 import { defineComponent, PropType, ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { ScannedComponent } from '../scanned-nodes';
 import { BackendMessageType } from '../../../shared/types';
+import {util} from "../../frontend";
 
 export default defineComponent({
   name: 'ComponentInfo',
@@ -94,12 +103,11 @@ export default defineComponent({
     };
 
     const navigateToNode = (nodeId: string) => {
+      util.log(`Navigating to node: ${nodeId}`);
       parent.postMessage({
         pluginMessage: {
           type: BackendMessageType.NAVIGATE_TO_NODE,
-          payload: {
-            nodeId: nodeId
-          }
+          payload: nodeId,
         }
       }, '*');
     };
