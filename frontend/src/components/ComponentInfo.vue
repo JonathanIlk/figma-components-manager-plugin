@@ -43,9 +43,9 @@
               :key="index"
               class="card-clickable-element variant-property"
               @click="navigateToNode(variant.nodeId)"
-              @mouseenter="setHover(variant.nodeId, true)"
+              @mouseenter="setHover(variant.nodeId, 'variant')"
               @mouseleave="setHover(variant.nodeId, false)"
-              :class="{ hover: hoverState[variant.nodeId] }"
+              :class="{ hover: hoverStates[variant.nodeId] === 'variant' }"
             >
               {{ property }}
             </div>
@@ -54,10 +54,10 @@
           <!-- Instance count of variant -->
           <div
             class="card-clickable-element variant-instances"
-            @click="navigateToNode(variant.nodeId)"
-            @mouseenter="setHover(variant.nodeId, true)"
+            @click="cycleThroughInstances(variant.nodeId)"
+            @mouseenter="setHover(variant.nodeId, 'instances')"
             @mouseleave="setHover(variant.nodeId, false)"
-            :class="{ hover: hoverState[variant.nodeId] }"
+            :class="{ hover: hoverStates[variant.nodeId] === 'instances' }"
           >
             {{ variant.instances.length }} instances
           </div>
@@ -73,6 +73,9 @@ import { ScannedComponent } from '../scanned-nodes';
 import { BackendMessageType } from '../../../shared/types';
 import {util} from "../../frontend";
 
+// Which element of a variant is being hovered
+type HoverState = "variant" | "instances" | false;
+
 export default defineComponent({
   name: 'ComponentInfo',
   props: {
@@ -84,7 +87,7 @@ export default defineComponent({
   setup(props) {
     const isExpanded = ref(false);
     const expandableContent = ref<HTMLElement | null>(null);
-    const hoverState = ref<Record<string, boolean>>({});
+    const hoverStates = ref<Record<string, HoverState>>({});
 
     const gridStyle = computed(() => {
       const propertyCount = props.component.variantProperties.length;
@@ -101,7 +104,6 @@ export default defineComponent({
     };
 
     const navigateToNode = (nodeId: string) => {
-      util.log(`Navigating to node: ${nodeId}`);
       parent.postMessage({
         pluginMessage: {
           type: BackendMessageType.NAVIGATE_TO_NODE,
@@ -110,8 +112,17 @@ export default defineComponent({
       }, '*');
     };
 
-    const setHover = (nodeId: string, isHover: boolean) => {
-      hoverState.value[nodeId] = isHover;
+    const cycleThroughInstances = (nodeId: string) => {
+      parent.postMessage({
+        pluginMessage: {
+          type: BackendMessageType.CYCLE_THROUGH_INSTANCES,
+          payload: nodeId,
+        }
+      }, '*');
+    };
+
+    const setHover = (nodeId: string, newHoverState: HoverState) => {
+      hoverStates.value[nodeId] = newHoverState;
     };
 
     // Listen for global expand/collapse event
@@ -143,8 +154,9 @@ export default defineComponent({
       gridStyle,
       toggleExpand,
       navigateToNode,
+      cycleThroughInstances,
       setHover,
-      hoverState,
+      hoverStates,
       expandableContent
     };
   }
