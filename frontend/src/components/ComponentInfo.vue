@@ -2,7 +2,7 @@
   <div class="card component-info">
     <div class="card-header">
       <div class="title">
-        <div class="component-name" :navigatable-node-id="component.nodeId" @click="navigateToNode(component.nodeId)">{{ component.displayName }}</div>
+        <div class="component-name" @click="navigateToNode(component.nodeId)">{{ component.displayName }}</div>
         <div v-if="component.variants.length > 0" class="expand-collapse-icon" :class="{ expanded: isExpanded }" @click="toggleExpand">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"></polyline>
@@ -42,7 +42,6 @@
               v-for="(property, index) in variant.propertyValues"
               :key="index"
               class="card-clickable-element variant-property"
-              :navigatable-node-id="variant.nodeId"
               @click="navigateToNode(variant.nodeId)"
               @mouseenter="setHover(variant.nodeId, true)"
               @mouseleave="setHover(variant.nodeId, false)"
@@ -55,7 +54,6 @@
           <!-- Instance count of variant -->
           <div
             class="card-clickable-element variant-instances"
-            :navigatable-node-id="variant.nodeId"
             @click="navigateToNode(variant.nodeId)"
             @mouseenter="setHover(variant.nodeId, true)"
             @mouseleave="setHover(variant.nodeId, false)"

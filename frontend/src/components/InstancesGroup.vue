@@ -3,7 +3,6 @@
     <div class="card-header">
       <div
         class="title"
-        :navigatable-node-id="groupNodeId"
         @click="navigateToNode"
       >
         {{ groupName }}

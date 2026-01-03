@@ -51,14 +51,6 @@ body {
   color: var(--figma-color-text-secondary);
 }
 
-[navigatable-node-id], [cycle-through-instances] {
-  cursor: pointer;
-}
-
-[navigatable-node-id]:hover {
-  text-decoration: underline;
-}
-
 .search-hidden {
   display: none;
 }

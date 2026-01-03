@@ -1,7 +1,6 @@
 <template>
   <div
     class="instance-info card-clickable-element"
-    :navigatable-node-id="instance.nodeId"
     @click="navigateToNode"
   >
     {{ instance.displayName }}
