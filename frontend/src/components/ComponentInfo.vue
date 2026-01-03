@@ -2,7 +2,7 @@
   <div class="card component-info">
     <div class="card-header">
       <div class="title">
-        <div class="component-name" @click="navigateToNode(component.nodeId)">{{ component.displayName }}</div>
+        <div class="component-name clickable-text" @click="navigateToNode(component.nodeId)">{{ component.displayName }}</div>
         <div v-if="component.variants.length > 0" class="expand-collapse-icon" :class="{ expanded: isExpanded }" @click="toggleExpand">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"></polyline>
@@ -174,9 +174,10 @@ export default defineComponent({
     transition: all 0.3s ease-in-out;
     overflow: hidden;
     height: 0;
+    margin-top: 0;
 
     &.visible {
-      /* Height is set via JS */
+      margin-top: 16px;
     }
   }
 

@@ -54,3 +54,11 @@ body {
 .search-hidden {
   display: none;
 }
+
+.clickable-text {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
