@@ -30,8 +30,6 @@ export class RefreshHandler {
     }
 
     public async partialComponentsRefresh(event: DocumentChangeEvent) {
-        util.log(`Received Document change event:`, event);
-
         const refreshInstructions: RefreshStartInstructions = {
             components: {},
             componentSets: {}
@@ -55,7 +53,6 @@ export class RefreshHandler {
                     removedNodeIds.push(documentChange.node.id);
                 }
                 removedNodeIds.push(...DocumentSearcher.findAllChildrenRecursively(documentChange.node as SceneNode).map(node => node.id));
-                await this.addRootComponentNodeToRefreshInstructions(documentChange.node as SceneNode, refreshInstructions);
             }
 
         }
@@ -70,7 +67,7 @@ export class RefreshHandler {
 
         const documentUpdatePayload: DocumentUpdatePayload = {
             scanResult: scanResultDto,
-            removedNodeIds: []
+            removedNodeIds: removedNodeIds,
         }
         figma.ui.postMessage({type: MessageToUiType.DOCUMENT_UPDATE, payload: documentUpdatePayload});
     }
