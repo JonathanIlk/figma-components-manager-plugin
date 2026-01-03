@@ -79,7 +79,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .instances-list {
-  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
