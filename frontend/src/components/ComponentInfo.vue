@@ -167,7 +167,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "../styles.scss";
 
 .component-info {
   .expandable-content {

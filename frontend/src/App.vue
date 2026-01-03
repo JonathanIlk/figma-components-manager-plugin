@@ -50,8 +50,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "./styles.scss";
-
 #inner-app {
   height: 100%;
   display: flex;

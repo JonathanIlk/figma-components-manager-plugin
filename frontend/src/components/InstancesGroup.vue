@@ -85,8 +85,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "../styles.scss";
-
 .instances-group {
   .card-content {
     display: grid;
