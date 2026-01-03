@@ -39,13 +39,13 @@
 
     .card-clickable-element {
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--cm-color-bg-tertiary);
       padding: 2px 8px;
       border-radius: 16px;
       color: var(--figma-color-text);
 
       &:hover, &.hover {
-        background: rgba(255, 255, 255, 0.2);
+        background: var(--cm-color-bg-tertiary-hover);
         text-decoration: none !important;
       }
 
@@ -55,7 +55,6 @@
       }
     }
   }
-
 }
 
 // Expand-Collapse
