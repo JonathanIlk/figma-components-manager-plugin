@@ -44,7 +44,7 @@ Issues for other features are also welcome, but I cannot guarantee that I will i
 
 ### Overview
 
-This plugin uses Typescript and the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components">Web Components</a> standard for the frontend UI.
+This plugin uses Typescript and Vue.js for the frontend UI.
 
 Figma plugins run in two layers:
 

@@ -1,3 +1,8 @@
+Version 5:
+
+- Enable seamless updates for the UI
+- Migrate to Vue.js for the UI
+
 Version 4:
 
 - Skip incorrect components when rendering view
