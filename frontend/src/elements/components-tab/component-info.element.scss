@@ -9,14 +9,13 @@ app-component-info .expandable-content:not(.visible) {
   height: 0 !important;
 }
 
-$columnGap: 3px;
+$columnGap: 4px;
 $rowGap: 4px;
 
 
 app-component-info .variants-grid {
   display: grid;
   //grid-template-columns -> set in TS based on number of properties
-  column-gap: $columnGap;
   row-gap: $rowGap;
   margin-bottom: 4px;
   font-size: 0.8rem;
@@ -31,7 +30,7 @@ app-component-info .variants-grid {
   }
 
   .variant-property-header {
-    padding-left: $columnGap;
+    padding-left: $columnGap * 2;
   }
 
   .grid-header {
@@ -42,6 +41,7 @@ app-component-info .variants-grid {
 app-component-info .variant-instances {
   text-align: center;
   font-size: 0.75rem;
+  margin-left: $columnGap;
 }
 
 app-component-info .variant-row .card-clickable-element {
@@ -55,7 +55,6 @@ app-component-info .variant-row .card-clickable-element {
   &.variant-property {
     border-radius: 0;
     gap: 0;
-    margin-left: -$columnGap;
 
     &:first-child {
       border-top-left-radius: 16px;
