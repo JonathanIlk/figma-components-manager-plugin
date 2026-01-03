@@ -57,9 +57,12 @@
             @click="cycleThroughInstances(variant.nodeId)"
             @mouseenter="setHover(variant.nodeId, 'instances')"
             @mouseleave="setHover(variant.nodeId, false)"
-            :class="{ hover: hoverStates[variant.nodeId] === 'instances' }"
+            :class="{ hover: hoverStates[variant.nodeId] === 'instances', disabled: variant.instances.length === 0 }"
           >
-            {{ variant.instances.length }} instances
+            <span :class="{ 'instances-count': variant.instances.length > 0}">
+              {{ variant.instances.length }}
+            </span>
+            {{variant.instances .length === 1 ? 'instance' : 'instances' }}
           </div>
         </div>
       </template>
@@ -206,7 +209,7 @@ export default defineComponent({
   }
 
   .variant-instances {
-    text-align: center;
+    text-align: left;
     font-size: 0.75rem;
     margin-left: $columnGap;
   }
