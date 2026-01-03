@@ -15,7 +15,7 @@
 .card {
   background: var(--figma-color-bg-secondary);
   border-radius: 12px;
-  padding: 8px 12px;
+  padding: 0.5rem 0.75rem;
 
   .card-header {
 
@@ -23,7 +23,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 0.5rem;
       font-size: 1rem;
       font-weight: 550;
     }

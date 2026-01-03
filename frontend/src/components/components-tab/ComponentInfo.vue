@@ -349,6 +349,7 @@ export default defineComponent({
 
   &.filter-visible {
     opacity: 1;
+    pointer-events: auto;
   }
 }
 
