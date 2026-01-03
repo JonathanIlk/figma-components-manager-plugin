@@ -1,14 +1,19 @@
-import {DocumentUpdatePayload, ScanResultDto} from "../../shared/types";
-import {ComponentsListHeaderElement} from "./elements/components-tab/components-list-header.element";
-import {InstancesListElement} from "./elements/instances-tab/instances-list.element";
-import {ComponentInfoElement} from "./elements/components-tab/component-info.element";
+import {DocumentUpdatePayload, ScanResultDto, SettingsUpdatePayload} from "../../shared/types";
 import {ScannedComponent, ScannedInstance, ScannedVariant} from "./scanned-nodes";
 import {util} from "../frontend";
+import {reactive} from "vue";
 
 export interface StoredScanResults {
     components: { [nodeId: string]: ScannedComponent };
     variants: { [nodeId: string]: ScannedVariant };
     instances: { [nodeId: string]: ScannedInstance };
+}
+
+export interface AppState {
+    scanResults: StoredScanResults;
+    settings: {
+        autoRefresh: boolean;
+    };
 }
 
 /**
@@ -25,11 +30,16 @@ export class ScanResultsManager {
         return ScanResultsManager.instance;
     }
 
-    private cachedScanResults: StoredScanResults = {
-        components: {},
-        variants: {},
-        instances: {}
-    };
+    public state: AppState = reactive({
+        scanResults: {
+            components: {},
+            variants: {},
+            instances: {}
+        },
+        settings: {
+            autoRefresh: false
+        }
+    });
 
     private constructor() {}
 
@@ -38,61 +48,39 @@ export class ScanResultsManager {
 
         for (const componentDto of updatePayload.scanResult.components) {
             const component = ScannedComponent.fromDto(componentDto);
-            this.cachedScanResults.components[component.nodeId] = component;
+            this.state.scanResults.components[component.nodeId] = component;
         }
 
         for (const variantDto of updatePayload.scanResult.variants) {
             const variant = ScannedVariant.fromDto(variantDto);
-            this.cachedScanResults.variants[variant.nodeId] = variant;
+            this.state.scanResults.variants[variant.nodeId] = variant;
         }
 
         for (const instanceDto of updatePayload.scanResult.instances) {
             const instance = ScannedInstance.fromDto(instanceDto);
-            this.cachedScanResults.instances[instance.nodeId] = instance;
+            this.state.scanResults.instances[instance.nodeId] = instance;
         }
 
         for (const removedNodeId of updatePayload.removedNodeIds) {
-            delete this.cachedScanResults.components[removedNodeId];
-            delete this.cachedScanResults.variants[removedNodeId];
-            delete this.cachedScanResults.instances[removedNodeId];
+            delete this.state.scanResults.components[removedNodeId];
+            delete this.state.scanResults.variants[removedNodeId];
+            delete this.state.scanResults.instances[removedNodeId];
         }
-
-        // For now we just do a full refresh of the UI on any update, this could be improved later
-        this.refreshUi();
     }
 
-    private refreshUi() {
-        const container = document.getElementById('components-list') as HTMLElement;
-        container.innerHTML = "";
-
-        for (const component of Object.values(this.cachedScanResults.components)) {
-            const componentInfo = this.createComponentInfoElement(component);
-            container.appendChild(componentInfo);
-        }
-
-        const header: ComponentsListHeaderElement = document.getElementById('components-list-header') as ComponentsListHeaderElement;
-        header.updateForScanResult(this.cachedScanResults);
-
-        const instancesList: InstancesListElement = document.getElementsByTagName('app-instances-list')[0] as InstancesListElement;
-        instancesList.updateForScanResult(this.cachedScanResults);
+    public handleSettingsUpdate(payload: SettingsUpdatePayload) {
+        this.state.settings.autoRefresh = payload.autoRefresh;
     }
-
-    private createComponentInfoElement(scannedComponent: ScannedComponent) {
-        const componentInfo: ComponentInfoElement = document.createElement('app-component-info') as ComponentInfoElement;
-        componentInfo.initForComponent(scannedComponent);
-        return componentInfo;
-    }
-
 
     public getComponentById(nodeId: string): ScannedComponent | undefined {
-        return this.cachedScanResults.components[nodeId];
+        return this.state.scanResults.components[nodeId];
     }
 
     public getVariantById(nodeId: string): ScannedVariant | undefined {
-        return this.cachedScanResults.variants[nodeId];
+        return this.state.scanResults.variants[nodeId];
     }
 
     public getInstanceById(nodeId: string): ScannedInstance | undefined {
-        return this.cachedScanResults.instances[nodeId];
+        return this.state.scanResults.instances[nodeId];
     }
 }
