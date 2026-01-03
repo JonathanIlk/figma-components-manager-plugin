@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <TabView>
+  <div id="inner-app">
+    <TabView class="main-tab-view">
       <template #Components>
           <ComponentsListHeader />
           <SearchInput v-model="componentsSearch" />
@@ -52,10 +52,16 @@ export default defineComponent({
 <style lang="scss">
 @import "./styles.scss";
 
-#app {
+#inner-app {
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.main-tab-view {
+  flex: 1;
+  min-height: 0; /* Important for nested flex scrolling */
 }
 </style>
 

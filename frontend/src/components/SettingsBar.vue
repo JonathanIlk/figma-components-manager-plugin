@@ -67,6 +67,7 @@ export default defineComponent({
   border-top: 1px solid var(--figma-color-border);
   z-index: 900; /* Below resize corner (1000) */
   height: 40px;
+  flex-shrink: 0;
 }
 
 .settings-bar-container {

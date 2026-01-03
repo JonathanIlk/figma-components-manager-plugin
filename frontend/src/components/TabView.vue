@@ -50,10 +50,12 @@ export default defineComponent({
 .tabview {
   display: flex;
   flex-direction: column;
+  height: 100%; /* Ensure it takes full height of parent */
 
   .tab-buttons-container {
     display: flex;
     justify-content: space-around;
+    flex-shrink: 0; /* Prevent shrinking */
 
     .tab-button {
       flex-grow: 1;
@@ -78,8 +80,9 @@ export default defineComponent({
 
   .tab-content {
     display: none;
-    height: 100%;
+    flex: 1;
     overflow-y: auto;
+    min-height: 0; /* Important for nested flex scrolling */
 
     &.active {
       display: block;
