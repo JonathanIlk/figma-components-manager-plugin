@@ -3,6 +3,7 @@ import {DocumentSearcher} from "./document-searcher";
 import {WindowManager} from "./window-manager";
 import {SettingsManager} from "./settings-manager";
 import {RefreshHandler} from "./refresh-handler";
+import {util} from "../backend";
 
 /**
  * Handles messages received from the UI (e.g. button clicks) and performs corresponding actions in the Figma document.

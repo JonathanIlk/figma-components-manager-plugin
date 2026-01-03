@@ -1,17 +1,5 @@
 @use "style-components";
 
-html {
-  height: 100%;
-}
-
-body {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 40px; /* Space for settings bar */
-  box-sizing: border-box;
-}
-
 body {
   /*
   https://www.figma.com/plugin-docs/css-variables/
@@ -63,14 +51,14 @@ body {
   color: var(--figma-color-text-secondary);
 }
 
-[navigatable-node-id], [cycle-through-instances] {
-  cursor: pointer;
-}
-
-[navigatable-node-id]:hover {
-  text-decoration: underline;
-}
-
 .search-hidden {
   display: none;
+}
+
+.clickable-text {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }

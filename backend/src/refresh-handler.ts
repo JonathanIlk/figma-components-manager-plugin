@@ -6,6 +6,8 @@ import {util} from "../backend";
 const INTERESTED_NODE_CHANGE_PROPERTIES: NodeChangeProperty[] = [
     "variant" as NodeChangeProperty,
     "name",
+    "componentPropertyDefinitions", // Occurs when deleting a variant
+    "parent", // Occurs when restoring after deleting them previously (ctrl+Z)
 ];
 
 /**
@@ -23,14 +25,15 @@ export class RefreshHandler {
 
         const documentUpdatePayload: DocumentUpdatePayload = {
             scanResult: scanResultDto,
-            removedNodeIds: []
+            removedNodeIds: [],
+            fullRefresh: true,
         }
 
         figma.ui.postMessage({type: MessageToUiType.DOCUMENT_UPDATE, payload: documentUpdatePayload});
     }
 
     public async partialComponentsRefresh(event: DocumentChangeEvent) {
-        util.log(`Received Document change event:`, event);
+        util.log("RefreshHandler: Detected document changes, processing for partial refresh...", event);
 
         const refreshInstructions: RefreshStartInstructions = {
             components: {},
@@ -55,7 +58,6 @@ export class RefreshHandler {
                     removedNodeIds.push(documentChange.node.id);
                 }
                 removedNodeIds.push(...DocumentSearcher.findAllChildrenRecursively(documentChange.node as SceneNode).map(node => node.id));
-                await this.addRootComponentNodeToRefreshInstructions(documentChange.node as SceneNode, refreshInstructions);
             }
 
         }
@@ -70,7 +72,7 @@ export class RefreshHandler {
 
         const documentUpdatePayload: DocumentUpdatePayload = {
             scanResult: scanResultDto,
-            removedNodeIds: []
+            removedNodeIds: removedNodeIds,
         }
         figma.ui.postMessage({type: MessageToUiType.DOCUMENT_UPDATE, payload: documentUpdatePayload});
     }

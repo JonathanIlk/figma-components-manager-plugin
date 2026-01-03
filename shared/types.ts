@@ -14,8 +14,8 @@ export interface MessageToBackend<T_Type = BackendMessageType, T_Payload = unkno
 }
 
 export interface ResizeMessage extends MessageToBackend<BackendMessageType.RESIZE, {width: number, height: number}> {}
-
 export interface SetAutoRefreshMessage extends MessageToBackend<BackendMessageType.SET_AUTO_REFRESH, {autoRefresh: boolean}> {}
+export interface NavigateToNodeMessage extends MessageToBackend<BackendMessageType.NAVIGATE_TO_NODE, string> {}
 
 /// Messages Backend -> UI
 export enum MessageToUiType {
@@ -35,6 +35,7 @@ export interface SettingsUpdatedMessage extends MessageToUi<MessageToUiType.SETT
 export type DocumentUpdatePayload = {
     scanResult: ScanResultDto;
     removedNodeIds: string[];
+    fullRefresh?: boolean;
 }
 
 export type SettingsUpdatePayload = {
@@ -62,6 +63,7 @@ export type ComponentDto = {
 export type VariantDto = {
     nodeId: string;
     displayName: string;
+    propertyValues: string[];
     instanceIds: string[];
 }
 

@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = [
     {
@@ -41,8 +42,15 @@ module.exports = [
         module: {
             rules: [
                 {
+                    test: /\.vue$/,
+                    loader: 'vue-loader'
+                },
+                {
                     test: /\.tsx?$/,
-                    loader: "ts-loader"
+                    loader: "ts-loader",
+                    options: {
+                        appendTsSuffixTo: [/\.vue$/],
+                    }
                 },
                 { // Include styles in html file directly when they are imported in typescript (https://stackoverflow.com/a/53657486/1123709)
                     test: /\.scss$/,
@@ -65,7 +73,8 @@ module.exports = [
             filename: 'ui.html',
             cache: false, // disable cache otherwise the script will not be inlined freshly when the typescript changes during watch
         }),
-        new HtmlInlineScriptPlugin()
+        new HtmlInlineScriptPlugin(),
+        new VueLoaderPlugin()
         ],
     }
 ];
