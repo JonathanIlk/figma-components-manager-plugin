@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { ScanResultsManager, StoredScanResults } from '../scan-results-manager';
+import { FrontendStateService, StoredScanResults } from '../frontend-state-service';
 import { ScannedInstance } from '../scanned-nodes';
 import InstancesGroup from './InstancesGroup.vue';
 
@@ -38,7 +38,7 @@ export default defineComponent({
     }
   },
   setup() {
-    const scanResultsManager = ScanResultsManager.getInstance();
+    const scanResultsManager = FrontendStateService.getInstance();
 
     const groupedInstances = computed(() => {
       const scanResults = scanResultsManager.state.scanResults;

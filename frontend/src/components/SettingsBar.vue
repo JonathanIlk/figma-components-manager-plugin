@@ -21,13 +21,13 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { ScanResultsManager } from '../scan-results-manager';
+import { FrontendStateService } from '../frontend-state-service';
 import { BackendMessageType } from '../../../shared/types';
 
 export default defineComponent({
   name: 'SettingsBar',
   setup() {
-    const scanResultsManager = ScanResultsManager.getInstance();
+    const scanResultsManager = FrontendStateService.getInstance();
 
     const autoRefresh = computed({
       get: () => scanResultsManager.state.settings.autoRefresh,

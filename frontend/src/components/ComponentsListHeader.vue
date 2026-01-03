@@ -13,12 +13,12 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from 'vue';
-import { ScanResultsManager } from '../scan-results-manager';
+import { FrontendStateService } from '../frontend-state-service';
 
 export default defineComponent({
   name: 'ComponentsListHeader',
   setup() {
-    const scanResultsManager = ScanResultsManager.getInstance();
+    const scanResultsManager = FrontendStateService.getInstance();
     const isAllExpanded = ref(false);
 
     const instancesCount = computed(() => {

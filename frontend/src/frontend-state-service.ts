@@ -19,15 +19,15 @@ export interface AppState {
 /**
  * Receives scan results from the Backend (Full/Partial) and updates its own state and the UI accordingly.
  */
-export class ScanResultsManager {
+export class FrontendStateService {
 
-    private static instance: ScanResultsManager;
+    private static instance: FrontendStateService;
 
-    public static getInstance(): ScanResultsManager {
-        if (!ScanResultsManager.instance) {
-            ScanResultsManager.instance = new ScanResultsManager();
+    public static getInstance(): FrontendStateService {
+        if (!FrontendStateService.instance) {
+            FrontendStateService.instance = new FrontendStateService();
         }
-        return ScanResultsManager.instance;
+        return FrontendStateService.instance;
     }
 
     public state: AppState = reactive({

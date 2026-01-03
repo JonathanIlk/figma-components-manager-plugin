@@ -1,5 +1,5 @@
 import {ComponentDto, ComponentType, InstanceDto, VariantDto} from "../../shared/types";
-import {ScanResultsManager} from "./scan-results-manager";
+import {FrontendStateService} from "./frontend-state-service";
 
 export interface BaseScannedNode {
     nodeId: string;
@@ -21,7 +21,7 @@ export class ScannedComponent implements BaseScannedNode {
     get variants(): ScannedVariant[] {
         const variants: ScannedVariant[] = [];
         for (const variantId of this.variantIds) {
-            const variant = ScanResultsManager.getInstance().getVariantById(variantId);
+            const variant = FrontendStateService.getInstance().getVariantById(variantId);
             if (variant) {
                 variants.push(variant);
             }
@@ -32,7 +32,7 @@ export class ScannedComponent implements BaseScannedNode {
     get instances(): ScannedInstance[] {
         const instances: ScannedInstance[] = [];
         for (const instanceId of this.instanceIds) {
-            const instance = ScanResultsManager.getInstance().getInstanceById(instanceId);
+            const instance = FrontendStateService.getInstance().getInstanceById(instanceId);
             if (instance) {
                 instances.push(instance);
             }
@@ -55,7 +55,7 @@ export class ScannedVariant implements BaseScannedNode {
     get instances(): ScannedInstance[] {
         const instances: ScannedInstance[] = [];
         for (const instanceId of this.instanceIds) {
-            const instance = ScanResultsManager.getInstance().getInstanceById(instanceId);
+            const instance = FrontendStateService.getInstance().getInstanceById(instanceId);
             if (instance) {
                 instances.push(instance);
             }

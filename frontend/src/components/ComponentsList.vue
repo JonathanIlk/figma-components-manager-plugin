@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { ScanResultsManager } from '../scan-results-manager';
+import { FrontendStateService } from '../frontend-state-service';
 import ComponentInfo from './ComponentInfo.vue';
 
 export default defineComponent({
@@ -25,7 +25,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const scanResultsManager = ScanResultsManager.getInstance();
+    const scanResultsManager = FrontendStateService.getInstance();
 
     const filteredComponents = computed(() => {
       const components = Object.values(scanResultsManager.state.scanResults.components);
