@@ -16,7 +16,7 @@
         <span class="tag-element">
           <span class="instances-count">{{ component.instances.length }}</span> instances
         </span>
-        <SearchInput v-model="searchTerm" icon="filter" placeholder="Filter variants" :class="{'display-none': !isExpanded}"></SearchInput>
+        <SearchInput v-model="searchTerm" icon="filter" placeholder="Filter variants" :class="{'filter-visible': isExpanded}"></SearchInput>
       </div>
     </div>
 
@@ -341,5 +341,16 @@ export default defineComponent({
     }
   }
 }
+
+.search-input {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease-in-out;
+
+  &.filter-visible {
+    opacity: 1;
+  }
+}
+
 </style>
 
