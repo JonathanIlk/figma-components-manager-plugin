@@ -1,8 +1,11 @@
-import {util} from "../backend";
-import {MessageToUiType, SettingsUpdatePayload} from "../../shared/types";
+import {util} from "../../backend";
+import {MessageToUiType, SettingsUpdatePayload} from "../../../shared/types";
 
-export class SettingsManager {
-    private static instance: SettingsManager;
+/**
+ * Singleton Service to manage user settings, persist them in Figma's clientStorage, and communicate changes to the UI.
+ */
+export class SettingsService {
+    private static instance: SettingsService;
     private static STORAGE_KEY_AUTO_REFRESH = "settings_auto_refresh";
     private static STORAGE_KEY_FONT_SIZE = "settings_font_size";
 
@@ -13,19 +16,19 @@ export class SettingsManager {
     }
 
     public static getInstance() {
-        if (!SettingsManager.instance) {
-            SettingsManager.instance = new SettingsManager();
+        if (!SettingsService.instance) {
+            SettingsService.instance = new SettingsService();
         }
-        return SettingsManager.instance;
+        return SettingsService.instance;
     }
 
     public async initialize() {
         try {
-            const storedAutoRefresh = await figma.clientStorage.getAsync(SettingsManager.STORAGE_KEY_AUTO_REFRESH);
+            const storedAutoRefresh = await figma.clientStorage.getAsync(SettingsService.STORAGE_KEY_AUTO_REFRESH);
             if (storedAutoRefresh !== undefined) {
                 this.autoRefresh = storedAutoRefresh;
             }
-            const storedFontSize = await figma.clientStorage.getAsync(SettingsManager.STORAGE_KEY_FONT_SIZE);
+            const storedFontSize = await figma.clientStorage.getAsync(SettingsService.STORAGE_KEY_FONT_SIZE);
             if (storedFontSize !== undefined) {
                 this.fontSize = storedFontSize;
             }
@@ -42,7 +45,7 @@ export class SettingsManager {
     public async setAutoRefresh(enabled: boolean) {
         this.autoRefresh = enabled;
         try {
-            await figma.clientStorage.setAsync(SettingsManager.STORAGE_KEY_AUTO_REFRESH, enabled);
+            await figma.clientStorage.setAsync(SettingsService.STORAGE_KEY_AUTO_REFRESH, enabled);
         } catch (err) {
             util.logError("Error saving settings to clientStorage", err);
         }
@@ -52,7 +55,7 @@ export class SettingsManager {
     public async setFontSize(size: number) {
         this.fontSize = size;
         try {
-            await figma.clientStorage.setAsync(SettingsManager.STORAGE_KEY_FONT_SIZE, size);
+            await figma.clientStorage.setAsync(SettingsService.STORAGE_KEY_FONT_SIZE, size);
         } catch (err) {
             util.logError("Error saving settings to clientStorage", err);
         }

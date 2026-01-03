@@ -1,5 +1,5 @@
-import {DocumentSearcher, RefreshStartInstructions} from "./document-searcher";
-import {ScanResultBuilder} from "./scan-result-builder";
+import {FigmaDocumentUtil, DocumentComponentFindings} from "./figma-document-util";
+import {DocumentScanner} from "./document-scanner";
 import {DocumentUpdatePayload, MessageToUiType} from "../../shared/types";
 import {util} from "../backend";
 
@@ -20,8 +20,8 @@ export class RefreshHandler {
      * Scan the entire document for components, variants, instances and send the result to the UI.
      */
     public async fullComponentsRefresh() {
-        const searchResult: RefreshStartInstructions = DocumentSearcher.findAllComponents();
-        const scanResultDto = await new ScanResultBuilder(searchResult).convert();
+        const searchResult: DocumentComponentFindings = FigmaDocumentUtil.findAllComponents();
+        const scanResultDto = await new DocumentScanner(searchResult).convert();
 
         const documentUpdatePayload: DocumentUpdatePayload = {
             scanResult: scanResultDto,
@@ -35,7 +35,7 @@ export class RefreshHandler {
     public async partialComponentsRefresh(event: DocumentChangeEvent) {
         util.log("RefreshHandler: Detected document changes, processing for partial refresh...", event);
 
-        const refreshInstructions: RefreshStartInstructions = {
+        const refreshInstructions: DocumentComponentFindings = {
             components: {},
             componentSets: {}
         };
@@ -57,7 +57,7 @@ export class RefreshHandler {
                 if (documentChange.node.removed) {
                     removedNodeIds.push(documentChange.node.id);
                 }
-                removedNodeIds.push(...DocumentSearcher.findAllChildrenRecursively(documentChange.node as SceneNode).map(node => node.id));
+                removedNodeIds.push(...FigmaDocumentUtil.findAllChildrenRecursively(documentChange.node as SceneNode).map(node => node.id));
             }
 
         }
@@ -68,7 +68,7 @@ export class RefreshHandler {
         }
 
 
-        const scanResultDto = await new ScanResultBuilder(refreshInstructions).convert();
+        const scanResultDto = await new DocumentScanner(refreshInstructions).convert();
 
         const documentUpdatePayload: DocumentUpdatePayload = {
             scanResult: scanResultDto,
@@ -80,8 +80,8 @@ export class RefreshHandler {
     /**
      * In any case we want to include the root component/component set node for the given node in the refresh instructions to be re-scanned.
      */
-    private async addRootComponentNodeToRefreshInstructions(node: BaseNode, instructions: RefreshStartInstructions) {
-        const relevantRootNode = await DocumentSearcher.findRootComponentNode(node as SceneNode);
+    private async addRootComponentNodeToRefreshInstructions(node: BaseNode, instructions: DocumentComponentFindings) {
+        const relevantRootNode = await FigmaDocumentUtil.findRootComponentNode(node as SceneNode);
         if (relevantRootNode?.type === "COMPONENT") {
             instructions.components[relevantRootNode.id] = relevantRootNode as ComponentNode;
         } else if (relevantRootNode?.type === "COMPONENT_SET") {

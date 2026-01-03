@@ -1,4 +1,9 @@
-export type RefreshStartInstructions = {
+import {util} from "../backend";
+
+/**
+ * A list of all component relevant figma nodes found in the document.
+ */
+export interface DocumentComponentFindings {
     // Components without Variants
     components: { [id: string]: ComponentNode };
 
@@ -7,19 +12,19 @@ export type RefreshStartInstructions = {
 }
 
 /**
- * Searches through the figma document to find components and their instances.
+ * Provides utility functions to traverse and analyze the Figma document structure.
  */
-export class DocumentSearcher {
+export class FigmaDocumentUtil {
 
-    public static findAllComponents(): RefreshStartInstructions {
+    public static findAllComponents(): DocumentComponentFindings {
         // COMPONENT_SET = Component with Variants, COMPONENT = Variant/Component without Variants
         const allComponentNodes: (ComponentSetNode | ComponentNode)[] = figma.root.findAll()
             .filter(node => node.type === 'COMPONENT_SET' || node.type === "COMPONENT") as (ComponentSetNode | ComponentNode)[];
         return this.findComponentsInNodes(allComponentNodes);
     }
 
-    public static findComponentsInNodes(nodes: (PageNode | SceneNode)[]): RefreshStartInstructions {
-        const searchResult: RefreshStartInstructions = {
+    public static findComponentsInNodes(nodes: (PageNode | SceneNode)[]): DocumentComponentFindings {
+        const searchResult: DocumentComponentFindings = {
             components: {},
             componentSets: {}
         };
@@ -88,5 +93,20 @@ export class DocumentSearcher {
             pageNode = pageNode.parent;
         }
         return undefined;
+    }
+
+    /**
+     * In some cases getting information from certain nodes can lead to errors, we will simply ignore such nodes.
+     */
+    public static isNodeValid(node: PageNode | SceneNode) {
+        try {
+            // Accessing variantProperties will call `getVariantProperties` internally which can throw errors for invalid nodes.
+            (node as ComponentNode).variantProperties;
+        } catch (e) {
+            util.logWarn("Invalid node encountered during search, skipping it:", node, e);
+            return false;
+        }
+
+        return true;
     }
 }

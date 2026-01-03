@@ -1,14 +1,13 @@
-import {RefreshStartInstructions} from "./document-searcher";
-import {ComponentType, ComponentDto, ScanResultDto, VariantDto, InstanceDto} from "../../shared/types";
+import {DocumentComponentFindings, FigmaDocumentUtil} from "./figma-document-util";
+import {ComponentDto, ComponentType, InstanceDto, ScanResultDto, VariantDto} from "../../shared/types";
 import {util} from "../backend";
-import {FigmaUtil} from "./figma-util";
 
 /**
- * Converts RefreshStartInstructions into a ScanResultDto for transfer to the frontend, to be displayed in the UI.
+ * Converts DocumentComponentFindings into a ScanResultDto for transfer to the frontend, to be displayed in the UI.
  */
-export class ScanResultBuilder {
+export class DocumentScanner {
 
-    constructor(protected searchResult: RefreshStartInstructions) {
+    constructor(protected searchResult: DocumentComponentFindings) {
     }
 
     protected allSeenInstances: Set<InstanceNode> = new Set();
@@ -125,7 +124,7 @@ export class ScanResultBuilder {
     }
 
     private isVariant(component: ComponentNode) {
-        if (!FigmaUtil.isNodeValid(component)) {
+        if (!FigmaDocumentUtil.isNodeValid(component)) {
             return false;
         }
 

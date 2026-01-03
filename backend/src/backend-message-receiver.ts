@@ -1,7 +1,7 @@
 import {BackendMessageType, MessageToBackend, ResizeMessage, SetAutoRefreshMessage, SetFontSizeMessage} from "../../shared/types";
-import {DocumentSearcher} from "./document-searcher";
-import {WindowManager} from "./window-manager";
-import {SettingsManager} from "./settings-manager";
+import {FigmaDocumentUtil} from "./figma-document-util";
+import {WindowService} from "./services/window-service";
+import {SettingsService} from "./services/settings-service";
 import {RefreshHandler} from "./refresh-handler";
 import {util} from "../backend";
 
@@ -23,17 +23,17 @@ export class BackendMessageReceiver {
                 }
                 case BackendMessageType.RESIZE: {
                     const message = msg as ResizeMessage;
-                    WindowManager.getInstance().resize(message.payload.width, message.payload.height);
+                    WindowService.getInstance().resize(message.payload.width, message.payload.height);
                     break;
                 }
                 case BackendMessageType.SET_AUTO_REFRESH: {
                     const message = msg as SetAutoRefreshMessage;
-                    await SettingsManager.getInstance().setAutoRefresh(message.payload.autoRefresh);
+                    await SettingsService.getInstance().setAutoRefresh(message.payload.autoRefresh);
                     break;
                 }
                 case BackendMessageType.SET_FONT_SIZE: {
                     const message = msg as SetFontSizeMessage;
-                    await SettingsManager.getInstance().setFontSize(message.payload.fontSize);
+                    await SettingsService.getInstance().setFontSize(message.payload.fontSize);
                     break;
                 }
                 case BackendMessageType.MANUAL_REFRESH: {
@@ -83,7 +83,7 @@ export class BackendMessageReceiver {
 
     private async focusNode(node: SceneNode) {
         // If the node is not in the current page, we should switch to the page where the node is located
-        const pageNode = DocumentSearcher.findPageForNode(node);
+        const pageNode = FigmaDocumentUtil.findPageForNode(node);
         if (!pageNode) {
             console.error("Could not find the page for the node");
             return;
