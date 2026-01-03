@@ -2,7 +2,7 @@
   <div class="card instances-group" v-if="isVisible">
     <div class="card-header">
       <div
-        class="title"
+        class="title clickable-text"
         @click="navigateToNode"
       >
         {{ groupName }}
