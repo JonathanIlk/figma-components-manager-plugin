@@ -55,5 +55,11 @@ export default defineComponent({
 
 <style lang="scss">
 @import "./styles.scss";
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 </style>
 
