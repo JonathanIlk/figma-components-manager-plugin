@@ -35,7 +35,7 @@
         @click="toggleSort(index)"
       >
         {{ variant }}
-        <span v-if="sortColumn === index" class="sort-indicator">
+        <span :class="{'visibility-hidden': sortColumn !== index}" class="sort-indicator">
           {{ sortDirection === 'asc' ? '▲' : '▼' }}
         </span>
       </div>
@@ -46,7 +46,7 @@
         @click="toggleSort('instances')"
       >
         Instances
-        <span v-if="sortColumn === 'instances'" class="sort-indicator">
+        <span class="sort-indicator" :class="{'visibility-hidden': sortColumn !== 'instances'}">
           {{ sortDirection === 'asc' ? '▲' : '▼' }}
         </span>
       </div>
@@ -78,10 +78,12 @@
             @mouseleave="setHover(variant.nodeId, false)"
             :class="{ hover: hoverStates[variant.nodeId] === 'instances', disabled: variant.instances.length === 0 }"
           >
-            <span :class="{ 'instances-count': variant.instances.length > 0}">
-              {{ variant.instances.length }}
+            <span>
+              <span :class="{ 'instances-count': variant.instances.length > 0}">
+                {{ variant.instances.length }}
+              </span>
+              {{ variant.instances.length === 1 ? 'instance' : 'instances' }}
             </span>
-            {{variant.instances .length === 1 ? 'instance' : 'instances' }}
           </div>
         </div>
       </template>
@@ -268,7 +270,7 @@ export default defineComponent({
     margin-top: 0;
 
     &.visible {
-      margin-top: 16px;
+      margin-top: 0.75rem;
     }
   }
 
@@ -315,9 +317,7 @@ export default defineComponent({
   }
 
   .variant-instances {
-    text-align: left;
     font-size: 0.75rem;
-    line-height: 0.75rem;
     margin-left: $columnGap;
   }
 
