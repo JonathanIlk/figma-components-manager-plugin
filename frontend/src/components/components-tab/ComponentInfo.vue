@@ -40,7 +40,7 @@
         </span>
       </div>
 
-      <!--  -->
+      <!-- Header for Instances Column -->
       <div
         class="subtle-text grid-header sortable-header"
         @click="toggleSort('instances')"
@@ -51,6 +51,7 @@
         </span>
       </div>
 
+      <!-- Actual content rows of the table -->
       <!-- Loop through all variants -->
       <template v-for="variant in sortedVariants" :key="variant.nodeId">
         <div class="variant-row">

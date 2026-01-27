@@ -84,7 +84,7 @@ export class FigmaDocumentUtil {
 
     public static findPageForNode(node: BaseNode): PageNode | undefined {
         let pageNode = node.parent;
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 50; i++) {
             if(!pageNode) break;
             if (pageNode.type === "PAGE") {
                 // yay we found the page somewhere in the hierarchy

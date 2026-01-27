@@ -38,9 +38,16 @@ This is because Figma does not emit events for Component/Variant deletion, other
 Pull Requests for these features are welcome!
 Issues for other features are also welcome, but I cannot guarantee that I will implement them.
 
+- Display amount of Components/Variants in the components tab (next to the instances count)
+- Instances tab: also show Components, Variants, Instances count (header)
+- Drag and Drop Variants directly into the document
+- Indicator for hidden Components/Variants/Instances (Show/Hide status) using eye icon (interactable for showing hiding)
+- Filter Components by various criteria (e.g. Components without Instances, hidden components)
 - Group Components by Page
+- Group Instances by Page inside variant card on instances tab
 - Show all instances that exist without a valid component in the document
 - Jump from Components tab to the corresponding instances for a selected component/variant
+- Add Resize "handle" to entire length/width of the plugin window borders instead of just the bottom right corner
 
 ## Technical Documentation
 

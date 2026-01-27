@@ -85,7 +85,7 @@ export class BackendMessageReceiver {
         // If the node is not in the current page, we should switch to the page where the node is located
         const pageNode = FigmaDocumentUtil.findPageForNode(node);
         if (!pageNode) {
-            console.error("Could not find the page for the node");
+            util.logError("Could not find the page for the node");
             return;
         }
         if(pageNode && pageNode.type === "PAGE" && figma.currentPage !== pageNode as PageNode) {
