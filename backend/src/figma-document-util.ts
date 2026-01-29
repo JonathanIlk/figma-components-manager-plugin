@@ -21,9 +21,9 @@ export class FigmaDocumentUtil {
 
     public static findAllComponentsOnPage(page: PageNode): DocumentComponentFindings {
         // COMPONENT_SET = Component with Variants, COMPONENT = Variant/Component without Variants
-        const allComponentNodesInPage: (ComponentSetNode | ComponentNode | InstanceNode)[] = page.findAll(node => {
-            return node.type === 'COMPONENT_SET' || node.type === "COMPONENT" || node.type === "INSTANCE";
-        }) as (ComponentSetNode | ComponentNode | InstanceNode)[];
+        const allComponentNodesInPage: (ComponentSetNode | ComponentNode | InstanceNode)[] = page.findAllWithCriteria({
+            types: ["COMPONENT_SET", "COMPONENT", "INSTANCE"],
+        });
         return this.constructDocumentFindings(allComponentNodesInPage);
     }
 

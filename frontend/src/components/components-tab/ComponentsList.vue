@@ -49,8 +49,8 @@ export default defineComponent({
            valB = b.displayName;
         } else if (sortColumn === 'instances') {
            // Calculate total instances (component instances + variant instances)
-           const countA = a.instances.length + a.variants.reduce((sum, v) => sum + v.instances.length, 0);
-           const countB = b.instances.length + b.variants.reduce((sum, v) => sum + v.instances.length, 0);
+           const countA = a.allDescendantInstances.length;
+           const countB = b.allDescendantInstances.length;
            valA = countA;
            valB = countB;
         }

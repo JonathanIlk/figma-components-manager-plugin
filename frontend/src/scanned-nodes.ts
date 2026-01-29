@@ -37,7 +37,20 @@ export class ScannedComponent implements BaseScannedNode {
         return variants;
     }
 
-    get instances(): ScannedInstance[] {
+    // Get all instances of this component including instances of its variants
+    get allDescendantInstances(): ScannedInstance[] {
+        let instances: ScannedInstance[] = [];
+        // Add direct instances
+        instances = instances.concat(this.directInstances);
+        // Add instances of variants
+        for (const variant of this.variants) {
+            instances = instances.concat(variant.instances);
+        }
+        return instances;
+    }
+
+    // Get the direct instances of this component (not including instances of variants)
+    get directInstances(): ScannedInstance[] {
         return FrontendStateService.getInstance().getInstancesForComponentId(this.nodeId);
     }
 

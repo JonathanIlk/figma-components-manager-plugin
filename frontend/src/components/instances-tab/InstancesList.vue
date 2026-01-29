@@ -58,11 +58,11 @@ export default defineComponent({
           }
         } else if (component.type === "COMPONENT") {
           // Component without variants
-          if (component.instances.length > 0) {
+          if (component.directInstances.length > 0) {
             groups.push({
               groupName: `${component.displayName}`,
               groupNodeId: component.nodeId,
-              instances: component.instances,
+              instances: component.directInstances,
             });
           }
         }

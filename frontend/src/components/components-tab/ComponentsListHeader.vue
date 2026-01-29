@@ -22,7 +22,7 @@ export default defineComponent({
     const isAllExpanded = ref(false);
 
     const instancesCount = computed(() => {
-      return Object.values(scanResultsManager.state.scanResults.instancesMap).flatMap(v => v).length;
+      return Object.values(scanResultsManager.state.scanResults.components).flatMap(component => component.allDescendantInstances).length;
     });
 
     const toggleExpandCollapseAll = () => {
