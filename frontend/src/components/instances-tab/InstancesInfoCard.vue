@@ -5,7 +5,10 @@
         class="title clickable-text"
         @click="navigateToNode"
       >
-        {{ groupName }}
+        {{ groupName.split(" - ")[0] || groupName }}
+        <span class="tag-element">
+          {{ groupName.split(" - ").slice(1).join(" - ") || 'All Variants' }}
+        </span>
       </div>
     </div>
     <div class="card-content">
@@ -85,6 +88,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.card .card-header .title {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
 .instances-group {
   .card-content {
     display: grid;
