@@ -1,8 +1,9 @@
 <template>
-  <label class="toggle-switch" :title="title">
-    <input type="checkbox" :checked="modelValue" @change="updateValue">
-    <span class="slider round"></span>
-  </label>
+  <button class="toggle-switch" :class="{ 'is-enabled': modelValue }" :title="title" @click="toggle" type="button">
+    <svg v-if="modelValue" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+    <svg v-else xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+    <span v-if="label" class="label">{{ label }}</span>
+  </button>
 </template>
 
 <script lang="ts">
@@ -18,76 +19,50 @@ export default defineComponent({
     title: {
       type: String,
       default: ''
+    },
+    label: {
+      type: String,
+      default: ''
     }
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-    const updateValue = (event: Event) => {
-      const target = event.target as HTMLInputElement;
-      emit('update:modelValue', target.checked);
+    const toggle = () => {
+      emit('update:modelValue', !props.modelValue);
     };
 
     return {
-      updateValue
+      toggle
     };
   }
 });
 </script>
 
 <style lang="scss" scoped>
-/* Toggle Switch */
 .toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 28px;
-  height: 16px;
-}
-
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--figma-color-bg-tertiary);
-  transition: .4s;
-  border: 1px solid var(--figma-color-border);
+  padding: 4px 8px;
+  color: var(--figma-color-icon);
+  gap: 6px;
+
+  &:hover {
+    background-color: var(--figma-color-bg-tertiary);
+  }
+
+  &.is-enabled {
+    border-color: var(--figma-color-bg-brand);
+  }
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 12px;
-  width: 12px;
-  left: 1px;
-  bottom: 1px;
-  background-color: var(--figma-color-icon);
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: var(--figma-color-bg-brand);
-  border-color: var(--figma-color-bg-brand);
-}
-
-input:checked + .slider:before {
-  transform: translateX(12px);
-  background-color: white;
-}
-
-.slider.round {
-  border-radius: 16px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
+.label {
+  font-size: 11px;
+  color: var(--figma-color-text);
+  user-select: none;
 }
 </style>
-

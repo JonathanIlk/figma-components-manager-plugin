@@ -5,8 +5,8 @@
         <ToggleSwitch
           v-model="autoRefresh"
           title="Enable/Disable automatic refresh on document changes"
+          label="Auto Refresh"
         />
-        <span class="label-text">Auto Refresh</span>
       </div>
       <div class="center-section">
         <a href="https://github.com/JonathanIlk/figma-components-manager-plugin" target="_blank" rel="noopener noreferrer" class="github-link" title="View on GitHub">
@@ -148,11 +148,6 @@ export default defineComponent({
   }
 }
 
-.label-text {
-  font-size: 11px;
-  color: var(--figma-color-text);
-  user-select: none;
-}
 
 /* Icon Button */
 .icon-button {
