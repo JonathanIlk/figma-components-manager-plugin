@@ -1,6 +1,6 @@
 import {FigmaDocumentUtil, DocumentComponentFindings} from "./figma-document-util";
 import {DocumentScanConverter} from "./document-scan-converter";
-import {DocumentUpdatePayload, MessageToUiType} from "../../shared/types";
+import {DocumentUpdatePayload, DocumentUpdateSeriesInformation, MessageToUiType} from "../../shared/types";
 import {util} from "../backend";
 
 const INTERESTED_NODE_CHANGE_PROPERTIES: NodeChangeProperty[] = [
@@ -20,38 +20,41 @@ export class RefreshHandler {
      * Scan the entire document for components, variants, instances and send the result to the UI.
      */
     public async fullComponentsRefresh() {
-        // First we clear all existing data in the UI.
-        const documentUpdatePayload: DocumentUpdatePayload = {
-            scanResult: {
-                components: [],
-                variants: [],
-                instances: [],
-            },
-            removedNodeIds: [],
-            fullRefresh: true,
-        }
-        figma.ui.postMessage({type: MessageToUiType.DOCUMENT_UPDATE, payload: documentUpdatePayload});
-
-        let pageIndex = 0;
+        let currentPageNumber = 1;
+        const pageCount = figma.root.children.length;
         // We look for components page by page to avoid loading too many nodes into memory at once.
         for (const page of figma.root.children) {
-            util.log(`Full refresh: Scanning page "${page.name}" (${pageIndex}/${figma.root.children.length - 1}) for components...`);
+            util.log(`Full refresh: Scanning page "${page.name}" (${currentPageNumber}/${figma.root.children.length}) for components...`);
             await page.loadAsync();
-            await this.partialRefreshForPage(page);
-            pageIndex++;
+
+            const seriesInfo: DocumentUpdateSeriesInformation = {
+                updateType: "series-segment",
+                currentUpdateIndex: currentPageNumber,
+                updatesExpectedInSeries: pageCount,
+            }
+            if(currentPageNumber === 1) {
+                seriesInfo.updateType = "series-start";
+            } else if(currentPageNumber === pageCount) {
+                seriesInfo.updateType = "final-series-update";
+            }
+
+            await this.partialRefreshForPage(page, seriesInfo);
 
             // Give the event loop a moment to flush the postMessage and handle UI updates
             await new Promise(resolve => setTimeout(resolve, 50));
+            currentPageNumber++;
         }
+
     }
 
-    protected async partialRefreshForPage(page: PageNode) {
+    protected async partialRefreshForPage(page: PageNode, seriesInfo: DocumentUpdateSeriesInformation) {
         const searchResults: DocumentComponentFindings = FigmaDocumentUtil.findAllComponentsOnPage(page);
         const scanResultDto = await new DocumentScanConverter(searchResults).convert();
 
         const documentUpdatePayload: DocumentUpdatePayload = {
             scanResult: scanResultDto,
             removedNodeIds: [],
+            updateSeriesInformation: seriesInfo,
         }
         figma.ui.postMessage({type: MessageToUiType.DOCUMENT_UPDATE, payload: documentUpdatePayload});
     }

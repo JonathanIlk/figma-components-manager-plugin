@@ -89,6 +89,7 @@ export class BackendMessageReceiver {
             return;
         }
         if(pageNode && pageNode.type === "PAGE" && figma.currentPage !== pageNode as PageNode) {
+            await pageNode.loadAsync();
             await figma.setCurrentPageAsync(pageNode as PageNode);
         }
 

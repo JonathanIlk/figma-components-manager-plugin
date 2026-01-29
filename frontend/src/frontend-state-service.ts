@@ -1,6 +1,6 @@
 import {
     ComponentDto,
-    DocumentUpdatePayload, InstanceDto,
+    DocumentUpdatePayload, DocumentUpdateSeriesInformation, InstanceDto,
     ScanResultDto,
     SettingsUpdatePayload,
     VariantDto
@@ -17,6 +17,9 @@ export interface StoredScanResults {
 
 export interface AppState {
     scanResults: StoredScanResults;
+    other: {
+        lastDocumentUpdateSeriesInfo?: DocumentUpdateSeriesInformation;
+    }
     settings: {
         autoRefresh: boolean;
         fontSize: number;
@@ -43,6 +46,9 @@ export class FrontendStateService {
             variants: {},
             instancesMap: {},
         },
+        other: {
+            lastDocumentUpdateSeriesInfo: undefined,
+        },
         settings: {
             autoRefresh: false,
             fontSize: 16
@@ -54,7 +60,7 @@ export class FrontendStateService {
     public handleDocumentUpdate(updatePayload: DocumentUpdatePayload) {
         util.log("ScanResultsManager: Handling Document Update", updatePayload);
 
-        if (updatePayload.fullRefresh) {
+        if (updatePayload.updateSeriesInformation?.updateType === "series-start") {
             // For a full refresh, we clear all existing scan results first.
             this.state.scanResults = {
                 components: {},
@@ -62,6 +68,7 @@ export class FrontendStateService {
                 instancesMap: {},
             };
         }
+        this.state.other.lastDocumentUpdateSeriesInfo = updatePayload.updateSeriesInformation;
 
 
         for (const componentDto of updatePayload.scanResult.components) {
