@@ -343,14 +343,32 @@ export default defineComponent({
   }
 }
 
+
+@keyframes fadeInInput {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+  1% {
+    display: inline-block;
+    opacity: 0;
+  }
+  100% {
+    display: inline-block;
+    opacity: 1;
+  }
+}
+
 .search-input {
+  display: none;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease-in-out;
 
   &.filter-visible {
+    display: inline-block;
     opacity: 1;
     pointer-events: auto;
+    animation: fadeInInput 0.25s ease-in-out forwards;
   }
 }
 
