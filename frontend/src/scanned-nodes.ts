@@ -13,17 +13,11 @@ export interface BaseScannedNode {
 export class ScannedComponent implements BaseScannedNode {
     public isPlaceholder: boolean = false;
 
-    private constructor(public nodeId: string, public displayName: string, public type: ComponentType, public variantIds: string[], public variantProperties: string[]) {
+    private constructor(public nodeId: string, public displayName: string, public type: ComponentType, public variantIds: string[], public variantProperties: string[], public pageName?: string) {
     }
 
-    public static fromDto(dto: ComponentDto): ScannedComponent {
-        return new ScannedComponent(dto.nodeId, dto.nodeName, dto.type, dto.variantIds, dto.variantProperties);
-    }
-
-    public static placeHolder(nodeId: string): ScannedComponent {
-        const placeholder = new ScannedComponent(nodeId, "Placeholder", ComponentType.COMPONENT, [], []);
-        placeholder.isPlaceholder = true;
-        return placeholder;
+    public static fromDto(dto: ComponentDto, pageName?: string): ScannedComponent {
+        return new ScannedComponent(dto.nodeId, dto.nodeName, dto.type, dto.variantIds, dto.variantProperties, pageName);
     }
 
     get variants(): ScannedVariant[] {
@@ -55,7 +49,7 @@ export class ScannedComponent implements BaseScannedNode {
     }
 
     get searchTerm(): string {
-        return `${this.displayName} ${this.variantProperties.join(' ')} ${this.variants.map(v => v.searchTerm).join(' ')}`;
+        return `${this.displayName} ${this.variantProperties.join(' ')} ${this.variants.map(v => v.searchTerm).join(' ')} ${this.pageName ?? ''}`;
     }
 }
 
@@ -70,12 +64,6 @@ export class ScannedVariant implements BaseScannedNode {
 
     public static fromDto(dto: VariantDto): ScannedVariant {
         return new ScannedVariant(dto.nodeId, dto.displayName, dto.propertyValues);
-    }
-
-    public static placeHolder(nodeId: string): ScannedVariant {
-        const placeholder = new ScannedVariant(nodeId, "Placeholder", []);
-        placeholder.isPlaceholder = true;
-        return placeholder;
     }
 
     get instances(): ScannedInstance[] {

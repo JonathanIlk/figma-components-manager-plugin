@@ -1,16 +1,20 @@
 <template>
   <div id="components-list">
-    <ComponentInfoCard
-      v-for="component in filteredComponents"
-      :key="component.nodeId"
-      :component="component"
-    />
+    <div v-for="group in groupedComponents" :key="group.pageName" class="component-group">
+      <div class="group-title">{{ group.pageName }}</div>
+      <ComponentInfoCard
+        v-for="component in group.components"
+        :key="component.nodeId"
+        :component="component"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue';
 import { FrontendStateService } from '../../frontend-state-service';
+import { ScannedComponent } from "../../scanned-nodes";
 import {IComponentListConfig} from "./types";
 import ComponentInfoCard from "./ComponentInfoCard.vue";
 
@@ -33,11 +37,13 @@ export default defineComponent({
 
       let result = components;
 
+      // Filter by Search term
       if (props.config.searchTerm) {
         const lowerSearch = props.config.searchTerm.toLowerCase();
         result = result.filter(c => c.searchTerm.toLowerCase().includes(lowerSearch));
       }
 
+      // Sort according to active column
       const { sortColumn, sortDirection } = props.config;
 
       return result.sort((a, b) => {
@@ -66,8 +72,34 @@ export default defineComponent({
       });
     });
 
+    const groupedComponents = computed(() => {
+      if (!props.config.groupByPage) {
+        return [{
+          pageName: 'All Components',
+          components: filteredComponents.value
+        }];
+      }
+
+      const groups: Record<string, ScannedComponent[]> = {};
+
+      for (const component of filteredComponents.value) {
+        const pageName = component.pageName || 'Unknown Page';
+        if (!groups[pageName]) {
+          groups[pageName] = [];
+        }
+        groups[pageName].push(component);
+      }
+
+      const sortedPageNames = Object.keys(groups).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+      return sortedPageNames.map(pageName => ({
+        pageName,
+        components: groups[pageName]
+      }));
+    });
+
     return {
-      filteredComponents
+      groupedComponents
     };
   }
 });
@@ -77,6 +109,19 @@ export default defineComponent({
 #components-list {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+}
+
+.component-group {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
+}
+
+.group-title {
+  font-size: 0.8rem;
+  color: var(--figma-color-text-secondary);
+  margin-bottom: 0.25rem;
+  font-weight: 500;
 }
 </style>

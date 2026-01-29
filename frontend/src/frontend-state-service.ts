@@ -74,7 +74,7 @@ export class FrontendStateService {
 
 
         for (const componentDto of updatePayload.scanResult.components) {
-            const component = ScannedComponent.fromDto(componentDto);
+            const component = ScannedComponent.fromDto(componentDto, this.state.other.lastDocumentUpdateSeriesInfo?.scannedFromPageName);
             this.state.scanResults.components[component.nodeId] = component;
         }
 

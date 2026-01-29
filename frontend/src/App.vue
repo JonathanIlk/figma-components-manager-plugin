@@ -5,6 +5,14 @@
           <ComponentsListHeader />
           <div class="components-filter-bar">
             <SearchInput v-model="componentsSearch" class="half-width-search"/>
+            <ToggleSwitch v-model="groupByPage" title="Group by Page">
+              <template #on>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-folder"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 3a1 1 0 0 1 .608 .206l.1 .087l2.706 2.707h6.586a3 3 0 0 1 2.995 2.824l.005 .176v8a3 3 0 0 1 -2.824 2.995l-.176 .005h-14a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-11a3 3 0 0 1 2.824 -2.995l.176 -.005h4z" /></svg>
+              </template>
+              <template #off>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-folder"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2" /></svg>
+              </template>
+            </ToggleSwitch>
             <div class="sort-buttons">
               <div
                 class="sort-button subtle-text"
@@ -47,6 +55,7 @@ import { defineComponent, ref, computed } from 'vue';
 import TabView from './components/common/TabView.vue';
 import ComponentsListHeader from './components/components-tab/ComponentsListHeader.vue';
 import SearchInput from './components/common/SearchInput.vue';
+import ToggleSwitch from './components/common/ToggleSwitch.vue';
 import InstancesList from './components/instances-tab/InstancesList.vue';
 import SettingsBar from './components/SettingsBar.vue';
 import ResizeCorner from './components/ResizeCorner.vue';
@@ -60,6 +69,7 @@ export default defineComponent({
     ComponentsListHeader,
     SearchInput,
     ComponentsList,
+    ToggleSwitch,
     InstancesList,
     SettingsBar,
     ResizeCorner
@@ -67,6 +77,7 @@ export default defineComponent({
   setup() {
     const componentsSearch = ref('');
     const instancesSearch = ref('');
+    const groupByPage = ref(true);
 
     // Sort state
     const componentsSortColumn = ref<'name' | 'instances'>('name');
@@ -76,6 +87,7 @@ export default defineComponent({
       searchTerm: componentsSearch.value,
       sortColumn: componentsSortColumn.value,
       sortDirection: componentsSortDirection.value,
+      groupByPage: groupByPage.value,
     }));
 
     const toggleComponentsSort = (column: 'name' | 'instances') => {
@@ -93,7 +105,8 @@ export default defineComponent({
       componentsSortColumn,
       componentsSortDirection,
       componentsListConfig,
-      toggleComponentsSort
+      toggleComponentsSort,
+      groupByPage
     };
   }
 });
