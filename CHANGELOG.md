@@ -1,3 +1,7 @@
+Version 8:
+
+- Group Instances on Instances tab by their page
+
 Version 7:
 
 - Improve scanning performance to support large files

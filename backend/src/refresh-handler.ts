@@ -31,6 +31,7 @@ export class RefreshHandler {
                 updateType: "series-segment",
                 currentUpdateIndex: currentPageNumber,
                 updatesExpectedInSeries: pageCount,
+                scannedFromPageName: page.name,
             }
             if(currentPageNumber === 1) {
                 seriesInfo.updateType = "series-start";

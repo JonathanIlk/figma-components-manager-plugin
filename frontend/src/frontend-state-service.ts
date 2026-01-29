@@ -95,7 +95,7 @@ export class FrontendStateService {
                 // Already exists, skip
                 continue;
             }
-            this.state.scanResults.instancesMap[instanceDto.mainComponentNodeId].push(ScannedInstance.fromDto(instanceDto));
+            this.state.scanResults.instancesMap[instanceDto.mainComponentNodeId].push(ScannedInstance.fromDto(instanceDto, this.state.other.lastDocumentUpdateSeriesInfo?.scannedFromPageName));
         }
 
         for (const removedNodeId of updatePayload.removedNodeIds) {

@@ -24,15 +24,20 @@
       </div>
     </div>
     <div
-      class="card-content expandable-content instance-entries-grid"
+      class="card-content expandable-content"
       ref="expandableContent"
       :class="{ visible: isExpanded }"
     >
-      <InstanceEntry
-        v-for="instance in visibleInstances"
-        :key="instance.nodeId"
-        :instance="instance"
-      />
+      <div v-for="group in groupedInstances" :key="group.pageName" class="instance-page-group">
+        <div class="page-name-title">{{ group.pageName }}</div>
+        <div class="instance-entries-grid">
+          <InstanceEntry
+            v-for="instance in group.instances"
+            :key="instance.nodeId"
+            :instance="instance"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -86,6 +91,23 @@ export default defineComponent({
       return props.instances.filter(i => i.displayName.toLowerCase().includes(lowerSearch));
     });
 
+    const groupedInstances = computed(() => {
+      const groups: Record<string, ScannedInstance[]> = {};
+
+      visibleInstances.value.forEach(instance => {
+        const page = instance.pageName || 'Unknown Page';
+        if (!groups[page]) {
+          groups[page] = [];
+        }
+        groups[page].push(instance);
+      });
+
+      return Object.keys(groups).sort().map(page => ({
+        pageName: page,
+        instances: groups[page]
+      }));
+    });
+
     const isVisible = computed(() => {
       if (!props.searchTerm) return true;
       return isGroupMatch.value || visibleInstances.value.length > 0;
@@ -123,6 +145,7 @@ export default defineComponent({
     return {
       isVisible,
       visibleInstances,
+      groupedInstances,
       navigateToNode,
       isExpanded,
       toggleExpand,
@@ -156,6 +179,21 @@ export default defineComponent({
 
     &.visible {
       margin-top: 0.75rem;
+    }
+  }
+
+  .instance-page-group {
+    margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .page-name-title {
+      font-size: 0.8rem;
+      color: var(--figma-color-text-secondary);
+      margin-bottom: 0.25rem;
+      font-weight: 500;
     }
   }
 

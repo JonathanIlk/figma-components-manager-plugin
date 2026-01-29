@@ -46,6 +46,7 @@ export type DocumentUpdateSeriesInformation = {
     updateType: "series-start" | "series-segment" | "final-series-update";
     updatesExpectedInSeries?: number;
     currentUpdateIndex?: number;
+    scannedFromPageName?: string;
 };
 
 export type SettingsUpdatePayload = {

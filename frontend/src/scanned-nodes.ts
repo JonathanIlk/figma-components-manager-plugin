@@ -91,10 +91,10 @@ export class ScannedVariant implements BaseScannedNode {
  * Frontend Representation of a figma document Instance retrieved from the Backend.
  */
 export class ScannedInstance implements BaseScannedNode {
-    private constructor(public nodeId: string, public displayName: string) {
+    private constructor(public nodeId: string, public displayName: string, public pageName?: string) {
     }
 
-    public static fromDto(dto: InstanceDto): ScannedInstance {
-        return new ScannedInstance(dto.nodeId, dto.nodeName);
+    public static fromDto(dto: InstanceDto, pageName?: string): ScannedInstance {
+        return new ScannedInstance(dto.nodeId, dto.nodeName, pageName);
     }
 }
