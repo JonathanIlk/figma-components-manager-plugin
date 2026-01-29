@@ -1,5 +1,5 @@
 import {FigmaDocumentUtil, DocumentComponentFindings} from "./figma-document-util";
-import {DocumentScanner} from "./document-scanner";
+import {DocumentScanConverter} from "./document-scan-converter";
 import {DocumentUpdatePayload, MessageToUiType} from "../../shared/types";
 import {util} from "../backend";
 
@@ -20,24 +20,52 @@ export class RefreshHandler {
      * Scan the entire document for components, variants, instances and send the result to the UI.
      */
     public async fullComponentsRefresh() {
-        const searchResult: DocumentComponentFindings = FigmaDocumentUtil.findAllComponents();
-        const scanResultDto = await new DocumentScanner(searchResult).convert();
+        // First we clear all existing data in the UI.
+        const documentUpdatePayload: DocumentUpdatePayload = {
+            scanResult: {
+                components: [],
+                variants: [],
+                instances: [],
+            },
+            removedNodeIds: [],
+            fullRefresh: true,
+        }
+        figma.ui.postMessage({type: MessageToUiType.DOCUMENT_UPDATE, payload: documentUpdatePayload});
+
+        let pageIndex = 0;
+        // We look for components page by page to avoid loading too many nodes into memory at once.
+        for (const page of figma.root.children) {
+            util.log(`Full refresh: Scanning page "${page.name}" (${pageIndex}/${figma.root.children.length - 1}) for components...`);
+            await page.loadAsync();
+            await this.partialRefreshForPage(page);
+            pageIndex++;
+
+            // Give the event loop a moment to flush the postMessage and handle UI updates
+            await new Promise(resolve => setTimeout(resolve, 50));
+        }
+    }
+
+    protected async partialRefreshForPage(page: PageNode) {
+        const searchResults: DocumentComponentFindings = FigmaDocumentUtil.findAllComponentsOnPage(page);
+        const scanResultDto = await new DocumentScanConverter(searchResults).convert();
 
         const documentUpdatePayload: DocumentUpdatePayload = {
             scanResult: scanResultDto,
             removedNodeIds: [],
-            fullRefresh: true,
         }
-
         figma.ui.postMessage({type: MessageToUiType.DOCUMENT_UPDATE, payload: documentUpdatePayload});
     }
 
-    public async partialComponentsRefresh(event: DocumentChangeEvent) {
+    /**
+     * Processes a DocumentChangeEvent and sends a partial refresh update to the UI if relevant changes are detected.
+     */
+    public async refreshForDocumentChangeEvent(event: DocumentChangeEvent) {
         util.log("RefreshHandler: Detected document changes, processing for partial refresh...", event);
 
         const refreshInstructions: DocumentComponentFindings = {
             components: {},
-            componentSets: {}
+            componentSets: {},
+            instances: {},
         };
         const removedNodeIds: string[] = [];
 
@@ -68,7 +96,7 @@ export class RefreshHandler {
         }
 
 
-        const scanResultDto = await new DocumentScanner(refreshInstructions).convert();
+        const scanResultDto = await new DocumentScanConverter(refreshInstructions).convert();
 
         const documentUpdatePayload: DocumentUpdatePayload = {
             scanResult: scanResultDto,

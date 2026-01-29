@@ -9,6 +9,9 @@ export interface DocumentComponentFindings {
 
     // Component Sets are Components with Variants
     componentSets: { [id: string]: ComponentSetNode };
+
+    // Instances of Components
+    instances: { [id: string]: InstanceNode };
 }
 
 /**
@@ -16,23 +19,27 @@ export interface DocumentComponentFindings {
  */
 export class FigmaDocumentUtil {
 
-    public static findAllComponents(): DocumentComponentFindings {
+    public static findAllComponentsOnPage(page: PageNode): DocumentComponentFindings {
         // COMPONENT_SET = Component with Variants, COMPONENT = Variant/Component without Variants
-        const allComponentNodes: (ComponentSetNode | ComponentNode)[] = figma.root.findAll()
-            .filter(node => node.type === 'COMPONENT_SET' || node.type === "COMPONENT") as (ComponentSetNode | ComponentNode)[];
-        return this.findComponentsInNodes(allComponentNodes);
+        const allComponentNodesInPage: (ComponentSetNode | ComponentNode | InstanceNode)[] = page.findAll(node => {
+            return node.type === 'COMPONENT_SET' || node.type === "COMPONENT" || node.type === "INSTANCE";
+        }) as (ComponentSetNode | ComponentNode | InstanceNode)[];
+        return this.constructDocumentFindings(allComponentNodesInPage);
     }
 
-    public static findComponentsInNodes(nodes: (PageNode | SceneNode)[]): DocumentComponentFindings {
+    public static constructDocumentFindings(nodes: (PageNode | SceneNode)[]): DocumentComponentFindings {
         const searchResult: DocumentComponentFindings = {
             components: {},
-            componentSets: {}
+            componentSets: {},
+            instances: {},
         };
         for (const node of nodes) {
             if (node.type === "COMPONENT") {
                 searchResult.components[node.id] = node as ComponentNode;
             } else if (node.type === "COMPONENT_SET") {
                 searchResult.componentSets[node.id] = node as ComponentSetNode;
+            } else if (node.type === "INSTANCE") {
+                searchResult.instances[node.id] = node as InstanceNode;
             }
         }
         return searchResult;

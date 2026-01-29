@@ -1,4 +1,10 @@
-import {DocumentUpdatePayload, ScanResultDto, SettingsUpdatePayload} from "../../shared/types";
+import {
+    ComponentDto,
+    DocumentUpdatePayload, InstanceDto,
+    ScanResultDto,
+    SettingsUpdatePayload,
+    VariantDto
+} from "../../shared/types";
 import {ScannedComponent, ScannedInstance, ScannedVariant} from "./scanned-nodes";
 import {util} from "../frontend";
 import {reactive} from "vue";
@@ -6,7 +12,7 @@ import {reactive} from "vue";
 export interface StoredScanResults {
     components: { [nodeId: string]: ScannedComponent };
     variants: { [nodeId: string]: ScannedVariant };
-    instances: { [nodeId: string]: ScannedInstance };
+    instancesMap: { [mainComponentNodeId: string]: ScannedInstance[] };
 }
 
 export interface AppState {
@@ -35,7 +41,7 @@ export class FrontendStateService {
         scanResults: {
             components: {},
             variants: {},
-            instances: {}
+            instancesMap: {},
         },
         settings: {
             autoRefresh: false,
@@ -53,7 +59,7 @@ export class FrontendStateService {
             this.state.scanResults = {
                 components: {},
                 variants: {},
-                instances: {}
+                instancesMap: {},
             };
         }
 
@@ -69,14 +75,24 @@ export class FrontendStateService {
         }
 
         for (const instanceDto of updatePayload.scanResult.instances) {
-            const instance = ScannedInstance.fromDto(instanceDto);
-            this.state.scanResults.instances[instance.nodeId] = instance;
+            // Add entry to instancesMap under its main component
+            if(!instanceDto.mainComponentNodeId) {
+                continue;
+            }
+            if (!this.state.scanResults.instancesMap[instanceDto.mainComponentNodeId]) {
+                this.state.scanResults.instancesMap[instanceDto.mainComponentNodeId] = [];
+            }
+            this.state.scanResults.instancesMap[instanceDto.mainComponentNodeId].push(ScannedInstance.fromDto(instanceDto));
         }
 
         for (const removedNodeId of updatePayload.removedNodeIds) {
             delete this.state.scanResults.components[removedNodeId];
             delete this.state.scanResults.variants[removedNodeId];
-            delete this.state.scanResults.instances[removedNodeId];
+
+            // find in instancesMap and remove (Probably pretty expensive at some point to do it like this)
+            for (const mainComponentId in this.state.scanResults.instancesMap) {
+                this.state.scanResults.instancesMap[mainComponentId] = this.state.scanResults.instancesMap[mainComponentId].filter(instance => instance.nodeId !== removedNodeId);
+            }
         }
     }
 
@@ -94,7 +110,8 @@ export class FrontendStateService {
         return this.state.scanResults.variants[nodeId];
     }
 
-    public getInstanceById(nodeId: string): ScannedInstance | undefined {
-        return this.state.scanResults.instances[nodeId];
+    public getInstancesForComponentId(nodeId: string): ScannedInstance[] {
+        const foundInstances = this.state.scanResults.instancesMap[nodeId];
+        return foundInstances ? foundInstances : [];
     }
 }

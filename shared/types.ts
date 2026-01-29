@@ -59,7 +59,6 @@ export type ComponentDto = {
     nodeName: string;
     type: ComponentType;
     variantIds: string[],
-    instanceIds: string[];
     variantProperties: string[]; // only for COMPONENT_SET
 }
 
@@ -67,12 +66,12 @@ export type VariantDto = {
     nodeId: string;
     displayName: string;
     propertyValues: string[];
-    instanceIds: string[];
 }
 
 export type InstanceDto = {
     nodeId: string;
     nodeName: string;
+    mainComponentNodeId: string | undefined;
 }
 
 export enum ComponentType {

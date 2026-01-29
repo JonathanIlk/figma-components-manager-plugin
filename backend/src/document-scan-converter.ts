@@ -5,19 +5,16 @@ import {util} from "../backend";
 /**
  * Converts DocumentComponentFindings into a ScanResultDto for transfer to the frontend, to be displayed in the UI.
  */
-export class DocumentScanner {
+export class DocumentScanConverter {
 
     constructor(protected searchResult: DocumentComponentFindings) {
     }
 
-    protected allSeenInstances: Set<InstanceNode> = new Set();
-
     /**
-     * Takes the Components passed to the constructor and searches for all relevant variants, instances for the passed components.
-     * This searches top-down from component sets to variants to instances.
+     * Takes all the found components, variants and instances and converts them into DTOs suitable for transfer to the UI.
      */
     public async convert(): Promise<ScanResultDto> {
-        util.log(`Converting scan result of ${Object.keys(this.searchResult.components).length} components and ${Object.keys(this.searchResult.componentSets).length} component sets to DTOs`);
+        util.log(`Converting scan result of ${Object.keys(this.searchResult.components).length} components | ${Object.keys(this.searchResult.componentSets).length} component sets | ${Object.keys(this.searchResult.instances).length} instances into DTOs...`);
         const allComponentDtos = await this.extractComponents();
 
         const variantDtos: VariantDto[] = await Promise.all(Object.values(this.searchResult.componentSets)
@@ -27,12 +24,13 @@ export class DocumentScanner {
                 return await this.constructDtoForVariant(component);
             }));
 
-        const instanceDtos: InstanceDto[] = Array.from(this.allSeenInstances).map(instance => {
+        const instanceDtos: InstanceDto[] = await Promise.all(Object.values(this.searchResult.instances).map(async instance => {
             return {
                 nodeId: instance.id,
-                nodeName: instance.name
-            }
-        });
+                nodeName: instance.name,
+                mainComponentNodeId: (await instance.getMainComponentAsync())?.id,
+            };
+        }));
 
         return {
             components: allComponentDtos,
@@ -61,11 +59,9 @@ export class DocumentScanner {
 
     private async constructDtoForComponentSet(componentSet: ComponentSetNode): Promise<ComponentDto> {
         const variants: VariantDto[] = [];
-        const instanceNodeIds: InstanceDto[] = [];
         for (const child of componentSet.children) {
             if (this.isVariant(child as ComponentNode)) {
                 variants.push(await this.constructDtoForVariant(child as ComponentNode));
-                instanceNodeIds.push(...await this.findAllInstances(child as ComponentNode));
             }
         }
 
@@ -81,26 +77,10 @@ export class DocumentScanner {
             nodeName: componentSet.name,
             type: ComponentType.COMPONENT_SET,
             variantIds: variants.map(variant => variant.nodeId),
-            instanceIds: instanceNodeIds.map(instance => instance.nodeId),
             variantProperties: variantPropertyKeys,
         }
     }
 
-    private async findAllInstances(componentNode: ComponentNode): Promise<InstanceDto[]> {
-        // It is probably slow to call getInstancesAsync this could probably be improved
-        const instances = await componentNode.getInstancesAsync();
-
-        for (const instance of instances) {
-            this.allSeenInstances.add(instance);
-        }
-
-        return instances.map(instance => {
-            return {
-                nodeId: instance.id,
-                nodeName: instance.name
-            }
-        });
-    }
 
 
     private async constructDtoForComponent(component: ComponentNode): Promise<ComponentDto> {
@@ -109,7 +89,6 @@ export class DocumentScanner {
             nodeName: component.name,
             type: ComponentType.COMPONENT,
             variantIds: [], // single components do not have variants
-            instanceIds: (await this.findAllInstances(component)).map(instance => instance.nodeId),
             variantProperties: [], // single components do not have variant properties
         }
     }
@@ -119,7 +98,6 @@ export class DocumentScanner {
             nodeId: node.id,
             displayName: Object.values(node.variantProperties!).join(", "),
             propertyValues: Object.values(node.variantProperties!),
-            instanceIds: (await this.findAllInstances(node)).map(instance => instance.nodeId)
         }
     }
 

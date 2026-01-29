@@ -20,7 +20,7 @@ class Backend {
         WindowService.getInstance().initialize();
         await SettingsService.getInstance().initialize();
 
-        this.viewUpdater.fullComponentsRefresh();
+        await this.viewUpdater.fullComponentsRefresh();
 
         this.subscribeToDocumentChanges();
     }
@@ -30,7 +30,7 @@ class Backend {
             if (!SettingsService.getInstance().shouldAutoRefresh()) {
                 return;
             }
-            this.viewUpdater.partialComponentsRefresh(event);
+            this.viewUpdater.refreshForDocumentChangeEvent(event);
         });
     }
 }

@@ -14,7 +14,7 @@
           <span class="variants-count">{{ isExpanded ? sortedVariants.length : component.variants.length }}</span> variants
         </span>
         <span class="tag-element">
-          <span class="instances-count">{{ component.instances.length }}</span> instances
+          <span class="instances-count">{{ component.variants.flatMap(variant => variant.instances).length + component.instances.length }}</span> instances
         </span>
         <SearchInput v-model="searchTerm" icon="filter" placeholder="Filter variants" :class="{'filter-visible': isExpanded}"></SearchInput>
       </div>

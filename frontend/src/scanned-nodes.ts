@@ -11,11 +11,19 @@ export interface BaseScannedNode {
  * Constructed when receiving scan results from the Backend.
  */
 export class ScannedComponent implements BaseScannedNode {
-    private constructor(public nodeId: string, public displayName: string, public type: ComponentType, public variantIds: string[], public instanceIds: string[], public variantProperties: string[]) {
+    public isPlaceholder: boolean = false;
+
+    private constructor(public nodeId: string, public displayName: string, public type: ComponentType, public variantIds: string[], public variantProperties: string[]) {
     }
 
     public static fromDto(dto: ComponentDto): ScannedComponent {
-        return new ScannedComponent(dto.nodeId, dto.nodeName, dto.type, dto.variantIds, dto.instanceIds, dto.variantProperties);
+        return new ScannedComponent(dto.nodeId, dto.nodeName, dto.type, dto.variantIds, dto.variantProperties);
+    }
+
+    public static placeHolder(nodeId: string): ScannedComponent {
+        const placeholder = new ScannedComponent(nodeId, "Placeholder", ComponentType.COMPONENT, [], []);
+        placeholder.isPlaceholder = true;
+        return placeholder;
     }
 
     get variants(): ScannedVariant[] {
@@ -30,14 +38,7 @@ export class ScannedComponent implements BaseScannedNode {
     }
 
     get instances(): ScannedInstance[] {
-        const instances: ScannedInstance[] = [];
-        for (const instanceId of this.instanceIds) {
-            const instance = FrontendStateService.getInstance().getInstanceById(instanceId);
-            if (instance) {
-                instances.push(instance);
-            }
-        }
-        return instances;
+        return FrontendStateService.getInstance().getInstancesForComponentId(this.nodeId);
     }
 
     get searchTerm(): string {
@@ -49,22 +50,23 @@ export class ScannedComponent implements BaseScannedNode {
  * Frontend Representation of a figma document Variant retrieved from the Backend.
  */
 export class ScannedVariant implements BaseScannedNode {
-    private constructor(public nodeId: string,  public displayName: string, public propertyValues: string[], public instanceIds: string[]) {
+    public isPlaceholder: boolean = false;
+
+    private constructor(public nodeId: string,  public displayName: string, public propertyValues: string[]) {
     }
 
     public static fromDto(dto: VariantDto): ScannedVariant {
-        return new ScannedVariant(dto.nodeId, dto.displayName, dto.propertyValues, dto.instanceIds);
+        return new ScannedVariant(dto.nodeId, dto.displayName, dto.propertyValues);
+    }
+
+    public static placeHolder(nodeId: string): ScannedVariant {
+        const placeholder = new ScannedVariant(nodeId, "Placeholder", []);
+        placeholder.isPlaceholder = true;
+        return placeholder;
     }
 
     get instances(): ScannedInstance[] {
-        const instances: ScannedInstance[] = [];
-        for (const instanceId of this.instanceIds) {
-            const instance = FrontendStateService.getInstance().getInstanceById(instanceId);
-            if (instance) {
-                instances.push(instance);
-            }
-        }
-        return instances;
+        return FrontendStateService.getInstance().getInstancesForComponentId(this.nodeId);
     }
 
     get searchTerm(): string {
