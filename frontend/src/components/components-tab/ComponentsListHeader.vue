@@ -1,7 +1,10 @@
 <template>
   <div class="components-list-header">
     <span class="tag-element subtle-text">
-      <span class="instances-count">{{ instancesCount }}</span> instances in total
+      <span class="variants-count">{{ componentsCount }}</span> components
+    </span>
+    <span class="tag-element subtle-text">
+      <span class="instances-count">{{ instancesCount }}</span> instances
     </span>
     <span v-if="updateSeriesInformation?.updateType !== 'final-series-update'">
         <span class="update-spinner-tag tag-element subtle-text">
@@ -22,6 +25,7 @@
 import { defineComponent, computed, ref } from 'vue';
 import { FrontendStateService } from '../../frontend-state-service';
 import LoadingSpinner from "../common/LoadingSpinner.vue";
+import component from "*.vue";
 
 export default defineComponent({
   name: 'ComponentsListHeader',
@@ -32,6 +36,10 @@ export default defineComponent({
 
     const instancesCount = computed(() => {
       return Object.values(scanResultsManager.state.scanResults.components).flatMap(component => component.allDescendantInstances).length;
+    });
+
+    const componentsCount = computed(() => {
+      return Object.keys(scanResultsManager.state.scanResults.components).length;
     });
 
     const updateSeriesInformation = computed(() => {
@@ -47,6 +55,7 @@ export default defineComponent({
     };
 
     return {
+      componentsCount,
       instancesCount,
       updateSeriesInformation,
       isAllExpanded,

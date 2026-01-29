@@ -24,7 +24,7 @@
       </div>
     </div>
     <div
-      class="card-content expandable-content"
+      class="card-content expandable-content instance-entries-grid"
       ref="expandableContent"
       :class="{ visible: isExpanded }"
     >
@@ -159,9 +159,9 @@ export default defineComponent({
     }
   }
 
-  .card-content {
+  .instance-entries-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 4px;
   }
 }
