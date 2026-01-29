@@ -1,3 +1,9 @@
+Version 7:
+
+- Improve scanning performance to support large files
+- Add setting to include/exclude invisible instances (Disable for better performance on large files!)
+- Fix bug where switching through instances would not work correctly in some cases
+
 Version 6:
 
 - Add font-size setting for users to customize text size in the UI
