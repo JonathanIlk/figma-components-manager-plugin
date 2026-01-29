@@ -12,12 +12,7 @@
 import { defineComponent, computed, PropType } from 'vue';
 import { FrontendStateService } from '../../frontend-state-service';
 import ComponentInfo from './ComponentInfo.vue';
-
-export interface ComponentListConfig {
-  searchTerm: string;
-  sortColumn: 'name' | 'instances';
-  sortDirection: 'asc' | 'desc';
-}
+import {IComponentListConfig} from "./types";
 
 export default defineComponent({
   name: 'ComponentsList',
@@ -26,7 +21,7 @@ export default defineComponent({
   },
   props: {
     config: {
-      type: Object as PropType<ComponentListConfig>,
+      type: Object as PropType<IComponentListConfig>,
       required: true
     }
   },

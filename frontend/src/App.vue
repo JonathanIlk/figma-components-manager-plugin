@@ -50,7 +50,8 @@ import SearchInput from './components/common/SearchInput.vue';
 import InstancesList from './components/instances-tab/InstancesList.vue';
 import SettingsBar from './components/SettingsBar.vue';
 import ResizeCorner from './components/ResizeCorner.vue';
-import ComponentsList, {ComponentListConfig} from "./components/components-tab/ComponentsList.vue";
+import ComponentsList from "./components/components-tab/ComponentsList.vue";
+import {IComponentListConfig} from "./components/components-tab/types";
 
 export default defineComponent({
   name: 'App',
@@ -71,7 +72,7 @@ export default defineComponent({
     const componentsSortColumn = ref<'name' | 'instances'>('name');
     const componentsSortDirection = ref<'asc' | 'desc'>('asc');
 
-    const componentsListConfig = computed((): ComponentListConfig => ({
+    const componentsListConfig = computed((): IComponentListConfig => ({
       searchTerm: componentsSearch.value,
       sortColumn: componentsSortColumn.value,
       sortDirection: componentsSortDirection.value,
