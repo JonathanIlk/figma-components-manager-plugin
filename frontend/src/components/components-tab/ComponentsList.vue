@@ -1,13 +1,11 @@
 <template>
   <div id="components-list">
-    <div v-for="group in groupedComponents" :key="group.pageName" class="component-group">
-      <div class="group-title">{{ group.pageName }}</div>
-      <ComponentInfoCard
-        v-for="component in group.components"
-        :key="component.nodeId"
-        :component="component"
-      />
-    </div>
+    <ComponentGroup
+      v-for="group in groupedComponents"
+      :key="group.pageName"
+      :page-name="group.pageName"
+      :components="group.components"
+    />
   </div>
 </template>
 
@@ -16,12 +14,12 @@ import { defineComponent, computed, PropType } from 'vue';
 import { FrontendStateService } from '../../frontend-state-service';
 import { ScannedComponent } from "../../scanned-nodes";
 import {IComponentListConfig} from "./types";
-import ComponentInfoCard from "./ComponentInfoCard.vue";
+import ComponentGroup from "./ComponentGroup.vue";
 
 export default defineComponent({
   name: 'ComponentsList',
   components: {
-    ComponentInfoCard
+    ComponentGroup
   },
   props: {
     config: {
@@ -110,18 +108,5 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.component-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.group-title {
-  font-size: 0.8rem;
-  color: var(--figma-color-text-secondary);
-  margin-bottom: 0.25rem;
-  font-weight: 500;
 }
 </style>

@@ -1,6 +1,7 @@
 Version 8:
 
-- Group Instances on Instances tab by their page
+- [Instances Tab] Group Instances for a Component by their page
+- [Components Tab] Group Components by their page
 
 Version 7:
 
