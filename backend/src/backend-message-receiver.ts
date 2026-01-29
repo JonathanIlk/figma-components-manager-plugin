@@ -1,4 +1,4 @@
-import {BackendMessageType, MessageToBackend, ResizeMessage, SetAutoRefreshMessage, SetFontSizeMessage} from "../../shared/types";
+import {BackendMessageType, MessageToBackend, ResizeMessage, SetAutoRefreshMessage, SetFontSizeMessage, SetIncludeInvisibleMessage} from "../../shared/types";
 import {FigmaDocumentUtil} from "./figma-document-util";
 import {WindowService} from "./services/window-service";
 import {SettingsService} from "./services/settings-service";
@@ -29,6 +29,11 @@ export class BackendMessageReceiver {
                 case BackendMessageType.SET_AUTO_REFRESH: {
                     const message = msg as SetAutoRefreshMessage;
                     await SettingsService.getInstance().setAutoRefresh(message.payload.autoRefresh);
+                    break;
+                }
+                case BackendMessageType.SET_INCLUDE_INVISIBLE: {
+                    const message = msg as SetIncludeInvisibleMessage;
+                    await SettingsService.getInstance().setIncludeInvisible(message.payload.includeInvisible);
                     break;
                 }
                 case BackendMessageType.SET_FONT_SIZE: {

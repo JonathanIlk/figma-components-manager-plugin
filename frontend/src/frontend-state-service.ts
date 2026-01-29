@@ -22,6 +22,7 @@ export interface AppState {
     }
     settings: {
         autoRefresh: boolean;
+        includeInvisible: boolean;
         fontSize: number;
     };
 }
@@ -51,6 +52,7 @@ export class FrontendStateService {
         },
         settings: {
             autoRefresh: false,
+            includeInvisible: false,
             fontSize: 16
         }
     });
@@ -109,6 +111,7 @@ export class FrontendStateService {
 
     public handleSettingsUpdate(payload: SettingsUpdatePayload) {
         this.state.settings.autoRefresh = payload.autoRefresh;
+        this.state.settings.includeInvisible = payload.includeInvisible;
         this.state.settings.fontSize = payload.fontSize;
         document.documentElement.style.fontSize = `${payload.fontSize}px`;
     }

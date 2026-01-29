@@ -7,9 +7,11 @@ import {MessageToUiType, SettingsUpdatePayload} from "../../../shared/types";
 export class SettingsService {
     private static instance: SettingsService;
     private static STORAGE_KEY_AUTO_REFRESH = "settings_auto_refresh";
+    private static STORAGE_KEY_INCLUDE_INVISIBLE = "settings_include_invisible";
     private static STORAGE_KEY_FONT_SIZE = "settings_font_size";
 
     private autoRefresh: boolean = true; // Default to true
+    private includeInvisible: boolean = false; // Default to false
     private fontSize: number = 16; // Default to 16px
 
     private constructor() {
@@ -28,6 +30,10 @@ export class SettingsService {
             if (storedAutoRefresh !== undefined) {
                 this.autoRefresh = storedAutoRefresh;
             }
+            const storedIncludeInvisible = await figma.clientStorage.getAsync(SettingsService.STORAGE_KEY_INCLUDE_INVISIBLE);
+            if (storedIncludeInvisible !== undefined) {
+                this.includeInvisible = storedIncludeInvisible;
+            }
             const storedFontSize = await figma.clientStorage.getAsync(SettingsService.STORAGE_KEY_FONT_SIZE);
             if (storedFontSize !== undefined) {
                 this.fontSize = storedFontSize;
@@ -35,6 +41,10 @@ export class SettingsService {
         } catch (err) {
             util.logError("Error loading settings from clientStorage", err);
         }
+
+        // Apply global settings
+        figma.skipInvisibleInstanceChildren = !this.includeInvisible;
+
         this.sendSettingsToUi();
     }
 
@@ -46,6 +56,20 @@ export class SettingsService {
         this.autoRefresh = enabled;
         try {
             await figma.clientStorage.setAsync(SettingsService.STORAGE_KEY_AUTO_REFRESH, enabled);
+        } catch (err) {
+            util.logError("Error saving settings to clientStorage", err);
+        }
+        this.sendSettingsToUi();
+    }
+
+    public async setIncludeInvisible(enabled: boolean) {
+        this.includeInvisible = enabled;
+
+        // Update Figma global setting
+        figma.skipInvisibleInstanceChildren = !enabled;
+
+        try {
+            await figma.clientStorage.setAsync(SettingsService.STORAGE_KEY_INCLUDE_INVISIBLE, enabled);
         } catch (err) {
             util.logError("Error saving settings to clientStorage", err);
         }
@@ -65,6 +89,7 @@ export class SettingsService {
     public sendSettingsToUi() {
         const payload: SettingsUpdatePayload = {
             autoRefresh: this.autoRefresh,
+            includeInvisible: this.includeInvisible,
             fontSize: this.fontSize
         };
         figma.ui.postMessage({type: MessageToUiType.SETTINGS_UPDATE, payload: payload});

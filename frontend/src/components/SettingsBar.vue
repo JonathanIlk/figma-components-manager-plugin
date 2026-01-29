@@ -7,6 +7,11 @@
           title="Enable/Disable automatic refresh on document changes"
           label="Auto Refresh"
         />
+        <ToggleSwitch
+          v-model="includeInvisible"
+          title="Include or exclude invisible instances (Enabling this may slow down the scan significantly in large documents!)"
+          label="Include Invisible"
+        />
       </div>
       <div class="center-section">
         <a href="https://github.com/JonathanIlk/figma-components-manager-plugin" target="_blank" rel="noopener noreferrer" class="github-link" title="View on GitHub">
@@ -59,6 +64,20 @@ export default defineComponent({
       }
     });
 
+    const includeInvisible = computed({
+      get: () => scanResultsManager.state.settings.includeInvisible,
+      set: (value: boolean) => {
+        parent.postMessage({
+          pluginMessage: {
+            type: BackendMessageType.SET_INCLUDE_INVISIBLE,
+            payload: {
+              includeInvisible: value
+            }
+          }
+        }, '*');
+      }
+    });
+
     const sendManualRefresh = () => {
       parent.postMessage({
         pluginMessage: {
@@ -83,6 +102,7 @@ export default defineComponent({
 
     return {
       autoRefresh,
+      includeInvisible,
       sendManualRefresh,
       toggleFontSize
     };
@@ -112,6 +132,7 @@ export default defineComponent({
 .left-section {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 8px;
   flex: 1;
 }
@@ -120,7 +141,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1;
+  flex: 0;
 }
 
 .right-section {
