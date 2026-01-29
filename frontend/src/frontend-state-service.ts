@@ -82,6 +82,10 @@ export class FrontendStateService {
             if (!this.state.scanResults.instancesMap[instanceDto.mainComponentNodeId]) {
                 this.state.scanResults.instancesMap[instanceDto.mainComponentNodeId] = [];
             }
+            if(this.state.scanResults.instancesMap[instanceDto.mainComponentNodeId].some(instance => instance.nodeId === instanceDto.nodeId)) {
+                // Already exists, skip
+                continue;
+            }
             this.state.scanResults.instancesMap[instanceDto.mainComponentNodeId].push(ScannedInstance.fromDto(instanceDto));
         }
 
