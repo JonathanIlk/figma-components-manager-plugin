@@ -13,7 +13,7 @@ import { ScannedInstance } from '../../scanned-nodes';
 import { BackendMessageType } from '../../../../shared/types';
 
 export default defineComponent({
-  name: 'InstanceInfo',
+  name: 'InstanceEntry',
   props: {
     instance: {
       type: Object as PropType<ScannedInstance>,

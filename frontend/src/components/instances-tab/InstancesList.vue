@@ -1,6 +1,6 @@
 <template>
   <div class="instances-list">
-    <InstancesGroup
+    <InstancesInfoCard
       v-for="group in groupedInstances"
       :key="group.groupNodeId"
       :group-name="group.groupName"
@@ -15,10 +15,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
-import { FrontendStateService, StoredScanResults } from '../../frontend-state-service';
-import { ScannedInstance } from '../../scanned-nodes';
-import InstancesGroup from './InstancesGroup.vue';
+import {computed, defineComponent} from 'vue';
+import {FrontendStateService} from '../../frontend-state-service';
+import {ScannedInstance} from '../../scanned-nodes';
+import InstancesInfoCard from "./InstancesInfoCard.vue";
 
 interface InstanceGroupData {
   groupName: string;
@@ -29,7 +29,7 @@ interface InstanceGroupData {
 export default defineComponent({
   name: 'InstancesList',
   components: {
-    InstancesGroup
+    InstancesInfoCard
   },
   props: {
     searchTerm: {

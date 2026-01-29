@@ -102,7 +102,7 @@ import SearchInput from "../common/SearchInput.vue";
 type HoverState = "variant" | "instances" | false;
 
 export default defineComponent({
-  name: 'ComponentInfo',
+  name: 'ComponentInfoCard',
   components: {SearchInput},
   props: {
     component: {

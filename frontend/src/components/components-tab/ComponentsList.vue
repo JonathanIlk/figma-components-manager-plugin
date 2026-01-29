@@ -1,6 +1,6 @@
 <template>
   <div id="components-list">
-    <ComponentInfo
+    <ComponentInfoCard
       v-for="component in filteredComponents"
       :key="component.nodeId"
       :component="component"
@@ -11,13 +11,13 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue';
 import { FrontendStateService } from '../../frontend-state-service';
-import ComponentInfo from './ComponentInfo.vue';
 import {IComponentListConfig} from "./types";
+import ComponentInfoCard from "./ComponentInfoCard.vue";
 
 export default defineComponent({
   name: 'ComponentsList',
   components: {
-    ComponentInfo
+    ComponentInfoCard
   },
   props: {
     config: {

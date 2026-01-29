@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="card-content">
-      <InstanceInfo
+      <InstanceEntry
         v-for="instance in visibleInstances"
         :key="instance.nodeId"
         :instance="instance"
@@ -21,13 +21,13 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from 'vue';
 import { ScannedInstance } from '../../scanned-nodes';
-import InstanceInfo from './InstanceInfo.vue';
 import { BackendMessageType } from '../../../../shared/types';
+import InstanceEntry from "./InstanceEntry.vue";
 
 export default defineComponent({
   name: 'InstancesGroup',
   components: {
-    InstanceInfo
+    InstanceEntry
   },
   props: {
     groupName: {
